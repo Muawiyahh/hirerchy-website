@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Hirerchy design tokens — ported from the client portal (dark + purple)
+   Source: hirerchy-portal/client.css
+   ══════════════════════════════════════════════════════════════════════════ */
+@theme {
+  --color-bg:         #0e0f1a;
+  --color-surface:    #15172a;
+  --color-surface-2:  #1c1e35;
+  --color-accent:     #7c5cfc;
+  --color-accent-2:   #6d48f5;
+  --color-ink:        #ebedf8;
+  --color-muted:      #7b7fa0;
+  --color-border:     #252840;
+  --color-success:    #22c58b;
+  --color-error:      #f87171;
+
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+
+  --radius-card: 16px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.7);
+
+  --animate-spin-slow: spin 0.7s linear infinite;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* offset for the sticky navbar when jumping to anchors */
+  scroll-padding-top: 88px;
+}
+
+body {
+  background-color: var(--color-bg);
+  background-image: radial-gradient(
+    1400px 700px at 50% -5%,
+    #141628 0%,
+    #0e0f1a 65%
+  );
+  background-attachment: fixed;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(124, 92, 252, 0.32);
+  color: #fff;
+}
+
+/* thin, on-brand scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2d4a;
+  border-radius: 999px;
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #353963;
+}
+
+/* ── Scroll-reveal animation (paired with the Reveal component) ───────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Reusable brand utilities ─────────────────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(120deg, #a78bfa 0%, #7c5cfc 55%, #6d48f5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glow-accent {
+  box-shadow: 0 0 0 1px rgba(124, 92, 252, 0.25),
+    0 18px 60px -12px rgba(124, 92, 252, 0.45);
+}
+
+/* ── Long-form prose (privacy page) ───────────────────────────────────────── */
+.prose-hirerchy p {
+  margin-top: 0.85rem;
+  font-size: 15px;
+  line-height: 1.75;
+  color: color-mix(in oklab, var(--color-ink) 85%, transparent);
+}
+.prose-hirerchy strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+/* faint grid texture used behind hero / proof sections */
+.bg-grid {
+  background-image: linear-gradient(rgba(124, 92, 252, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 92, 252, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #000 0%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 0%, transparent 75%);
+}

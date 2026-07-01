@@ -806,8 +806,10 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: .9; }
   gap: 16px;
   margin-bottom: 24px;
 }
-.apps-head .section-head { margin: 0; }
+.apps-head .section-head { margin: 0; padding: 0; border: none; }
 .apps-head h1 { font-size: 24px; letter-spacing: -.02em; margin: 4px 0 2px; }
+/* override the profile form's negative-margin hint so it doesn't overlap the h1 */
+.apps-head .section-hint { margin: 6px 0 0; }
 
 /* Summary stat cards */
 .apps-summary {

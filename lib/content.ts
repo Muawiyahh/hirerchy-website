@@ -19,7 +19,7 @@ export const site = {
     "Hirerchy is a done-for-you job-application agency. We rebuild your resume, write tailored cover letters, and apply to 100+ roles a week on your behalf — so you spend your time in interviews, not in application forms.",
   url: "https://hirerchy.com", // TODO: set your real domain
   email: "hello@hirerchy.com", // TODO: real contact email
-  portalUrl: "https://hirerchy-portal.netlify.app/", // existing client portal (signup + login)
+  portalUrl: "/portal", // client portal — now bundled into this site at /portal
   privacyUrl: "/privacy",
 };
 

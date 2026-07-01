@@ -124,8 +124,6 @@ export default function HowItWorksPage() {
             </p>
             <a
               href={site.portalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex shrink-0 items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-accent-2"
             >
               Open the portal

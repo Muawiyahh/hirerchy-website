@@ -57,7 +57,8 @@ type ButtonProps = {
   children: ReactNode;
   variant?: "primary" | "ghost" | "soft";
   size?: "md" | "lg";
-  external?: boolean;
+  external?: boolean; // render a plain <a> (full navigation) instead of client-side <Link>
+  newTab?: boolean; // open in a new tab (only meaningful with external)
   className?: string;
 };
 
@@ -67,6 +68,7 @@ export function Button({
   variant = "primary",
   size = "md",
   external = false,
+  newTab = false,
   className = "",
 }: ButtonProps) {
   const base =
@@ -86,7 +88,11 @@ export function Button({
 
   if (external) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+      <a
+        href={href}
+        {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        className={cls}
+      >
         {children}
       </a>
     );

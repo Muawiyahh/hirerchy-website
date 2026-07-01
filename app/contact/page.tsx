@@ -30,7 +30,6 @@ export default function ContactPage() {
                 title="Already a client?"
                 value="Open your client portal"
                 href={site.portalUrl}
-                external
               />
               <ContactItem
                 icon="doc"

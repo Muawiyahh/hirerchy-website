@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Served as part of the marketing site at /portal — this <base> makes every
+       relative asset (scripts, styles, ES-module imports) resolve under /portal/. -->
+  <base href="/portal/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hirerchy — Client Portal</title>
+  <script src="theme-boot.js"></script>
+  <link rel="stylesheet" href="client.css" />
+</head>
+<body>
+
+  <!-- ══ Boot splash ═══════════════════════════════════════════════════════ -->
+  <div id="boot-splash" class="boot-splash">
+    <div class="boot-inner">
+      <svg class="brand-mark" width="48" height="48" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect class="bm-bg" width="40" height="40" rx="11"/>
+        <path class="bm-h" d="M13 11v18M27 11v18M13 20h14" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <div class="boot-spinner"></div>
+    </div>
+  </div>
+
+  <!-- ══ Login ═════════════════════════════════════════════════════════════ -->
+  <div id="view-login" class="view view-centered">
+    <div class="login-wrap">
+      <div class="brand brand-lg">
+        <svg class="brand-mark" width="52" height="52" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <rect class="bm-bg" width="40" height="40" rx="11"/>
+          <path class="bm-h" d="M13 11v18M27 11v18M13 20h14" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+        <div class="wordmark wordmark-lg">Hirerchy</div>
+      </div>
+      <p class="login-tagline">Your profile, ready to apply.</p>
+
+      <form id="form-login" class="card login-card">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@email.com" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="••••••••" required minlength="6" autocomplete="current-password" />
+        </div>
+        <div id="login-error" class="alert alert-error hidden"></div>
+        <button type="submit" id="btn-auth" class="btn btn-primary btn-block">Create account</button>
+        <p class="auth-toggle">
+          <span id="auth-toggle-text">Already have an account?</span>
+          <a href="#" id="auth-toggle-link">Sign in</a>
+        </p>
+      </form>
+
+      <p class="powered-by">Powered by <strong>Hirerchy</strong></p>
+    </div>
+  </div>
+
+  <!-- ══ Profile ════════════════════════════════════════════════════════════ -->
+  <div id="view-profile" class="view hidden">
+
+    <header class="appbar">
+      <div class="appbar-inner">
+        <div class="brand">
+          <svg class="brand-mark" width="34" height="34" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <rect class="bm-bg" width="40" height="40" rx="11"/>
+            <path class="bm-h" d="M13 11v18M27 11v18M13 20h14" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+          <span class="wordmark">Hirerchy</span>
+        </div>
+
+        <div class="view-switch" role="tablist" aria-label="Portal sections">
+          <button id="vs-profile" class="vs-btn is-active" type="button" role="tab" aria-selected="true">My profile</button>
+          <button id="vs-apps" class="vs-btn" type="button" role="tab" aria-selected="false">My applications</button>
+        </div>
+
+        <div class="meter" id="profile-meter" aria-label="Profile completion">
+          <div class="meter-head">
+            <span class="meter-title">Profile completion</span>
+            <span id="progress-pct" class="meter-pct">0%</span>
+          </div>
+          <div class="meter-track"><div id="progress-fill" class="meter-fill"></div></div>
+        </div>
+
+        <div class="appbar-actions">
+          <button id="btn-theme" class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+            <svg class="ic-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="ic-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          </button>
+          <button id="btn-logout" class="btn-ghost" type="button">Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="profile-layout">
+
+      <!-- ── Sidebar navigation ── -->
+      <nav class="sidebar" aria-label="Profile sections">
+        <ul class="sidebar-nav">
+          <li><button class="snav-btn is-active" data-section="s-personal">
+            <span class="snav-num">01</span>
+            <span class="snav-label">Personal</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-address">
+            <span class="snav-num">02</span>
+            <span class="snav-label">Address</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-legal">
+            <span class="snav-num">03</span>
+            <span class="snav-label">Legal</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-work-prefs">
+            <span class="snav-num">04</span>
+            <span class="snav-label">Work Preferences</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-portfolio">
+            <span class="snav-num">05</span>
+            <span class="snav-label">Portfolio</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-skills">
+            <span class="snav-num">06</span>
+            <span class="snav-label">Skills</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-experience">
+            <span class="snav-num">07</span>
+            <span class="snav-label">Experience</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-education">
+            <span class="snav-num">08</span>
+            <span class="snav-label">Education</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-eeo">
+            <span class="snav-num">09</span>
+            <span class="snav-label">EEO</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-cover">
+            <span class="snav-num">10</span>
+            <span class="snav-label">Cover Letter</span>
+            <span class="snav-dot"></span>
+          </button></li>
+          <li><button class="snav-btn" data-section="s-resume">
+            <span class="snav-num">11</span>
+            <span class="snav-label">Resume</span>
+            <span class="snav-dot"></span>
+          </button></li>
+        </ul>
+      </nav>
+
+      <!-- ── Content ── -->
+      <main class="content">
+        <div class="page-head hidden">
+          <h1>My profile</h1>
+        </div>
+
+        <div id="profile-alert" class="alert hidden"></div>
+
+        <form id="form-profile">
+
+          <!-- ── Personal Info ── -->
+          <section class="form-section is-active" id="s-personal">
+            <div class="section-head">
+              <span class="section-eyebrow">01 — Personal</span>
+              <h2>Personal information</h2>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="p-first-name">First name *</label>
+                <input id="p-first-name" name="first_name" required />
+              </div>
+              <div class="field">
+                <label for="p-middle-name">Middle name</label>
+                <input id="p-middle-name" name="middle_name" />
+              </div>
+              <div class="field">
+                <label for="p-last-name">Last name *</label>
+                <input id="p-last-name" name="last_name" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="p-email">Email</label>
+                <input id="p-email" name="email" type="email" />
+              </div>
+              <div class="field">
+                <label for="p-phone">Phone</label>
+                <input id="p-phone" name="phone" placeholder="+1 555 000 0000" />
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Address ── -->
+          <section class="form-section" id="s-address">
+            <div class="section-head">
+              <span class="section-eyebrow">02 — Address</span>
+              <h2>Address</h2>
+            </div>
+            <p class="section-hint">Choose your country first, then enter your ZIP / postal code — we'll fill in your city and state automatically.</p>
+            <div class="form-row">
+              <div class="field">
+                <label for="p-country">Country</label>
+                <select id="p-country" name="country"></select>
+              </div>
+              <div class="field" style="flex:0 0 150px">
+                <label for="p-zip">ZIP / Postal code</label>
+                <input id="p-zip" name="zip" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="p-state">State</label>
+                <select id="p-state" name="state"></select>
+              </div>
+              <div class="field">
+                <label for="p-city">City</label>
+                <input id="p-city" name="city" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="p-address">Street address</label>
+              <input id="p-address" name="address_line1" />
+            </div>
+          </section>
+
+          <!-- ── Legal / Work Authorization ── -->
+          <section class="form-section" id="s-legal">
+            <div class="section-head">
+              <span class="section-eyebrow">03 — Legal</span>
+              <h2>Legal &amp; work authorization</h2>
+            </div>
+            <p class="section-hint">These answers autofill compliance questions on job applications.</p>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-is-18">Are you at least 18 years of age?</label>
+                <select id="p-is-18" name="is_18_plus">
+                  <option value="">— select —</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="p-work-auth">Are you legally authorized to work in the US?</label>
+                <select id="p-work-auth" name="work_authorized">
+                  <option value="">— select —</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-sponsorship">Do you require visa sponsorship now or in the future?</label>
+                <select id="p-sponsorship" name="requires_sponsorship">
+                  <option value="">— select —</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-visa-type">Work authorization status</label>
+                <select id="p-visa-type" name="visa_type">
+                  <option value="">— select —</option>
+                  <option value="U.S. Citizen">U.S. Citizen</option>
+                  <option value="Green Card / Permanent Resident">Green Card / Permanent Resident</option>
+                  <option value="H-1B Visa">H-1B Visa</option>
+                  <option value="H-4 EAD">H-4 EAD</option>
+                  <option value="L-1 Visa">L-1 Visa</option>
+                  <option value="F-1 OPT">F-1 OPT</option>
+                  <option value="F-1 CPT">F-1 CPT</option>
+                  <option value="TN Visa">TN Visa</option>
+                  <option value="E-3 Visa">E-3 Visa</option>
+                  <option value="Other">Other…</option>
+                </select>
+                <div id="visa-other-wrap" class="visa-other-wrap hidden">
+                  <input id="p-visa-other" type="text" placeholder="Describe your work authorization status…" />
+                  <button type="button" id="btn-visa-back" class="btn-visa-back">← Back to list</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-non-compete">Are you subject to a non-compete agreement?</label>
+                <select id="p-non-compete" name="non_compete">
+                  <option value="">— select —</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-govt">Have you previously worked for a federal entity?</label>
+                <select id="p-govt" name="worked_for_government">
+                  <option value="">— select —</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Work Preferences ── -->
+          <section class="form-section" id="s-work-prefs">
+            <div class="section-head">
+              <span class="section-eyebrow">04 — Work Preferences</span>
+              <h2>Work preferences</h2>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label>Desired employment type <span class="label-hint">(select all that apply)</span></label>
+                <div class="check-group" data-group="employment_type">
+                  <label class="check-pill"><input type="checkbox" name="employment_type" value="Full-time"><span>Full-time</span></label>
+                  <label class="check-pill"><input type="checkbox" name="employment_type" value="Part-time"><span>Part-time</span></label>
+                  <label class="check-pill"><input type="checkbox" name="employment_type" value="Contract"><span>Contract</span></label>
+                  <label class="check-pill"><input type="checkbox" name="employment_type" value="Temporary"><span>Temporary</span></label>
+                  <label class="check-pill"><input type="checkbox" name="employment_type" value="Internship"><span>Internship</span></label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Work arrangement <span class="label-hint">(select all that apply)</span></label>
+                <div class="check-group" data-group="work_arrangement">
+                  <label class="check-pill"><input type="checkbox" name="work_arrangement" value="Remote"><span>Remote</span></label>
+                  <label class="check-pill"><input type="checkbox" name="work_arrangement" value="Hybrid"><span>Hybrid</span></label>
+                  <label class="check-pill"><input type="checkbox" name="work_arrangement" value="On-site"><span>On-site</span></label>
+                  <label class="check-pill"><input type="checkbox" name="work_arrangement" value="No preference"><span>No preference</span></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-years-exp">Years of experience</label>
+                <select id="p-years-exp" name="years_experience">
+                  <option value="">— select —</option>
+                  <option value="Less than 1 year">Less than 1 year</option>
+                  <option value="1-2 years">1-2 years</option>
+                  <option value="3-5 years">3-5 years</option>
+                  <option value="5-7 years">5-7 years</option>
+                  <option value="7-10 years">7-10 years</option>
+                  <option value="10+ years">10+ years</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="p-availability">When can you start?</label>
+                <select id="p-availability" name="availability">
+                  <option value="">— select —</option>
+                  <option value="Immediately">Immediately</option>
+                  <option value="Within 1 week">Within 1 week</option>
+                  <option value="Within 2 weeks">Within 2 weeks</option>
+                  <option value="Within 1 month">Within 1 month</option>
+                  <option value="More than 1 month">More than 1 month</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-notice-period">Notice period <span class="label-hint">(days)</span></label>
+                <input id="p-notice-period" name="notice_period" type="number" min="0" placeholder="e.g. 30" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-salary">Expected salary / salary range</label>
+                <input id="p-salary" name="salary_expectation" placeholder="e.g. $80,000 – $100,000" />
+              </div>
+              <div class="field">
+                <label for="p-driver">Do you have a valid driver's license?</label>
+                <select id="p-driver" name="has_drivers_license">
+                  <option value="">— select —</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-relocate">Are you willing to relocate?</label>
+                <select id="p-relocate" name="willing_to_relocate">
+                  <option value="">— select —</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="p-pref-locations">Preferred locations <span class="label-hint">(if relocating)</span></label>
+                <input id="p-pref-locations" name="preferred_locations" placeholder="e.g. Austin TX, Denver CO" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-travel">Are you willing to travel for work?</label>
+                <select id="p-travel" name="willing_to_travel">
+                  <option value="">— select —</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="p-travel-pct">Percentage willing to travel</label>
+                <select id="p-travel-pct" name="travel_percentage">
+                  <option value="">— select —</option>
+                  <option value="No travel">No travel</option>
+                  <option value="Up to 25%">Up to 25%</option>
+                  <option value="Up to 50%">Up to 50%</option>
+                  <option value="Up to 75%">Up to 75%</option>
+                  <option value="Up to 100%">Up to 100%</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Portfolio Links ── -->
+          <section class="form-section" id="s-portfolio">
+            <div class="section-head">
+              <span class="section-eyebrow">05 — Portfolio</span>
+              <h2>Portfolio links</h2>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="p-linkedin">LinkedIn URL</label>
+                <input id="p-linkedin" name="linkedin_url" type="url" placeholder="https://linkedin.com/in/..." />
+              </div>
+              <div class="field">
+                <label for="p-portfolio">Portfolio / Website</label>
+                <input id="p-portfolio" name="portfolio_url" type="url" placeholder="https://..." />
+              </div>
+            </div>
+            <div class="field">
+              <label for="p-additional-links">Additional links <span class="label-hint">(GitHub, Behance, Dribbble, etc.)</span></label>
+              <input id="p-additional-links" name="additional_links" placeholder="https://github.com/..., https://behance.net/..." />
+            </div>
+          </section>
+
+          <!-- ── Skills ── -->
+          <section class="form-section" id="s-skills">
+            <div class="section-head">
+              <span class="section-eyebrow">06 — Skills</span>
+              <h2>Skills</h2>
+            </div>
+            <div class="field">
+              <label for="p-skills">Skills <span class="label-hint">(comma-separated)</span></label>
+              <input id="p-skills" name="skills" placeholder="React, Python, Project Management, Communication..." />
+            </div>
+          </section>
+
+          <!-- ── Work Experience ── -->
+          <section class="form-section" id="s-experience">
+            <div class="section-head">
+              <span class="section-eyebrow">07 — Experience</span>
+              <h2>Work experience</h2>
+            </div>
+            <div id="work-list"></div>
+            <button type="button" id="btn-add-work" class="btn-add">+ Add position</button>
+          </section>
+
+          <!-- ── Education History ── -->
+          <section class="form-section" id="s-education">
+            <div class="section-head">
+              <span class="section-eyebrow">08 — Education</span>
+              <h2>Education history</h2>
+            </div>
+            <div id="edu-list"></div>
+            <button type="button" id="btn-add-edu" class="btn-add">+ Add education</button>
+          </section>
+
+          <!-- ── Equal Opportunity ── -->
+          <section class="form-section" id="s-eeo">
+            <div class="section-head">
+              <span class="section-eyebrow">09 — EEO</span>
+              <h2>Equal opportunity <span class="label-hint">(optional)</span></h2>
+            </div>
+            <p class="section-hint">Voluntary. Used only to autofill EEO questions where asked — leave any blank.</p>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-gender">Gender identity</label>
+                <select id="p-gender" name="gender">
+                  <option value="">— select —</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Non-binary">Non-binary</option>
+                  <option value="Decline to self-identify">Decline to self-identify</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="p-ethnicity">Race / Ethnicity</label>
+                <select id="p-ethnicity" name="ethnicity">
+                  <option value="">— select —</option>
+                  <option value="Hispanic or Latino">Hispanic or Latino</option>
+                  <option value="White">White</option>
+                  <option value="Black or African American">Black or African American</option>
+                  <option value="Asian">Asian</option>
+                  <option value="Native Hawaiian or Other Pacific Islander">Native Hawaiian or Other Pacific Islander</option>
+                  <option value="American Indian or Alaska Native">American Indian or Alaska Native</option>
+                  <option value="Two or More Races">Two or More Races</option>
+                  <option value="Decline to self-identify">Decline to self-identify</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="p-veteran">Veteran status</label>
+                <select id="p-veteran" name="veteran_status">
+                  <option value="">— select —</option>
+                  <option value="I am not a protected veteran">I am not a protected veteran</option>
+                  <option value="I identify as one or more of the classifications of a protected veteran">I am a protected veteran</option>
+                  <option value="I don't wish to answer">I don't wish to answer</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="p-disability">Disability status</label>
+                <select id="p-disability" name="disability_status">
+                  <option value="">— select —</option>
+                  <option value="No, I do not have a disability">No, I do not have a disability</option>
+                  <option value="Yes, I have a disability (or previously had one)">Yes, I have a disability</option>
+                  <option value="I do not wish to answer">I do not wish to answer</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Cover Letter ── -->
+          <section class="form-section" id="s-cover">
+            <div class="section-head">
+              <span class="section-eyebrow">10 — Cover Letter</span>
+              <h2>Cover letter <span class="label-hint">(optional)</span></h2>
+            </div>
+            <p class="section-hint">Add a default cover letter — upload a document or paste your text.</p>
+            <div class="cl-toggle">
+              <button type="button" id="cl-mode-upload" class="cl-mode-btn active">Upload document</button>
+              <button type="button" id="cl-mode-paste" class="cl-mode-btn">Paste text</button>
+            </div>
+            <div id="cl-upload-panel">
+              <div id="cover-letter-current" class="resume-current hidden"></div>
+              <div class="field">
+                <label for="p-cover-letter" class="file-drop">
+                  <span class="file-drop-icon">⬆</span>
+                  <span class="file-drop-text">Upload cover letter <span class="label-hint">(PDF, DOC, DOCX)</span></span>
+                </label>
+                <input id="p-cover-letter" type="file" accept=".pdf,.doc,.docx" class="file-input" />
+              </div>
+            </div>
+            <div id="cl-paste-panel" class="hidden">
+              <div class="field">
+                <label for="p-cover-letter-text">Cover letter text</label>
+                <textarea id="p-cover-letter-text" name="cover_letter_text" rows="8" placeholder="Paste or type your cover letter here..."></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Resume ── -->
+          <section class="form-section" id="s-resume">
+            <div class="section-head">
+              <span class="section-eyebrow">11 — Resume</span>
+              <h2>Resume</h2>
+            </div>
+            <div id="resume-current" class="resume-current hidden"></div>
+            <div class="field">
+              <label for="p-resume" class="file-drop">
+                <span class="file-drop-icon">⬆</span>
+                <span class="file-drop-text">Upload resume <span class="label-hint">(PDF, DOC, DOCX)</span></span>
+              </label>
+              <input id="p-resume" type="file" accept=".pdf,.doc,.docx" class="file-input" />
+            </div>
+          </section>
+
+          <!-- ── Tab navigation ── -->
+          <div class="tab-nav">
+            <button type="button" id="btn-tab-prev" class="btn btn-ghost tab-prev hidden-nav">← Previous</button>
+            <button type="button" id="btn-tab-next" class="btn btn-primary tab-next">Next: Address →</button>
+          </div>
+
+          <div class="form-save-bar hidden">
+            <button type="button" id="btn-save-manual" class="btn btn-primary btn-save-manual">Complete profile</button>
+            <p class="autosave-note">Your details save automatically as you type — click to finish and submit your profile.</p>
+          </div>
+        </form>
+
+        <footer class="portal-footer">Powered by <strong>Hirerchy</strong></footer>
+      </main>
+
+    </div><!-- .profile-layout -->
+
+    <!-- ══ Applications tracker ═══════════════════════════════════════════════ -->
+    <div id="panel-applications" class="apps-panel hidden">
+      <main class="content">
+        <div class="apps-head">
+          <div class="section-head">
+            <span class="section-eyebrow">Tracker</span>
+            <h1>My applications</h1>
+            <p class="section-hint">Every job we apply to on your behalf — updated as we go.</p>
+          </div>
+          <button id="btn-apps-refresh" class="btn btn-ghost" type="button">↻ Refresh</button>
+        </div>
+
+        <div id="apps-summary" class="apps-summary"></div>
+
+        <div id="apps-loading" class="apps-loading">Loading your applications…</div>
+
+        <div id="apps-empty" class="apps-empty hidden">
+          <div class="apps-empty-mark">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"/><path d="M19 8v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8z"/><path d="M9 13h6M9 17h4"/></svg>
+          </div>
+          <h3>No applications logged yet</h3>
+          <p>As soon as our team starts applying on your behalf, every application shows up here — company, role, date and status. Check back soon.</p>
+        </div>
+
+        <div id="apps-table-wrap" class="apps-table-wrap hidden">
+          <table class="apps-table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Role</th>
+                <th class="apps-col-date">Applied</th>
+                <th class="apps-col-status">Status</th>
+                <th class="apps-col-link" aria-label="Link"></th>
+              </tr>
+            </thead>
+            <tbody id="apps-tbody"></tbody>
+          </table>
+        </div>
+
+        <footer class="portal-footer">Powered by <strong>Hirerchy</strong></footer>
+      </main>
+    </div><!-- #panel-applications -->
+  </div><!-- #view-profile -->
+
+  <!-- ══ Success modal ══════════════════════════════════════════════════════ -->
+  <div id="success-modal" class="success-overlay hidden">
+    <div class="success-card">
+      <svg class="success-brand-mark" width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect class="bm-bg" width="40" height="40" rx="11"/>
+        <path class="bm-h" d="M13 11v18M27 11v18M13 20h14" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <div class="success-check">
+        <svg viewBox="0 0 52 52">
+          <circle class="success-check-circle" cx="26" cy="26" r="24" fill="none"/>
+          <path class="success-check-mark" fill="none" d="M14 27l8 8 16-16"/>
+        </svg>
+      </div>
+      <h2>Your profile is complete!</h2>
+      <p>Thank you — your profile has been submitted. Hirerchy will now take care of your job applications on your behalf. You can come back and update your details anytime.</p>
+      <button type="button" id="btn-success-close" class="btn btn-primary btn-block">Done</button>
+    </div>
+  </div>
+
+  <!-- ══ Save toast ═════════════════════════════════════════════════════════ -->
+  <div id="save-toast" class="save-toast" aria-live="polite">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    All changes saved
+  </div>
+
+  <script src="client.js" type="module"></script>
+</body>
+</html>

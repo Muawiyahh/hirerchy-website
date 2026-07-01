@@ -60,16 +60,12 @@ export default function Navbar() {
         <div className="hidden items-center gap-3 md:flex">
           <a
             href={site.portalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             className="text-sm font-medium text-muted transition-colors hover:text-ink"
           >
             Client login
           </a>
           <a
             href={site.portalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(124,92,252,0.6)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-2"
           >
             Get started
@@ -113,16 +109,12 @@ export default function Navbar() {
             <div className="mt-2 flex flex-col gap-2">
               <a
                 href={site.portalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="rounded-full px-4 py-3 text-center text-sm font-semibold text-ink ring-1 ring-border"
               >
                 Client login
               </a>
               <a
                 href={site.portalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="rounded-full bg-accent px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 Get started

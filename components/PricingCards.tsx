@@ -46,8 +46,6 @@ export default function PricingCards({
 
               <a
                 href={site.portalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className={`mt-7 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-all ${
                   plan.featured
                     ? "bg-accent text-white hover:bg-accent-2"

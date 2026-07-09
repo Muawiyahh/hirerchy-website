@@ -33,7 +33,7 @@ export default function FreeReviewPage() {
               <ul className="mt-5 space-y-4">
                 {perks.map((p) => (
                   <li key={p} className="flex gap-3 text-sm text-ink/90">
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent-deep">
                       <Icon name="check" size={15} />
                     </span>
                     {p}
@@ -41,9 +41,9 @@ export default function FreeReviewPage() {
                 ))}
               </ul>
 
-              <div className="mt-8 rounded-card border border-border bg-surface/50 p-5">
+              <div className="mt-8 rounded-card border border-border bg-surface p-5">
                 <div className="flex items-center gap-2 text-sm font-semibold text-ink">
-                  <Icon name="spark" size={16} className="text-accent" />
+                  <Icon name="spark" size={16} className="text-accent-deep" />
                   Why we do this for free
                 </div>
                 <p className="mt-2 text-sm leading-relaxed text-muted">

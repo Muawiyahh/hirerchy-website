@@ -26,29 +26,29 @@ export default function PricingPage() {
         <PricingCards />
       </Section>
 
-      {/* referral program */}
-      <Section className="border-t border-border/60">
+      {/* referral program — navy */}
+      <Section tone="navy">
         <Reveal>
-          <div className="glow-accent grid items-center gap-8 rounded-card border border-accent/30 bg-surface p-8 sm:p-12 lg:grid-cols-[1.2fr_1fr]">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
             <div>
               <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent">
                 <Icon name="users" size={16} /> Referral program
               </span>
-              <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+              <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
                 {referral.title}
               </h2>
-              <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted sm:text-base">
+              <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/70 sm:text-base">
                 {referral.body}
               </p>
             </div>
-            <div className="rounded-card border border-border bg-surface-2/60 p-6 text-center">
-              <div className="text-sm text-muted">You both get</div>
-              <div className="mt-1 text-3xl font-extrabold text-ink">1 free week</div>
-              <div className="mt-1 text-sm text-muted">of applications, each</div>
-              <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-dashed border-accent/40 px-4 py-2 font-mono text-sm text-accent">
+            <div className="rounded-card border border-white/10 bg-white/[0.04] p-6 text-center">
+              <div className="text-sm text-white/60">You both get</div>
+              <div className="mt-1 text-3xl font-extrabold text-accent">1 free week</div>
+              <div className="mt-1 text-sm text-white/60">of applications, each</div>
+              <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-dashed border-accent/60 px-4 py-2 font-mono text-sm text-accent">
                 YOURNAME-2026
               </div>
-              <p className="mt-3 text-[11px] text-muted/70">
+              <p className="mt-3 text-[11px] text-white/50">
                 Your unique code appears in your dashboard once you join
               </p>
             </div>

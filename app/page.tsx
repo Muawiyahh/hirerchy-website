@@ -9,19 +9,20 @@ import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import CTASection from "@/components/CTASection";
 
+/* Sections alternate light → navy → light … all the way down the page. */
 export default function Home() {
   return (
     <>
-      <Hero />
-      <ProblemSolution />
-      <Steps />
-      <ResultsPreview />
-      <Features />
-      <LeadMagnetBand />
-      <HomePricing />
-      <Testimonials />
-      <FAQ />
-      <CTASection />
+      <Hero />               {/* light (navy stat card) */}
+      <ProblemSolution tone="navy" />
+      <Steps />              {/* light */}
+      <ResultsPreview tone="navy" />
+      <Features />           {/* light */}
+      <LeadMagnetBand />     {/* navy */}
+      <HomePricing />        {/* light */}
+      <Testimonials tone="navy" />
+      <FAQ />                {/* light */}
+      <CTASection />         {/* navy */}
     </>
   );
 }

@@ -15,12 +15,12 @@ export default function PricingCards({
             <div
               className={`relative flex h-full flex-col rounded-card border p-7 ${
                 plan.featured
-                  ? "glow-accent border-accent/40 bg-surface"
-                  : "border-border bg-surface/50"
+                  ? "glow-accent border-accent/60 bg-surface"
+                  : "border-border bg-surface"
               }`}
             >
               {plan.featured && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-navy">
                   Most popular
                 </span>
               )}
@@ -36,7 +36,7 @@ export default function PricingCards({
               <ul className="mt-6 flex-1 space-y-3">
                 {plan.features.map((f) => (
                   <li key={f} className="flex gap-2.5 text-sm text-ink/90">
-                    <span className="mt-0.5 text-accent">
+                    <span className="mt-0.5 text-accent-deep">
                       <Icon name="check" size={16} />
                     </span>
                     {f}
@@ -48,8 +48,8 @@ export default function PricingCards({
                 href={site.portalUrl}
                 className={`mt-7 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-all ${
                   plan.featured
-                    ? "bg-accent text-white hover:bg-accent-2"
-                    : "text-ink ring-1 ring-border hover:ring-accent/50"
+                    ? "bg-navy text-white hover:bg-navy-2"
+                    : "text-ink ring-1 ring-border hover:ring-navy/40 hover:bg-navy/[0.04]"
                 }`}
               >
                 {plan.cta}

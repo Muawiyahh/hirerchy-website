@@ -109,7 +109,7 @@ export default function PrivacyPage() {
           <H2>9. Contact us</H2>
           <p>
             Questions about this policy or your data? Email us at{" "}
-            <a className="text-accent hover:underline" href={`mailto:${site.email}`}>
+            <a className="text-accent-deep hover:underline" href={`mailto:${site.email}`}>
               {site.email}
             </a>
             .
@@ -132,14 +132,14 @@ function H2({ children }: { children: React.ReactNode }) {
 }
 function Callout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="my-6 rounded-xl border border-border border-l-[3px] border-l-accent bg-surface/50 px-5 py-4 text-sm text-muted">
+    <div className="my-6 rounded-xl border border-border border-l-[3px] border-l-accent bg-surface px-5 py-4 text-sm text-muted">
       {children}
     </div>
   );
 }
 function Ul({ items }: { items: string[] }) {
   return (
-    <ul className="my-4 list-disc space-y-2 pl-6 text-[15px] text-ink/85 marker:text-accent">
+    <ul className="my-4 list-disc space-y-2 pl-6 text-[15px] text-ink/85 marker:text-accent-deep">
       {items.map((it) => (
         <li key={it}>{it}</li>
       ))}

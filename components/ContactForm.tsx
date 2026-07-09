@@ -5,7 +5,7 @@ import { submitLead } from "@/lib/supabase";
 import Icon from "./Icon";
 
 const field =
-  "w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent/60 focus:ring-2 focus:ring-accent/20";
+  "w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25";
 const label = "mb-1.5 block text-sm font-medium text-ink/90";
 
 export default function ContactForm() {
@@ -82,7 +82,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white transition-all hover:bg-accent-2 disabled:opacity-60 sm:w-auto"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-navy px-6 py-3.5 text-sm font-semibold text-white transition-all hover:bg-navy-2 disabled:opacity-60 sm:w-auto"
       >
         {status === "sending" ? "Sending…" : "Send message"}
         {status !== "sending" && <Icon name="arrow" size={18} />}

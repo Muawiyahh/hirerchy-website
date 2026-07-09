@@ -72,9 +72,9 @@ function ContactItem({
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="flex items-center gap-4 rounded-card border border-border bg-surface/50 p-5 transition-colors hover:border-accent/40"
+      className="flex items-center gap-4 rounded-card border border-border bg-surface p-5 transition-colors hover:border-accent/60"
     >
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/12 text-accent ring-1 ring-accent/25">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-navy ring-1 ring-accent/30">
         <Icon name={icon} size={20} />
       </span>
       <span>

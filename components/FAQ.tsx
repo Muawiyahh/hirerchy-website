@@ -13,7 +13,7 @@ export default function FAQ({ withHeading = true }: { withHeading?: boolean }) {
         <Heading center eyebrow="FAQ" title="Questions, answered" />
       )}
 
-      <div className="mx-auto mt-12 max-w-3xl divide-y divide-border rounded-card border border-border bg-surface/50">
+      <div className="mx-auto mt-12 max-w-3xl divide-y divide-border rounded-card border border-border bg-surface">
         {faqs.map((item, i) => {
           const isOpen = open === i;
           return (
@@ -26,7 +26,7 @@ export default function FAQ({ withHeading = true }: { withHeading?: boolean }) {
               >
                 <span className="text-[15px] font-semibold text-ink">{item.q}</span>
                 <span
-                  className={`shrink-0 text-accent transition-transform duration-300 ${
+                  className={`shrink-0 text-accent-deep transition-transform duration-300 ${
                     isOpen ? "rotate-45" : ""
                   }`}
                 >

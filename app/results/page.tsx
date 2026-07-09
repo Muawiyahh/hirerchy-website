@@ -21,6 +21,7 @@ const bigStats = [
   { value: stats.clientsServed, suffix: "+", label: "clients served and counting" },
 ];
 
+/* Sections alternate light → navy → light … down the page. */
 export default function ResultsPage() {
   return (
     <>
@@ -30,28 +31,28 @@ export default function ResultsPage() {
         sub="We track one thing above all: interview callbacks. Here's what that's looked like across our clients — specific figures we can stand behind."
       />
 
-      {/* big stat grid */}
-      <Section>
-        <div className="grid gap-px overflow-hidden rounded-card border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+      {/* big stat grid — navy */}
+      <Section tone="navy">
+        <div className="grid gap-px overflow-hidden rounded-card bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
           {bigStats.map((s, i) => (
-            <Reveal as="div" key={i} delay={i * 70}>
-              <div className="h-full bg-surface/70 px-6 py-9 text-center">
-                <div className="text-4xl font-extrabold tracking-tight text-ink">
+            <Reveal as="div" key={i} delay={i * 70} className="bg-navy">
+              <div className="h-full px-6 py-9 text-center">
+                <div className="text-4xl font-extrabold tracking-tight text-accent">
                   <StatCounter value={s.value} suffix={s.suffix} />
                 </div>
-                <p className="mx-auto mt-2 max-w-[180px] text-sm text-muted">{s.label}</p>
+                <p className="mx-auto mt-2 max-w-[180px] text-sm text-white/70">{s.label}</p>
               </div>
             </Reveal>
           ))}
         </div>
-        <p className="mt-3 text-center text-[11px] text-muted/70">
+        <p className="mt-4 text-center text-[11px] text-white/50">
           Based on Hirerchy client data. Individual results vary; figures are
           updated periodically.
         </p>
       </Section>
 
-      {/* weekly volume chart */}
-      <Section className="border-t border-border/60">
+      {/* weekly volume chart — light */}
+      <Section>
         <Reveal>
           <Heading
             eyebrow="Consistency"
@@ -66,10 +67,11 @@ export default function ResultsPage() {
         </div>
       </Section>
 
-      {/* before / after */}
-      <Section className="border-t border-border/60">
+      {/* before / after — navy */}
+      <Section tone="navy">
         <Reveal>
           <Heading
+            onDark
             eyebrow="Show the work"
             title="Before & after: the resume rewrite"
             sub="A resume that lists duties gets filtered out. One that proves impact gets read. Here's the kind of transformation we make (anonymized)."
@@ -77,11 +79,12 @@ export default function ResultsPage() {
         </Reveal>
         <div className="mt-10">
           <Reveal>
-            <BeforeAfter />
+            <BeforeAfter tone="navy" />
           </Reveal>
         </div>
       </Section>
 
+      {/* testimonials — light */}
       <Testimonials />
 
       <CTASection

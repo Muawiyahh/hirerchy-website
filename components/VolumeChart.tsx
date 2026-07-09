@@ -26,7 +26,7 @@ export default function VolumeChart() {
   }, []);
 
   return (
-    <div ref={ref} className="rounded-card border border-border bg-surface/60 p-6 sm:p-8">
+    <div ref={ref} className="rounded-card border border-border bg-surface p-6 sm:p-8">
       <div className="flex items-baseline justify-between">
         <h3 className="text-base font-bold text-ink">Applications sent per week</h3>
         <span className="text-xs text-muted">last 8 weeks</span>

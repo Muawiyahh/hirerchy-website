@@ -1,31 +1,43 @@
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Hirerchy design tokens — ported from the client portal (dark + purple)
-   Source: hirerchy-portal/client.css
+   Hirerchy design tokens — navy + gold (matches the extension / Chrome Store
+   branding and the admin panel). Light surfaces, navy ink, gold accents.
+
+   Colour rules:
+     • navy   → primary buttons, dark bands, cards, headings
+     • gold   → fills, borders, large display text, and text ON navy
+     • gold-deep → small gold text/icons on LIGHT backgrounds (contrast-safe)
+   NOTE: the client portal at /portal keeps its own dark+purple theme.
    ══════════════════════════════════════════════════════════════════════════ */
 @theme {
-  --color-bg:         #0e0f1a;
-  --color-surface:    #15172a;
-  --color-surface-2:  #1c1e35;
-  --color-accent:     #7c5cfc;
-  --color-accent-2:   #6d48f5;
-  --color-ink:        #ebedf8;
-  --color-muted:      #7b7fa0;
-  --color-border:     #252840;
-  --color-success:    #22c58b;
-  --color-error:      #f87171;
+  --color-bg:          #edf1f7; /* soft blue-tinted light, so white cards lift off it */
+  --color-surface:     #ffffff;
+  --color-surface-2:   #e3e9f2;
+
+  --color-navy:        #0f1f3d;
+  --color-navy-2:      #16213a;
+
+  --color-accent:      #c9a227; /* gold — fills, borders, display text, on-navy text */
+  --color-accent-2:    #a8871c; /* deeper gold — hover fills */
+  --color-accent-deep: #8a6a14; /* gold that passes contrast as small text on light */
+
+  --color-ink:         #16213a;
+  --color-muted:       #697089;
+  --color-border:      #e4e8f0;
+
+  --color-success:     #1e7d4f;
+  --color-error:       #c0392b;
+
+  /* lighter variants for use on the navy bands, where the dark ones vanish */
+  --color-success-light: #22c58b;
+  --color-error-light:   #f87171;
 
   --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
 
   --radius-card: 16px;
   --radius-pill: 999px;
-
-  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.7);
-
-  --animate-spin-slow: spin 0.7s linear infinite;
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
@@ -44,9 +56,9 @@ html {
 body {
   background-color: var(--color-bg);
   background-image: radial-gradient(
-    1400px 700px at 50% -5%,
-    #141628 0%,
-    #0e0f1a 65%
+    1200px 600px at 50% -10%,
+    #f9fbfd 0%,
+    var(--color-bg) 70%
   );
   background-attachment: fixed;
   color: var(--color-ink);
@@ -57,8 +69,8 @@ body {
 }
 
 ::selection {
-  background: rgba(124, 92, 252, 0.32);
-  color: #fff;
+  background: rgba(201, 162, 39, 0.3);
+  color: var(--color-navy);
 }
 
 /* thin, on-brand scrollbar */
@@ -67,12 +79,12 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2d4a;
+  background: #c7cdd9;
   border-radius: 999px;
   border: 2px solid var(--color-bg);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #353963;
+  background: #aab3c4;
 }
 
 /* ── Scroll-reveal animation (paired with the Reveal component) ───────────── */
@@ -91,16 +103,44 @@ body {
 }
 
 /* ── Reusable brand utilities ─────────────────────────────────────────────── */
+
+/* Gold display text — only for LARGE headings, never small copy. */
 .text-gradient {
-  background: linear-gradient(120deg, #a78bfa 0%, #7c5cfc 55%, #6d48f5 100%);
+  background: linear-gradient(120deg, #e3c65c 0%, #c9a227 55%, #a8871c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .glow-accent {
-  box-shadow: 0 0 0 1px rgba(124, 92, 252, 0.25),
-    0 18px 60px -12px rgba(124, 92, 252, 0.45);
+  box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.35),
+    0 18px 50px -14px rgba(15, 31, 61, 0.18);
+}
+
+/* faint grid texture behind hero / proof sections (on LIGHT backgrounds) */
+.bg-grid {
+  background-image: linear-gradient(rgba(15, 31, 61, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 31, 61, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #000 0%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 0%, transparent 75%);
+}
+
+/* same texture, tuned for NAVY bands (gold lines) */
+.bg-grid-navy {
+  background-image: linear-gradient(rgba(201, 162, 39, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 162, 39, 0.1) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 70% at 50% 0%,
+    #000 0%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 0%, #000 0%, transparent 78%);
 }
 
 /* ── Long-form prose (privacy page) ───────────────────────────────────────── */
@@ -113,17 +153,4 @@ body {
 .prose-hirerchy strong {
   color: var(--color-ink);
   font-weight: 600;
-}
-
-/* faint grid texture used behind hero / proof sections */
-.bg-grid {
-  background-image: linear-gradient(rgba(124, 92, 252, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(124, 92, 252, 0.06) 1px, transparent 1px);
-  background-size: 56px 56px;
-  -webkit-mask-image: radial-gradient(
-    ellipse 70% 60% at 50% 0%,
-    #000 0%,
-    transparent 75%
-  );
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 0%, transparent 75%);
 }

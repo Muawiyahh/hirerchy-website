@@ -8,7 +8,7 @@
      • navy   → primary buttons, dark bands, cards, headings
      • gold   → fills, borders, large display text, and text ON navy
      • gold-deep → small gold text/icons on LIGHT backgrounds (contrast-safe)
-   NOTE: the client portal at /portal keeps its own dark+purple theme.
+   The client portal at /portal uses this same navy + gold palette.
    ══════════════════════════════════════════════════════════════════════════ */
 @theme {
   --color-bg:          #edf1f7; /* soft blue-tinted light, so white cards lift off it */

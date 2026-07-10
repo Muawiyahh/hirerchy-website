@@ -10,13 +10,14 @@ import {
 import { COUNTRIES, DEGREE_TYPES, statesFor, COUNTRY_CODES } from "@/lib/portalData";
 import { SECTIONS, VISA_TYPES, type Field } from "./config";
 
-// ── shared class strings ──────────────────────────────────────────────────────
+// ── shared class strings (site's light navy + gold palette) ────────────────────
 const input =
-  "w-full rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder-white/30 outline-none transition focus:border-violet-400/70 focus:bg-white/[0.06] focus:ring-4 focus:ring-violet-500/10";
-const labelCls = "mb-1.5 block text-[13px] font-medium text-white/80";
-const pill =
-  "inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm transition select-none";
-const cardCls = "rounded-2xl border border-white/10 bg-white/[0.03] p-6";
+  "w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25";
+const labelCls = "mb-1.5 block text-sm font-medium text-ink/90";
+const pill = "inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm transition select-none";
+const cardCls = "rounded-2xl border border-border bg-surface p-6 shadow-sm";
+const addBtn = "rounded-lg border border-dashed border-accent/50 bg-accent/5 px-4 py-2.5 text-sm font-semibold text-accent-deep transition hover:bg-accent/10";
+const primaryBtn = "rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-2";
 
 const COMPLETION = [
   "first_name", "last_name", "email", "phone", "address_line1", "city", "state", "zip", "country",
@@ -43,8 +44,6 @@ export default function PortalProfile() {
   const workRef = useRef<WorkEntry[]>([]);
   const eduRef = useRef<EduEntry[]>([]);
   const formRef = useRef<Record<string, string>>({});
-  // Keep refs in sync so the debounced save reads the latest values (updated
-  // after render, not during — required by the react-hooks/refs rule).
   useEffect(() => { workRef.current = work; }, [work]);
   useEffect(() => { eduRef.current = edu; }, [edu]);
   useEffect(() => { formRef.current = form; }, [form]);
@@ -120,7 +119,6 @@ export default function PortalProfile() {
     scheduleSave();
   }, [scheduleSave]);
 
-  // country change rebuilds state options + clears state
   const onCountry = useCallback((country: string) => {
     setForm((p) => ({ ...p, country, state: "" }));
     scheduleSave();
@@ -177,7 +175,7 @@ export default function PortalProfile() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-white/15 border-t-violet-400" />
+        <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-border border-t-navy" />
       </div>
     );
   }
@@ -188,22 +186,22 @@ export default function PortalProfile() {
   return (
     <div className="min-h-screen">
       {/* header */}
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0a0e1a]/85 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-border bg-bg/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3.5 sm:px-8">
           <div className="flex items-center gap-2.5">
-            <BrandMark size={30} onDark />
-            <span className="font-extrabold tracking-tight text-white">Hirerchy</span>
+            <BrandMark size={30} />
+            <span className="font-extrabold tracking-tight text-ink">Hirerchy</span>
           </div>
           <div className="ml-auto hidden min-w-[220px] flex-col gap-1 sm:flex">
-            <div className="flex justify-between text-[11px] font-medium text-white/50">
-              <span>Profile completion</span><span className="text-violet-300">{pct}%</span>
+            <div className="flex justify-between text-[11px] font-medium text-muted">
+              <span>Profile completion</span><span className="text-accent-deep">{pct}%</span>
             </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full bg-violet-500 transition-all" style={{ width: `${pct}%` }} />
+            <div className="h-1.5 overflow-hidden rounded-full bg-surface-2">
+              <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${pct}%` }} />
             </div>
           </div>
           <button onClick={() => signOut().then(() => location.reload())}
-            className="rounded-lg px-3 py-1.5 text-sm font-medium text-white/60 transition hover:bg-white/5 hover:text-white">
+            className="rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-ink">
             Sign out
           </button>
         </div>
@@ -217,9 +215,9 @@ export default function PortalProfile() {
               <li key={s.id}>
                 <button onClick={() => setActive(i)}
                   className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition ${
-                    i === active ? "bg-violet-500/15 font-semibold text-violet-200" : "text-white/55 hover:bg-white/5 hover:text-white"
+                    i === active ? "bg-accent/10 font-semibold text-accent-deep" : "text-muted hover:bg-surface-2 hover:text-ink"
                   }`}>
-                  <span className="text-[11px] tabular-nums text-white/30">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="text-[11px] tabular-nums text-muted/50">{String(i + 1).padStart(2, "0")}</span>
                   {s.nav}
                 </button>
               </li>
@@ -230,11 +228,11 @@ export default function PortalProfile() {
         {/* content */}
         <main className="min-w-0 flex-1">
           <div className="mb-6">
-            <div className="text-xs font-semibold uppercase tracking-wider text-violet-300/80">
+            <div className="text-xs font-semibold uppercase tracking-wider text-accent-deep">
               {String(active + 1).padStart(2, "0")} — {section.nav}
             </div>
-            <h2 className="mt-1 text-2xl font-bold text-white">{section.title}</h2>
-            {section.hint && <p className="mt-2 max-w-2xl text-sm text-white/50">{section.hint}</p>}
+            <h2 className="mt-1 text-2xl font-bold text-ink">{section.title}</h2>
+            {section.hint && <p className="mt-2 max-w-2xl text-sm text-muted">{section.hint}</p>}
           </div>
 
           <div className={cardCls}>
@@ -252,17 +250,15 @@ export default function PortalProfile() {
           {/* tab nav */}
           <div className="mt-6 flex items-center justify-between">
             <button disabled={active === 0} onClick={() => setActive((a) => a - 1)}
-              className="rounded-lg px-4 py-2.5 text-sm font-medium text-white/60 transition enabled:hover:bg-white/5 enabled:hover:text-white disabled:opacity-0">
+              className="rounded-lg px-4 py-2.5 text-sm font-medium text-muted transition enabled:hover:bg-surface-2 enabled:hover:text-ink disabled:opacity-0">
               ← Previous
             </button>
             {isLast ? (
-              <button onClick={async () => { await flush(); setDone(true); }}
-                className="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500">
+              <button onClick={async () => { await flush(); setDone(true); }} className={primaryBtn}>
                 Complete profile
               </button>
             ) : (
-              <button onClick={() => setActive((a) => a + 1)}
-                className="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500">
+              <button onClick={() => setActive((a) => a + 1)} className={primaryBtn}>
                 Next: {SECTIONS[active + 1].nav} →
               </button>
             )}
@@ -271,23 +267,20 @@ export default function PortalProfile() {
       </div>
 
       {/* save toast */}
-      <div className={`fixed bottom-5 left-1/2 z-30 -translate-x-1/2 rounded-full border border-white/10 bg-[#141a2b] px-4 py-2 text-sm text-white/80 shadow-lg transition ${saved ? "opacity-100" : "pointer-events-none opacity-0"}`}>
+      <div className={`fixed bottom-5 left-1/2 z-30 -translate-x-1/2 rounded-full border border-border bg-surface px-4 py-2 text-sm text-ink shadow-lg transition ${saved ? "opacity-100" : "pointer-events-none opacity-0"}`}>
         ✓ All changes saved
       </div>
 
       {/* success modal */}
       {done && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4" onClick={() => setDone(false)}>
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#111726] p-8 text-center" onClick={(e) => e.stopPropagation()}>
-            <BrandMark size={40} onDark />
-            <h2 className="mt-4 text-xl font-bold text-white">Your profile is complete!</h2>
-            <p className="mt-2 text-sm leading-relaxed text-white/60">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-navy/50 px-4 backdrop-blur-sm" onClick={() => setDone(false)}>
+          <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 text-center shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-center"><BrandMark size={40} /></div>
+            <h2 className="mt-4 text-xl font-bold text-ink">Your profile is complete!</h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
               Thank you — your profile has been submitted. Hirerchy will now take care of your job applications on your behalf. You can come back and update your details anytime.
             </p>
-            <button onClick={() => setDone(false)}
-              className="mt-6 w-full rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-500">
-              Done
-            </button>
+            <button onClick={() => setDone(false)} className={`${primaryBtn} mt-6 w-full`}>Done</button>
           </div>
         </div>
       )}
@@ -301,12 +294,12 @@ export default function PortalProfile() {
       const sel = val.split(",").map((s) => s.trim()).filter(Boolean);
       return (
         <>
-          <label className={labelCls}>{f.label}{f.hint && <span className="ml-1 font-normal text-white/40">({f.hint})</span>}</label>
+          <label className={labelCls}>{f.label}{f.hint && <span className="ml-1 font-normal text-muted">({f.hint})</span>}</label>
           <div className="flex flex-wrap gap-2">
             {f.options!.map((o) => {
               const on = sel.includes(o);
               return (
-                <label key={o} className={`${pill} ${on ? "border-violet-400/60 bg-violet-500/20 text-violet-100" : "border-white/10 bg-white/[0.03] text-white/70 hover:border-white/25"}`}>
+                <label key={o} className={`${pill} ${on ? "border-navy bg-navy text-white" : "border-border bg-surface-2 text-ink/70 hover:border-accent"}`}>
                   <input type="checkbox" className="sr-only" checked={on} onChange={() => toggleMulti(f.name, o)} />
                   {o}
                 </label>
@@ -327,7 +320,7 @@ export default function PortalProfile() {
           <select className={`${input} appearance-none`} value={val}
             onChange={(e) => (f.name === "country" ? onCountry(e.target.value) : setField(f.name, e.target.value))}>
             <option value="">{options.length ? "— select —" : "— n/a —"}</option>
-            {options.map((o) => <option key={o} value={o} className="bg-[#141a2b]">{o}</option>)}
+            {options.map((o) => <option key={o} value={o}>{o}</option>)}
           </select>
           {f.name === "visa_type" && val && !VISA_TYPES.includes(val) && (
             <input className={`${input} mt-2`} value={val} placeholder="Describe your work authorization status…"
@@ -360,19 +353,19 @@ export default function PortalProfile() {
       return (
         <div className="space-y-4">
           {work.map((w, i) => (
-            <div key={i} className="relative rounded-xl border border-white/10 bg-white/[0.02] p-4">
-              <button onClick={() => rmWork(i)} className="absolute right-3 top-3 text-white/30 hover:text-red-300">✕</button>
+            <div key={i} className="relative rounded-xl border border-border bg-surface-2 p-4">
+              <button onClick={() => rmWork(i)} className="absolute right-3 top-3 text-muted hover:text-error">✕</button>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div><label className={labelCls}>Job title</label><input className={input} value={w.title || ""} onChange={(e) => setWorkField(i, "title", e.target.value)} /></div>
                 <div><label className={labelCls}>Company</label><input className={input} value={w.company || ""} onChange={(e) => setWorkField(i, "company", e.target.value)} /></div>
-                <div className="sm:col-span-2"><label className={labelCls}>Location <span className="font-normal text-white/40">(optional)</span></label><input className={input} value={w.location || ""} placeholder="e.g. Austin, TX" onChange={(e) => setWorkField(i, "location", e.target.value)} /></div>
+                <div className="sm:col-span-2"><label className={labelCls}>Location <span className="font-normal text-muted">(optional)</span></label><input className={input} value={w.location || ""} placeholder="e.g. Austin, TX" onChange={(e) => setWorkField(i, "location", e.target.value)} /></div>
                 <div><label className={labelCls}>Start date</label><input type="month" className={input} value={w.start || ""} onChange={(e) => setWorkField(i, "start", e.target.value)} /></div>
-                <div><label className={labelCls}>End date <span className="font-normal text-white/40">(blank if current)</span></label><input type="month" className={input} value={w.end || ""} onChange={(e) => setWorkField(i, "end", e.target.value)} /></div>
+                <div><label className={labelCls}>End date <span className="font-normal text-muted">(blank if current)</span></label><input type="month" className={input} value={w.end || ""} onChange={(e) => setWorkField(i, "end", e.target.value)} /></div>
                 <div className="sm:col-span-2"><label className={labelCls}>Description</label><textarea className={`${input} resize-y`} rows={2} value={w.description || ""} onChange={(e) => setWorkField(i, "description", e.target.value)} /></div>
               </div>
             </div>
           ))}
-          <button onClick={addWork} className="rounded-lg border border-dashed border-violet-400/40 bg-violet-500/5 px-4 py-2.5 text-sm font-semibold text-violet-200 transition hover:bg-violet-500/10">+ Add position</button>
+          <button onClick={addWork} className={addBtn}>+ Add position</button>
         </div>
       );
     }
@@ -380,41 +373,41 @@ export default function PortalProfile() {
       return (
         <div className="space-y-4">
           {edu.map((e, i) => (
-            <div key={i} className="relative rounded-xl border border-white/10 bg-white/[0.02] p-4">
-              <button onClick={() => rmEdu(i)} className="absolute right-3 top-3 text-white/30 hover:text-red-300">✕</button>
+            <div key={i} className="relative rounded-xl border border-border bg-surface-2 p-4">
+              <button onClick={() => rmEdu(i)} className="absolute right-3 top-3 text-muted hover:text-error">✕</button>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div><label className={labelCls}>School</label><input className={input} value={e.school || ""} onChange={(ev) => setEduField(i, "school", ev.target.value)} /></div>
                 <div><label className={labelCls}>Degree</label>
                   <select className={`${input} appearance-none`} value={e.degree || ""} onChange={(ev) => setEduField(i, "degree", ev.target.value)}>
                     <option value="">— select —</option>
-                    {DEGREE_TYPES.map((d) => <option key={d} value={d} className="bg-[#141a2b]">{d}</option>)}
+                    {DEGREE_TYPES.map((d) => <option key={d} value={d}>{d}</option>)}
                   </select>
                 </div>
                 <div className="sm:col-span-2"><label className={labelCls}>Field of study</label><input className={input} value={e.field || ""} onChange={(ev) => setEduField(i, "field", ev.target.value)} /></div>
                 <div><label className={labelCls}>Start date</label><input type="month" className={input} value={e.start || ""} onChange={(ev) => setEduField(i, "start", ev.target.value)} /></div>
                 <div><label className={labelCls}>End date</label><input type="month" className={input} value={e.end || ""} onChange={(ev) => setEduField(i, "end", ev.target.value)} /></div>
-                <div><label className={labelCls}>GPA <span className="font-normal text-white/40">(optional)</span></label><input className={input} value={e.gpa || ""} placeholder="e.g. 3.8" onChange={(ev) => setEduField(i, "gpa", ev.target.value)} /></div>
+                <div><label className={labelCls}>GPA <span className="font-normal text-muted">(optional)</span></label><input className={input} value={e.gpa || ""} placeholder="e.g. 3.8" onChange={(ev) => setEduField(i, "gpa", ev.target.value)} /></div>
               </div>
             </div>
           ))}
-          <button onClick={addEdu} className="rounded-lg border border-dashed border-violet-400/40 bg-violet-500/5 px-4 py-2.5 text-sm font-semibold text-violet-200 transition hover:bg-violet-500/10">+ Add education</button>
+          <button onClick={addEdu} className={addBtn}>+ Add education</button>
         </div>
       );
     }
     if (kind === "cover") {
       return (
         <div>
-          <div className="mb-4 inline-flex rounded-lg border border-white/10 bg-white/[0.03] p-1">
+          <div className="mb-4 inline-flex rounded-lg border border-border bg-surface-2 p-1">
             {(["upload", "paste"] as const).map((m) => (
               <button key={m} onClick={() => setCoverMode(m)}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${coverMode === m ? "bg-violet-500/25 text-violet-100" : "text-white/50 hover:text-white"}`}>
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${coverMode === m ? "bg-navy text-white" : "text-muted hover:text-ink"}`}>
                 {m === "upload" ? "Upload document" : "Paste text"}
               </button>
             ))}
           </div>
           {coverMode === "upload" ? (
             <div>
-              {coverUrl && <p className="mb-3 text-sm text-white/60">📄 Current: <strong className="text-white/80">{decodeURIComponent(coverUrl.split("/").pop() || "")}</strong></p>}
+              {coverUrl && <p className="mb-3 text-sm text-muted">📄 Current: <strong className="text-ink">{decodeURIComponent(coverUrl.split("/").pop() || "")}</strong></p>}
               <FileDrop label="Upload cover letter (PDF, DOC, DOCX)" onFile={onCover} />
             </div>
           ) : (
@@ -430,7 +423,7 @@ export default function PortalProfile() {
     if (kind === "resume") {
       return (
         <div>
-          {resumeUrl && <p className="mb-3 text-sm text-white/60">📄 Current resume: <strong className="text-white/80">{decodeURIComponent(resumeUrl.split("/").pop() || "")}</strong></p>}
+          {resumeUrl && <p className="mb-3 text-sm text-muted">📄 Current resume: <strong className="text-ink">{decodeURIComponent(resumeUrl.split("/").pop() || "")}</strong></p>}
           <FileDrop label="Upload resume (PDF, DOC, DOCX)" onFile={onResume} />
         </div>
       );
@@ -439,32 +432,32 @@ export default function PortalProfile() {
     return apps.length ? (
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
-          <thead className="text-[11px] uppercase tracking-wide text-white/40">
+          <thead className="text-[11px] uppercase tracking-wide text-muted">
             <tr><th className="pb-3 pr-4">Company</th><th className="pb-3 pr-4">Role</th><th className="pb-3 pr-4">Status</th><th className="pb-3">Applied</th></tr>
           </thead>
-          <tbody className="text-white/80">
+          <tbody className="text-ink/80">
             {apps.map((a) => (
-              <tr key={a.id} className="border-t border-white/5">
-                <td className="py-2.5 pr-4 font-medium text-white">{a.company}</td>
+              <tr key={a.id} className="border-t border-border">
+                <td className="py-2.5 pr-4 font-medium text-ink">{a.company}</td>
                 <td className="py-2.5 pr-4">{a.role_title || "—"}</td>
-                <td className="py-2.5 pr-4"><span className="rounded-full bg-white/10 px-2 py-0.5 text-xs">{a.status}</span></td>
-                <td className="py-2.5 text-white/50">{a.applied_at}</td>
+                <td className="py-2.5 pr-4"><span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-ink/70">{a.status}</span></td>
+                <td className="py-2.5 text-muted">{a.applied_at}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
     ) : (
-      <p className="text-sm text-white/50">No applications logged yet. Once Hirerchy starts applying on your behalf, they’ll show up here.</p>
+      <p className="text-sm text-muted">No applications logged yet. Once Hirerchy starts applying on your behalf, they’ll show up here.</p>
     );
   }
 }
 
 function FileDrop({ label, onFile }: { label: string; onFile: (f?: File) => void }) {
   return (
-    <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed border-white/15 bg-white/[0.02] px-6 py-8 text-center transition hover:border-violet-400/50 hover:bg-white/[0.04]">
-      <span className="text-2xl text-violet-300">⬆</span>
-      <span className="text-sm text-white/60">{label}</span>
+    <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed border-border bg-surface-2 px-6 py-8 text-center transition hover:border-accent/60 hover:bg-accent/5">
+      <span className="text-2xl text-accent-deep">⬆</span>
+      <span className="text-sm text-muted">{label}</span>
       <input type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={(e) => onFile(e.target.files?.[0])} />
     </label>
   );

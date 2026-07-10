@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-// The portal is a self-contained dark app. `[color-scheme:dark]` makes native
-// controls (date pickers, selects, scrollbars) render dark to match.
+// The portal uses the site's light navy + gold palette so it matches the rest
+// of the marketing site.
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-[#0a0e1a] text-white [color-scheme:dark]">{children}</div>;
+  return <div className="min-h-screen bg-bg text-ink">{children}</div>;
 }

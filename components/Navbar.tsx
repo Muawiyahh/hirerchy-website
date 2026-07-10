@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Wordmark } from "./BrandMark";
 import { site } from "@/lib/content";
@@ -13,6 +14,7 @@ const NAV = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -30,6 +32,9 @@ export default function Navbar() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  // The client portal is a full-screen dark app — no marketing chrome.
+  if (pathname?.startsWith("/portal")) return null;
 
   return (
     <header

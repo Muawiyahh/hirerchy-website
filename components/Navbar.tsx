@@ -33,9 +33,6 @@ export default function Navbar() {
     };
   }, [open]);
 
-  // The client portal is a full-screen dark app — no marketing chrome.
-  if (pathname?.startsWith("/portal")) return null;
-
   return (
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
@@ -51,21 +48,30 @@ export default function Navbar() {
 
         {/* desktop nav */}
         <div className="hidden items-center gap-8 md:flex">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-muted transition-colors hover:text-ink"
-            >
-              {item.label}
-            </Link>
-          ))}
+          {NAV.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={`text-sm font-medium transition-colors ${
+                  isActive ? "text-ink" : "text-muted hover:text-ink"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
           <a
             href={site.portalUrl}
-            className="text-sm font-medium text-muted transition-colors hover:text-ink"
+            aria-current={pathname?.startsWith("/portal") ? "page" : undefined}
+            className={`text-sm font-medium transition-colors ${
+              pathname?.startsWith("/portal") ? "text-ink" : "text-muted hover:text-ink"
+            }`}
           >
             Client login
           </a>

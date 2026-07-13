@@ -34,7 +34,7 @@ export default function PortalAuth({ onAuthed }: { onAuthed: () => void }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-16">
+    <div className="flex min-h-[calc(100vh-68px)] flex-col items-center justify-center px-4 py-16">
       <div className="flex flex-col items-center">
         <BrandMark size={52} />
         <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-ink">Hirerchy</h1>

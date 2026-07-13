@@ -174,7 +174,7 @@ export default function PortalProfile() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-[60vh] items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-border border-t-navy" />
       </div>
     );
@@ -184,14 +184,11 @@ export default function PortalProfile() {
   const isLast = active === SECTIONS.length - 1;
 
   return (
-    <div className="min-h-screen">
-      {/* header */}
-      <header className="sticky top-0 z-20 border-b border-border bg-bg/85 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3.5 sm:px-8">
-          <div className="flex items-center gap-2.5">
-            <BrandMark size={30} />
-            <span className="font-extrabold tracking-tight text-ink">Hirerchy</span>
-          </div>
+    <div className="min-h-[calc(100vh-68px)]">
+      {/* portal toolbar — sits just under the site navbar (68px) */}
+      <header className="sticky top-[68px] z-20 border-b border-border bg-bg/85 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-2.5 sm:px-8">
+          <span className="text-sm font-semibold tracking-tight text-ink">Client portal</span>
           <div className="ml-auto hidden min-w-[220px] flex-col gap-1 sm:flex">
             <div className="flex justify-between text-[11px] font-medium text-muted">
               <span>Profile completion</span><span className="text-accent-deep">{pct}%</span>
@@ -210,7 +207,7 @@ export default function PortalProfile() {
       <div className="mx-auto flex max-w-6xl gap-8 px-5 py-8 sm:px-8">
         {/* sidebar */}
         <nav className="hidden w-52 shrink-0 lg:block">
-          <ul className="sticky top-24 space-y-1">
+          <ul className="sticky top-[124px] space-y-1">
             {SECTIONS.map((s, i) => (
               <li key={s.id}>
                 <button onClick={() => setActive(i)}

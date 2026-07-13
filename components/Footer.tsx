@@ -1,14 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Wordmark } from "./BrandMark";
 import { site, referral } from "@/lib/content";
 
 export default function Footer() {
-  const pathname = usePathname();
-  // Hidden inside the client portal (full-screen dark app).
-  if (pathname?.startsWith("/portal")) return null;
   return (
     <footer className="bg-navy text-white/70">
       <div className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">

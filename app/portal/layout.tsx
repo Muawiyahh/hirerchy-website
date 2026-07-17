@@ -9,5 +9,9 @@ export const metadata: Metadata = {
 // and it uses the site's light navy + gold palette so it matches the rest of
 // the marketing site.
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-[calc(100vh-68px)] bg-bg text-ink">{children}</div>;
+  return (
+    <div className="min-h-[calc(100vh-68px)] bg-gradient-to-b from-surface-2/60 to-bg text-ink">
+      {children}
+    </div>
+  );
 }

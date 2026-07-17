@@ -13,6 +13,7 @@ export interface Field {
   placeholder?: string;
   hint?: string;
   full?: boolean; // span the whole row
+  required?: boolean; // must be filled before the profile can be completed
 }
 
 export interface Section {
@@ -35,11 +36,11 @@ export const SECTIONS: Section[] = [
   {
     id: "personal", nav: "Personal", title: "Personal information",
     fields: [
-      { name: "first_name", label: "First name", type: "text" },
+      { name: "first_name", label: "First name", type: "text", required: true },
       { name: "middle_name", label: "Middle name", type: "text" },
-      { name: "last_name", label: "Last name", type: "text" },
-      { name: "email", label: "Email", type: "email" },
-      { name: "phone", label: "Phone", type: "tel", placeholder: "+1 555 000 0000" },
+      { name: "last_name", label: "Last name", type: "text", required: true },
+      { name: "email", label: "Email", type: "email", required: true },
+      { name: "phone", label: "Phone", type: "tel", placeholder: "+1 555 000 0000", required: true },
       { name: "date_of_birth", label: "Date of birth", type: "date" },
     ],
   },
@@ -47,11 +48,11 @@ export const SECTIONS: Section[] = [
     id: "address", nav: "Address", title: "Address",
     hint: "Choose your country first, then enter your ZIP / postal code — we'll fill in your city and state automatically.",
     fields: [
-      { name: "country", label: "Country", type: "select", options: [] /* filled at runtime */ },
-      { name: "zip", label: "ZIP / Postal code", type: "text" },
-      { name: "state", label: "State", type: "select", options: [] /* depends on country */ },
-      { name: "city", label: "City", type: "text" },
-      { name: "address_line1", label: "Street address", type: "text", full: true },
+      { name: "country", label: "Country", type: "select", options: [] /* filled at runtime */, required: true },
+      { name: "zip", label: "ZIP / Postal code", type: "text", required: true },
+      { name: "state", label: "State", type: "select", options: [] /* depends on country */, required: true },
+      { name: "city", label: "City", type: "text", required: true },
+      { name: "address_line1", label: "Street address", type: "text", full: true, required: true },
     ],
   },
   {
@@ -59,7 +60,7 @@ export const SECTIONS: Section[] = [
     hint: "These answers autofill compliance questions on job applications.",
     fields: [
       { name: "is_18_plus", label: "Are you at least 18 years of age?", type: "select", options: YN },
-      { name: "work_authorized", label: "Are you legally authorized to work in the US?", type: "select", options: YN },
+      { name: "work_authorized", label: "Are you legally authorized to work in the US?", type: "select", options: YN, required: true },
       { name: "requires_sponsorship", label: "Do you require visa sponsorship now or in the future?", type: "select", options: YN },
       { name: "visa_type", label: "Work authorization status", type: "select", options: VISA_TYPES },
       { name: "non_compete", label: "Are you subject to a non-compete agreement?", type: "select", options: YN },

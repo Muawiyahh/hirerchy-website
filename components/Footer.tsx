@@ -35,7 +35,7 @@ export default function Footer() {
               <li><Link href="/contact" className="text-white/75 hover:text-white">Contact</Link></li>
               <li><Link href="/privacy" className="text-white/75 hover:text-white">Privacy</Link></li>
               <li>
-                <a href={site.portalUrl} className="text-white/75 hover:text-white">
+                <a href={`${site.portalUrl}?view=signin`} className="text-white/75 hover:text-white">
                   Client login
                 </a>
               </li>

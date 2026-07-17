@@ -26,6 +26,13 @@ const COMPLETION = [
   "willing_to_relocate", "willing_to_travel", "has_drivers_license", "linkedin_url", "skills",
 ];
 
+// Fields that MUST be filled before the profile can be completed (flagged
+// `required` in config) — the essentials the extension needs to autofill.
+const REQUIRED = SECTIONS.flatMap((s) => s.fields ?? []).filter((f) => f.required).map((f) => f.name);
+const FIELD_LABEL: Record<string, string> = Object.fromEntries(
+  SECTIONS.flatMap((s) => s.fields ?? []).map((f) => [f.name, f.label])
+);
+
 export default function PortalProfile() {
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Record<string, string>>({});
@@ -38,6 +45,7 @@ export default function PortalProfile() {
   const [active, setActive] = useState(0);
   const [saved, setSaved] = useState(false);
   const [done, setDone] = useState(false);
+  const [missing, setMissing] = useState<string[]>([]);
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const idRef = useRef("");
@@ -172,6 +180,21 @@ export default function PortalProfile() {
     return Math.round((filled / (COMPLETION.length + extras)) * 100);
   }, [form, work, edu, resumeUrl]);
 
+  // Block completion until every required field is filled; jump to the first
+  // section that still has a gap.
+  async function completeProfile() {
+    const miss = REQUIRED.filter((k) => !(formRef.current[k] || "").trim());
+    if (miss.length) {
+      setMissing(miss);
+      const idx = SECTIONS.findIndex((s) => s.fields?.some((f) => miss.includes(f.name)));
+      if (idx >= 0) setActive(idx);
+      return;
+    }
+    setMissing([]);
+    await flush();
+    setDone(true);
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
@@ -188,7 +211,6 @@ export default function PortalProfile() {
       {/* portal toolbar — sits just under the site navbar (68px) */}
       <header className="sticky top-[68px] z-20 border-b border-border bg-bg/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-2.5 sm:px-8">
-          <span className="text-sm font-semibold tracking-tight text-ink">Client portal</span>
           <div className="ml-auto hidden min-w-[220px] flex-col gap-1 sm:flex">
             <div className="flex justify-between text-[11px] font-medium text-muted">
               <span>Profile completion</span><span className="text-accent-deep">{pct}%</span>
@@ -198,7 +220,7 @@ export default function PortalProfile() {
             </div>
           </div>
           <button onClick={() => signOut().then(() => location.reload())}
-            className="rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-ink">
+            className="ml-auto rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-ink">
             Sign out
           </button>
         </div>
@@ -207,14 +229,14 @@ export default function PortalProfile() {
       <div className="mx-auto flex max-w-6xl gap-8 px-5 py-8 sm:px-8">
         {/* sidebar */}
         <nav className="hidden w-52 shrink-0 lg:block">
-          <ul className="sticky top-[124px] space-y-1">
+          <ul className="sticky top-[124px] space-y-1 rounded-2xl bg-navy p-3 shadow-[0_20px_50px_-24px_rgba(15,31,61,0.65)]">
             {SECTIONS.map((s, i) => (
               <li key={s.id}>
                 <button onClick={() => setActive(i)}
                   className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition ${
-                    i === active ? "bg-accent/10 font-semibold text-accent-deep" : "text-muted hover:bg-surface-2 hover:text-ink"
+                    i === active ? "bg-white/10 font-semibold text-white" : "text-white/55 hover:bg-white/5 hover:text-white"
                   }`}>
-                  <span className="text-[11px] tabular-nums text-muted/50">{String(i + 1).padStart(2, "0")}</span>
+                  <span className={`text-[11px] tabular-nums ${i === active ? "text-accent" : "text-white/30"}`}>{String(i + 1).padStart(2, "0")}</span>
                   {s.nav}
                 </button>
               </li>
@@ -224,6 +246,12 @@ export default function PortalProfile() {
 
         {/* content */}
         <main className="min-w-0 flex-1">
+          {missing.length > 0 && (
+            <div className="mb-4 rounded-xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-error">
+              Please complete the required fields before finishing:{" "}
+              <span className="font-semibold">{missing.map((k) => FIELD_LABEL[k] || k).join(", ")}</span>.
+            </div>
+          )}
           <div className="mb-6">
             <div className="text-xs font-semibold uppercase tracking-wider text-accent-deep">
               {String(active + 1).padStart(2, "0")} — {section.nav}
@@ -251,7 +279,7 @@ export default function PortalProfile() {
               ← Previous
             </button>
             {isLast ? (
-              <button onClick={async () => { await flush(); setDone(true); }} className={primaryBtn}>
+              <button onClick={completeProfile} className={primaryBtn}>
                 Complete profile
               </button>
             ) : (
@@ -291,7 +319,7 @@ export default function PortalProfile() {
       const sel = val.split(",").map((s) => s.trim()).filter(Boolean);
       return (
         <>
-          <label className={labelCls}>{f.label}{f.hint && <span className="ml-1 font-normal text-muted">({f.hint})</span>}</label>
+          <label className={labelCls}>{f.label}{f.required && <span className="text-error"> *</span>}{f.hint && <span className="ml-1 font-normal text-muted">({f.hint})</span>}</label>
           <div className="flex flex-wrap gap-2">
             {f.options!.map((o) => {
               const on = sel.includes(o);
@@ -313,7 +341,7 @@ export default function PortalProfile() {
         f.options || [];
       return (
         <>
-          <label className={labelCls}>{f.label}</label>
+          <label className={labelCls}>{f.label}{f.required && <span className="text-error"> *</span>}</label>
           <select className={`${input} appearance-none`} value={val}
             onChange={(e) => (f.name === "country" ? onCountry(e.target.value) : setField(f.name, e.target.value))}>
             <option value="">{options.length ? "— select —" : "— n/a —"}</option>
@@ -329,7 +357,7 @@ export default function PortalProfile() {
     if (f.type === "textarea") {
       return (
         <>
-          <label className={labelCls}>{f.label}</label>
+          <label className={labelCls}>{f.label}{f.required && <span className="text-error"> *</span>}</label>
           <textarea className={`${input} min-h-[90px] resize-y`} value={val} placeholder={f.placeholder}
             onChange={(e) => setField(f.name, e.target.value)} />
         </>

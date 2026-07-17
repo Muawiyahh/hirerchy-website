@@ -8,7 +8,14 @@ const input =
   "w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25";
 
 export default function PortalAuth({ onAuthed }: { onAuthed: () => void }) {
-  const [mode, setMode] = useState<"signup" | "signin">("signup");
+  // "Client login" links arrive with ?view=signin so returning clients land on
+  // the sign-in view; "Get started" (no param) defaults to sign-up.
+  const [mode, setMode] = useState<"signup" | "signin">(() =>
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("view") === "signin"
+      ? "signin"
+      : "signup"
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

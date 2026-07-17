@@ -67,7 +67,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-3 md:flex">
           <a
-            href={site.portalUrl}
+            href={`${site.portalUrl}?view=signin`}
             aria-current={pathname?.startsWith("/portal") ? "page" : undefined}
             className={`text-sm font-medium transition-colors ${
               pathname?.startsWith("/portal") ? "text-ink" : "text-muted hover:text-ink"
@@ -119,7 +119,7 @@ export default function Navbar() {
             ))}
             <div className="mt-2 flex flex-col gap-2">
               <a
-                href={site.portalUrl}
+                href={`${site.portalUrl}?view=signin`}
                 className="rounded-full px-4 py-3 text-center text-sm font-semibold text-ink ring-1 ring-border"
               >
                 Client login

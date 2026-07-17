@@ -6,8 +6,12 @@ import { site, stats } from "@/lib/content";
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
+      {/* soft blue-tinted band so the top of the page isn't stark white */}
       <div className="bg-grid pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute left-1/2 top-[-10%] h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-accent/15 blur-[140px]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[440px] bg-gradient-to-b from-surface-2 via-surface-2/40 to-transparent" />
+      {/* gold glow (top-centre) + navy glow (right) bring the navy+gold palette in */}
+      <div className="pointer-events-none absolute left-1/2 top-[-10%] h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-accent/25 blur-[140px]" />
+      <div className="pointer-events-none absolute right-[-6%] top-[6%] h-[360px] w-[560px] rounded-full bg-navy/10 blur-[150px]" />
 
       <div className="relative mx-auto w-full max-w-6xl px-5 pb-16 pt-20 sm:px-8 sm:pb-24 sm:pt-28">
         <div className="mx-auto max-w-3xl text-center">

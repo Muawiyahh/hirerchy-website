@@ -23,6 +23,9 @@ export default function PortalApp() {
   const [apps, setApps] = useState<AppRow[]>([]);
   const [view, setView] = useState<View>("onboarding");
   const [justSubmitted, setJustSubmitted] = useState(false);
+  // Sticky for the session once the client has finished onboarding — drives tab
+  // visibility so navigating away from Overview never strands them without tabs.
+  const [onboarded, setOnboarded] = useState(false);
 
   async function load() {
     const p = await getMyProfile();
@@ -35,7 +38,9 @@ export default function PortalApp() {
     (async () => {
       try {
         const p = await load();
-        setView(p.submitted_at ? "overview" : "onboarding");
+        const done = !!p.submitted_at;
+        setOnboarded(done);
+        setView(done ? "overview" : "onboarding");
       } catch {
         /* stay on onboarding; the form will surface its own errors */
       } finally {
@@ -47,12 +52,13 @@ export default function PortalApp() {
   // Fired by PortalProfile's "Complete profile" (onboarding) / "Save & return" (edit).
   async function handleComplete() {
     if (!profile) return;
-    if (!profile.submitted_at) {
+    if (!onboarded) {
       try {
         await saveProfile(profile.id, { submitted_at: new Date().toISOString() });
-      } catch { /* non-fatal — overview still shows */ }
+      } catch { /* non-fatal — tabs work from session state either way */ }
       setJustSubmitted(true);
     }
+    setOnboarded(true);
     await load(); // refresh completion % + apps for the overview snapshot
     setView("overview");
     window.scrollTo({ top: 0 });
@@ -72,7 +78,6 @@ export default function PortalApp() {
     );
   }
 
-  const submitted = Boolean(profile?.submitted_at) || justSubmitted;
   const name = profile?.first_name || "";
   const pct = profile ? completionFromProfile(profile) : 0;
 
@@ -87,7 +92,7 @@ export default function PortalApp() {
       {/* sub-bar under the site navbar (68px) */}
       <header className="sticky top-[68px] z-20 border-b border-border bg-bg/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-1 px-5 py-2 sm:px-8">
-          {submitted ? (
+          {onboarded ? (
             tabs.map((t) => (
               <button
                 key={t.id}

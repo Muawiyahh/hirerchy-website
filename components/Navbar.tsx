@@ -19,6 +19,10 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  // Gate the auth buttons until we know the session, so a signed-in client never
+  // flashes the logged-out "Client login / Get started" buttons on load. If the
+  // portal isn't configured there's no session to resolve, so reveal immediately.
+  const [authReady, setAuthReady] = useState(!portalConfigured);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -28,11 +32,15 @@ export default function Navbar() {
   }, []);
 
   // Track the client-portal session so we can hide "Get started" and swap
-  // "Client login" → "My portal" while a client is signed in.
+  // "Client login" → "My profile" while a client is signed in.
   useEffect(() => {
     if (!portalConfigured) return;
     let mounted = true;
-    getSession().then((s) => { if (mounted) setLoggedIn(!!s); }).catch(() => {});
+    // Resolve the session (fast, local read) before revealing the auth buttons,
+    // then keep it in sync with sign-in / sign-out.
+    getSession()
+      .then((s) => { if (mounted) { setLoggedIn(!!s); setAuthReady(true); } })
+      .catch(() => { if (mounted) setAuthReady(true); });
     const { data } = portal().auth.onAuthStateChange((_e, session) => setLoggedIn(!!session));
     return () => { mounted = false; data.subscription.unsubscribe(); };
   }, []);
@@ -78,22 +86,26 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <a
-            href={loggedIn ? site.portalUrl : `${site.portalUrl}?view=signin`}
-            aria-current={pathname?.startsWith("/portal") ? "page" : undefined}
-            className={`text-sm font-medium transition-colors ${
-              pathname?.startsWith("/portal") ? "text-ink" : "text-muted hover:text-ink"
-            }`}
-          >
-            {loggedIn ? "My portal" : "Client login"}
-          </a>
-          {!loggedIn && (
-            <a
-              href={site.portalUrl}
-              className="inline-flex items-center justify-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(15,31,61,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-navy-2"
-            >
-              Get started
-            </a>
+          {authReady && (
+            <>
+              <a
+                href={loggedIn ? site.portalUrl : `${site.portalUrl}?view=signin`}
+                aria-current={pathname?.startsWith("/portal") ? "page" : undefined}
+                className={`text-sm font-medium transition-colors ${
+                  pathname?.startsWith("/portal") ? "text-ink" : "text-muted hover:text-ink"
+                }`}
+              >
+                {loggedIn ? "My profile" : "Client login"}
+              </a>
+              {!loggedIn && (
+                <a
+                  href={site.portalUrl}
+                  className="inline-flex items-center justify-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(15,31,61,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-navy-2"
+                >
+                  Get started
+                </a>
+              )}
+            </>
           )}
         </div>
 
@@ -132,19 +144,23 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="mt-2 flex flex-col gap-2">
-              <a
-                href={loggedIn ? site.portalUrl : `${site.portalUrl}?view=signin`}
-                className="rounded-full px-4 py-3 text-center text-sm font-semibold text-ink ring-1 ring-border"
-              >
-                {loggedIn ? "My portal" : "Client login"}
-              </a>
-              {!loggedIn && (
-                <a
-                  href={site.portalUrl}
-                  className="rounded-full bg-navy px-4 py-3 text-center text-sm font-semibold text-white"
-                >
-                  Get started
-                </a>
+              {authReady && (
+                <>
+                  <a
+                    href={loggedIn ? site.portalUrl : `${site.portalUrl}?view=signin`}
+                    className="rounded-full px-4 py-3 text-center text-sm font-semibold text-ink ring-1 ring-border"
+                  >
+                    {loggedIn ? "My profile" : "Client login"}
+                  </a>
+                  {!loggedIn && (
+                    <a
+                      href={site.portalUrl}
+                      className="rounded-full bg-navy px-4 py-3 text-center text-sm font-semibold text-white"
+                    >
+                      Get started
+                    </a>
+                  )}
+                </>
               )}
             </div>
           </div>

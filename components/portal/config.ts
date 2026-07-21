@@ -1,6 +1,8 @@
 // Field configuration for the client-portal profile form. Mirrors the fields the
 // extension autofills from (the `clients` table) and the standalone portal.
 
+import type { ClientProfile } from "@/lib/portal";
+
 export type FieldType =
   | "text" | "email" | "url" | "tel" | "date" | "number"
   | "textarea" | "select" | "multiselect";
@@ -124,5 +126,28 @@ export const SECTIONS: Section[] = [
   },
   { id: "cover", nav: "Cover Letter", title: "Cover letter (optional)", custom: "cover" },
   { id: "resume", nav: "Resume", title: "Resume", custom: "resume" },
-  { id: "applications", nav: "Applications", title: "Your applications", custom: "applications" },
 ];
+
+// ── Profile completion ────────────────────────────────────────────────────────
+// Shared between the live form meter (PortalProfile) and the Overview snapshot
+// (PortalApp), so both agree. Keys + 3 extras (work / education / resume).
+export const COMPLETION_KEYS = [
+  "first_name", "last_name", "email", "phone", "address_line1", "city", "state", "zip", "country",
+  "is_18_plus", "work_authorized", "requires_sponsorship", "visa_type", "non_compete", "worked_for_government",
+  "employment_type", "work_arrangement", "years_experience", "availability", "salary_expectation",
+  "willing_to_relocate", "willing_to_travel", "has_drivers_license", "linkedin_url", "skills",
+];
+
+export function completionFromProfile(p: ClientProfile): number {
+  const extras = 3;
+  let filled = 0;
+  for (const k of COMPLETION_KEYS) {
+    const v = p[k];
+    if (k === "skills") { if (Array.isArray(v) && v.length) filled++; }
+    else if (v != null && String(v).trim() !== "") filled++;
+  }
+  if (Array.isArray(p.work_experience) && p.work_experience.some((w) => w.title || w.company)) filled++;
+  if (Array.isArray(p.education) && p.education.some((e) => e.school || e.degree)) filled++;
+  if (p.resume_url) filled++;
+  return Math.round((filled / (COMPLETION_KEYS.length + extras)) * 100);
+}

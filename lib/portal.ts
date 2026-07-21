@@ -43,6 +43,7 @@ export interface EduEntry {
 export interface ClientProfile {
   id: string;
   profile_id?: string | null;
+  submitted_at?: string | null;
   first_name?: string; middle_name?: string; last_name?: string;
   email?: string; phone?: string; date_of_birth?: string;
   address_line1?: string; city?: string; state?: string; zip?: string; country?: string;

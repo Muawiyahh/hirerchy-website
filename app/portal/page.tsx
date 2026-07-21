@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSession, portalConfigured } from "@/lib/portal";
 import PortalAuth from "@/components/portal/PortalAuth";
-import PortalProfile from "@/components/portal/PortalProfile";
+import PortalApp from "@/components/portal/PortalApp";
 
 export default function PortalPage() {
   const [state, setState] = useState<"loading" | "auth" | "in">(
@@ -24,6 +24,6 @@ export default function PortalPage() {
       </div>
     );
   }
-  if (state === "in") return <PortalProfile />;
+  if (state === "in") return <PortalApp />;
   return <PortalAuth onAuthed={() => setState("in")} />;
 }

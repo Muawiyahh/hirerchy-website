@@ -1,14 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import BrandMark from "@/components/BrandMark";
 import {
-  getMyProfile, saveProfile, signOut, uploadResume, uploadCoverLetter,
-  getMyApplications, lookupZip,
-  type ClientProfile, type WorkEntry, type EduEntry, type AppRow,
+  getMyProfile, saveProfile, uploadResume, uploadCoverLetter, lookupZip,
+  type ClientProfile, type WorkEntry, type EduEntry,
 } from "@/lib/portal";
 import { COUNTRIES, DEGREE_TYPES, statesFor, COUNTRY_CODES } from "@/lib/portalData";
-import { SECTIONS, VISA_TYPES, type Field } from "./config";
+import { SECTIONS, VISA_TYPES, COMPLETION_KEYS, type Field } from "./config";
 
 // ── shared class strings (site's light navy + gold palette) ────────────────────
 const input =
@@ -19,13 +17,6 @@ const cardCls = "rounded-2xl border border-border bg-surface p-6 shadow-sm";
 const addBtn = "rounded-lg border border-dashed border-accent/50 bg-accent/5 px-4 py-2.5 text-sm font-semibold text-accent-deep transition hover:bg-accent/10";
 const primaryBtn = "rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-2";
 
-const COMPLETION = [
-  "first_name", "last_name", "email", "phone", "address_line1", "city", "state", "zip", "country",
-  "is_18_plus", "work_authorized", "requires_sponsorship", "visa_type", "non_compete", "worked_for_government",
-  "employment_type", "work_arrangement", "years_experience", "availability", "salary_expectation",
-  "willing_to_relocate", "willing_to_travel", "has_drivers_license", "linkedin_url", "skills",
-];
-
 // Fields that MUST be filled before the profile can be completed (flagged
 // `required` in config) — the essentials the extension needs to autofill.
 const REQUIRED = SECTIONS.flatMap((s) => s.fields ?? []).filter((f) => f.required).map((f) => f.name);
@@ -33,7 +24,13 @@ const FIELD_LABEL: Record<string, string> = Object.fromEntries(
   SECTIONS.flatMap((s) => s.fields ?? []).map((f) => [f.name, f.label])
 );
 
-export default function PortalProfile() {
+export default function PortalProfile({
+  mode,
+  onComplete,
+}: {
+  mode: "onboarding" | "edit";
+  onComplete: () => void | Promise<void>;
+}) {
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Record<string, string>>({});
   const [work, setWork] = useState<WorkEntry[]>([]);
@@ -41,10 +38,8 @@ export default function PortalProfile() {
   const [resumeUrl, setResumeUrl] = useState<string>("");
   const [coverUrl, setCoverUrl] = useState<string>("");
   const [coverMode, setCoverMode] = useState<"upload" | "paste">("upload");
-  const [apps, setApps] = useState<AppRow[]>([]);
   const [active, setActive] = useState(0);
   const [saved, setSaved] = useState(false);
-  const [done, setDone] = useState(false);
   const [missing, setMissing] = useState<string[]>([]);
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -76,7 +71,6 @@ export default function PortalProfile() {
         setResumeUrl(c.resume_url || "");
         setCoverUrl(c.cover_letter_url || "");
         if (c.cover_letter_text) setCoverMode("paste");
-        getMyApplications(c.id).then(setApps).catch(() => {});
       } catch {
         /* leave empty; user can retry */
       } finally {
@@ -173,11 +167,11 @@ export default function PortalProfile() {
   const pct = useMemo(() => {
     const extras = 3;
     let filled = 0;
-    for (const key of COMPLETION) if ((form[key] || "").trim() !== "") filled++;
+    for (const key of COMPLETION_KEYS) if ((form[key] || "").trim() !== "") filled++;
     if (work.some((w) => w.title || w.company)) filled++;
     if (edu.some((e) => e.school || e.degree)) filled++;
     if (resumeUrl) filled++;
-    return Math.round((filled / (COMPLETION.length + extras)) * 100);
+    return Math.round((filled / (COMPLETION_KEYS.length + extras)) * 100);
   }, [form, work, edu, resumeUrl]);
 
   // Block completion until every required field is filled; jump to the first
@@ -192,7 +186,7 @@ export default function PortalProfile() {
     }
     setMissing([]);
     await flush();
-    setDone(true);
+    await onComplete();
   }
 
   if (loading) {
@@ -207,25 +201,7 @@ export default function PortalProfile() {
   const isLast = active === SECTIONS.length - 1;
 
   return (
-    <div className="min-h-[calc(100vh-68px)]">
-      {/* portal toolbar — sits just under the site navbar (68px) */}
-      <header className="sticky top-[68px] z-20 border-b border-border bg-bg/85 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-2.5 sm:px-8">
-          <div className="ml-auto hidden min-w-[220px] flex-col gap-1 sm:flex">
-            <div className="flex justify-between text-[11px] font-medium text-muted">
-              <span>Profile completion</span><span className="text-accent-deep">{pct}%</span>
-            </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-surface-2">
-              <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${pct}%` }} />
-            </div>
-          </div>
-          <button onClick={() => signOut().then(() => location.reload())}
-            className="ml-auto rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-ink">
-            Sign out
-          </button>
-        </div>
-      </header>
-
+    <>
       <div className="mx-auto flex max-w-6xl gap-8 px-5 py-8 sm:px-8">
         {/* sidebar */}
         <nav className="hidden w-52 shrink-0 lg:block">
@@ -246,6 +222,14 @@ export default function PortalProfile() {
 
         {/* content */}
         <main className="min-w-0 flex-1">
+          {/* inline completion meter */}
+          <div className="mb-5 flex items-center gap-3">
+            <span className="whitespace-nowrap text-[11px] font-medium text-muted">Profile completion</span>
+            <div className="h-1.5 w-40 overflow-hidden rounded-full bg-surface-2">
+              <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${pct}%` }} />
+            </div>
+            <span className="text-[11px] font-semibold text-accent-deep">{pct}%</span>
+          </div>
           {missing.length > 0 && (
             <div className="mb-4 rounded-xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-error">
               Please complete the required fields before finishing:{" "}
@@ -280,7 +264,7 @@ export default function PortalProfile() {
             </button>
             {isLast ? (
               <button onClick={completeProfile} className={primaryBtn}>
-                Complete profile
+                {mode === "edit" ? "Save & return" : "Complete profile"}
               </button>
             ) : (
               <button onClick={() => setActive((a) => a + 1)} className={primaryBtn}>
@@ -295,21 +279,7 @@ export default function PortalProfile() {
       <div className={`fixed bottom-5 left-1/2 z-30 -translate-x-1/2 rounded-full border border-border bg-surface px-4 py-2 text-sm text-ink shadow-lg transition ${saved ? "opacity-100" : "pointer-events-none opacity-0"}`}>
         ✓ All changes saved
       </div>
-
-      {/* success modal */}
-      {done && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-navy/50 px-4 backdrop-blur-sm" onClick={() => setDone(false)}>
-          <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 text-center shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-center"><BrandMark size={40} /></div>
-            <h2 className="mt-4 text-xl font-bold text-ink">Your profile is complete!</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">
-              Thank you — your profile has been submitted. Hirerchy will now take care of your job applications on your behalf. You can come back and update your details anytime.
-            </p>
-            <button onClick={() => setDone(false)} className={`${primaryBtn} mt-6 w-full`}>Done</button>
-          </div>
-        </div>
-      )}
-    </div>
+    </>
   );
 
   // ── field renderers ─────────────────────────────────────────────────────────────
@@ -453,28 +423,7 @@ export default function PortalProfile() {
         </div>
       );
     }
-    // applications
-    return apps.length ? (
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
-          <thead className="text-[11px] uppercase tracking-wide text-muted">
-            <tr><th className="pb-3 pr-4">Company</th><th className="pb-3 pr-4">Role</th><th className="pb-3 pr-4">Status</th><th className="pb-3">Applied</th></tr>
-          </thead>
-          <tbody className="text-ink/80">
-            {apps.map((a) => (
-              <tr key={a.id} className="border-t border-border">
-                <td className="py-2.5 pr-4 font-medium text-ink">{a.company}</td>
-                <td className="py-2.5 pr-4">{a.role_title || "—"}</td>
-                <td className="py-2.5 pr-4"><span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-ink/70">{a.status}</span></td>
-                <td className="py-2.5 text-muted">{a.applied_at}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    ) : (
-      <p className="text-sm text-muted">No applications logged yet. Once Hirerchy starts applying on your behalf, they’ll show up here.</p>
-    );
+    return null;
   }
 }
 

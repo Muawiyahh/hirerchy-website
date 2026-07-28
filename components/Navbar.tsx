@@ -8,13 +8,15 @@ import LiveCount from "./LiveCount";
 import { site } from "@/lib/content";
 import { getSession, portal, portalConfigured } from "@/lib/portal";
 
-/* Section anchors on the home page, plus the standalone pricing page. */
+/* Home-page anchors plus the standalone pages. Kept to five so the bar still
+   fits on one line at the narrow desktop widths the design was drawn at —
+   everything else hangs off the footer. */
 const NAV = [
   { label: "What we handle", href: "/#services" },
-  { label: "Process", href: "/#process" },
-  { label: "Testimonials", href: "/#testimonials" },
+  { label: "How it works", href: "/how-it-works" },
+  { label: "Results", href: "/results" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Get started", href: "/#intake" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 export default function Navbar() {

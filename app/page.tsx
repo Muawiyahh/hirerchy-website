@@ -7,6 +7,7 @@ import Promise from "@/components/home/Promise";
 import Process from "@/components/home/Process";
 import Testimonials from "@/components/home/Testimonials";
 import PricingTeaser from "@/components/home/PricingTeaser";
+import FAQ from "@/components/home/FAQ";
 import IntakeCTA from "@/components/home/IntakeCTA";
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
       <Process />
       <Testimonials />
       <PricingTeaser />
+      <FAQ />
       <IntakeCTA />
     </>
   );

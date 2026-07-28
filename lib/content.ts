@@ -431,6 +431,135 @@ export const compareGroups: {
 export const pricingFootnote =
   "Need something longer than 8 weeks, or a plan built around a specific industry push? Message us after your intake and we will put a custom runway together.";
 
+/* ── FAQ ───────────────────────────────────────────────────────────────────── */
+export const faqs = [
+  {
+    q: "Do you actually apply for me, or just send me a list?",
+    a: "We apply for you. Once your profile is set up, our team hand-applies to matched roles under your name every week — up to 120 of them depending on your plan. You do not lift a finger after onboarding.",
+  },
+  {
+    q: "How is this different from a resume writer?",
+    a: "A resume writer hands you a document and wishes you luck. We rebuild your resume AND do the searching, selecting, applying and tracking — the whole job-search grind, done for you, every week.",
+  },
+  {
+    q: "Will applications look generic or spammy?",
+    a: "No. A real person reviews every role before we apply, and we skip the dead-end postings and ghost jobs. Rookie and Pro include one strong generalized cover letter; on Champion and Legend a fresh one is written for every single application.",
+  },
+  {
+    q: "Can I see where you have applied?",
+    a: "Yes. Your client portal has a live application tracker listing every company, role, date and status, updated as we apply — so you always know exactly what is happening.",
+  },
+  {
+    q: "What do you need from me to start?",
+    a: "A completed profile (about 15 minutes) and your current resume. We take it from there, and you can update your details any time from the portal.",
+  },
+  {
+    q: "What if I do not like the roles you picked?",
+    a: "Tell us and we redo that week's applications free of charge. You can also send us specific postings you want us to apply to, and we will include those alongside our own picks.",
+  },
+  {
+    q: "Do you guarantee I will get a job?",
+    a: "No, and be wary of anyone who does — hiring decisions belong to employers. What we guarantee is the work: hand-picked roles, applications submitted within hours of a posting going live, and a redo at no cost if a week's selection misses the mark.",
+  },
+  {
+    q: "Can I cancel or change plans?",
+    a: "Plans run in 4-week and 8-week terms, and you choose the length up front. Message your specialist to move up or down a tier — we will apply the change from your next term.",
+  },
+];
+
+/* ── What is included (detail page) ────────────────────────────────────────── */
+export const included = [
+  {
+    title: "ATS-grade resume rebuild",
+    body: "A complete rewrite engineered to pass applicant-tracking filters and land in front of a human. Free and included on every plan.",
+    icon: "doc",
+    plans: "All plans",
+  },
+  {
+    title: "Up to 120 applications a week",
+    body: "We hand-apply to carefully matched roles every single week — 60 on Rookie, up to 120 on Pro, Champion and Legend.",
+    icon: "bolt",
+    plans: "All plans",
+  },
+  {
+    title: "Cover letters",
+    body: "One strong, generalized cover letter built around your background on Rookie and Pro; a fresh one tailored to each application on Champion and Legend.",
+    icon: "pen",
+    plans: "All plans",
+  },
+  {
+    title: "Live application tracker",
+    body: "A private dashboard showing every company, role, date applied and status — updated as we go, so nothing happens out of sight.",
+    icon: "chart",
+    plans: "All plans",
+  },
+  {
+    title: "LinkedIn profile rebuild",
+    body: "We rewrite your headline, About section and keywords to match your new resume so recruiters find you too.",
+    icon: "link",
+    plans: "Champion & Legend",
+  },
+  {
+    title: "A specialist who knows your search",
+    body: "One person owns your account start to finish, with strategy calls monthly on Pro and Champion, or every two weeks on Legend.",
+    icon: "users",
+    plans: "Champion & Legend",
+  },
+];
+
+/* ── Inside the portal (how-it-works page) ─────────────────────────────────── */
+export const portalSteps = [
+  {
+    title: "Create your account",
+    body: "Sign up for your private client portal and you are ready to start — no email confirmation hoops.",
+  },
+  {
+    title: "Fill your profile once",
+    body: "A guided form captures your experience, target roles, locations, salary and work authorization. About 15 minutes.",
+  },
+  {
+    title: "Add your resume",
+    body: "Paste in your current resume and links. Our team takes it from there and rebuilds it for the filters.",
+  },
+  {
+    title: "We start applying",
+    body: "We search and screen roles daily, then submit that week's batch under your name — within hours of a posting going live.",
+  },
+  {
+    title: "Track everything live",
+    body: "Watch every company, role, date and status land in your dashboard as the callbacks come in.",
+  },
+];
+
+/* ── Proof page ────────────────────────────────────────────────────────────
+   Every figure here is one the site already states elsewhere — nothing new is
+   claimed. The weekly volume series below is still illustrative.            */
+export const proofStats = [
+  { value: "95%", label: "of clients receive an interview callback within the first 4 to 8 weeks" },
+  { value: "120", label: "applications submitted per week on Pro, Champion and Legend" },
+  { value: "40 hours", label: "of manual searching and applying reclaimed every week" },
+  { value: "100%", label: "of applications hand reviewed by a person before they go out" },
+];
+
+/* Weekly application volume — drives the bar chart on /results.
+   TODO: replace with your real weekly totals from the tracker. */
+export const weeklyVolume: { week: string; applications: number }[] = [
+  { week: "Wk 1", applications: 96 },
+  { week: "Wk 2", applications: 104 },
+  { week: "Wk 3", applications: 118 },
+  { week: "Wk 4", applications: 112 },
+  { week: "Wk 5", applications: 121 },
+  { week: "Wk 6", applications: 117 },
+  { week: "Wk 7", applications: 124 },
+  { week: "Wk 8", applications: 119 },
+];
+
+/* ── Referral program ──────────────────────────────────────────────────────── */
+export const referral = {
+  title: "Refer a friend, you both win",
+  body: "Every client gets a referral code. When a friend signs up with it, you both get a free week of applications. Good help spreads — we just make it pay.",
+};
+
 /* ── Closing CTA ───────────────────────────────────────────────────────────── */
 export const intake = {
   title: "Start your intake.",

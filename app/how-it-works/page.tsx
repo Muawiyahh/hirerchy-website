@@ -82,6 +82,7 @@ export default function HowItWorksPage() {
                   <tr>
                     <th className="px-4 py-2 font-semibold">Company</th>
                     <th className="px-4 py-2 font-semibold">Role</th>
+                    <th className="px-4 py-2 font-semibold">Listing</th>
                     <th className="px-4 py-2 font-semibold">Status</th>
                   </tr>
                 </thead>
@@ -90,6 +91,7 @@ export default function HowItWorksPage() {
                     <tr key={co} className="even:bg-surface-2/50">
                       <td className="px-4 py-2 font-medium text-ink">{co}</td>
                       <td className="px-4 py-2 text-ink/80">{role}</td>
+                      <td className="px-4 py-2 font-medium text-accent">View</td>
                       <td className="px-4 py-2">
                         <span
                           className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS[status]}`}

@@ -35,6 +35,7 @@ export default function PortalTracker({ apps }: { apps: AppRow[] }) {
                 <tr>
                   <th className="px-4 py-2 font-semibold">Company</th>
                   <th className="px-4 py-2 font-semibold">Role</th>
+                  <th className="px-4 py-2 font-semibold">Listing</th>
                   <th className="px-4 py-2 font-semibold">Status</th>
                   <th className="whitespace-nowrap px-4 py-2 font-semibold">Applied</th>
                 </tr>
@@ -47,6 +48,24 @@ export default function PortalTracker({ apps }: { apps: AppRow[] }) {
                   >
                     <td className="px-4 py-1.5 font-medium text-ink">{a.company}</td>
                     <td className="px-4 py-1.5 text-ink/80">{a.role_title || "—"}</td>
+                    <td className="px-4 py-1.5">
+                      {a.job_url ? (
+                        <a
+                          href={a.job_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={a.job_url}
+                          className="inline-flex items-center gap-1 font-medium text-accent hover:underline"
+                        >
+                          View
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                          </svg>
+                        </a>
+                      ) : (
+                        <span className="text-muted">—</span>
+                      )}
+                    </td>
                     <td className="px-4 py-1.5">
                       <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_STYLES[a.status] || "bg-surface-2 text-ink/70"}`}>
                         {a.status}

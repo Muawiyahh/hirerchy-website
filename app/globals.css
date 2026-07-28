@@ -242,13 +242,23 @@ h3 {
   /* No animation means no loop, so drop the duplicate set and let the
      originals wrap into a static grid instead of repeating themselves.
      `.reverse` has to be named explicitly — it out-specifies a bare
-     `.marquee-row` reset and would otherwise keep its translate. */
+     `.marquee-row` reset and would otherwise keep its translate.
+     The wrapped grid also has to be centred: a scrolling row starts flush left
+     by design, but once it is static that reads as the whole block being
+     shunted to one side. */
   .marquee-row,
   .marquee-row.reverse {
     animation: none;
     transform: none;
     flex-wrap: wrap;
+    justify-content: center;
     width: auto;
+    padding-inline: 24px;
+  }
+  /* The edge fade only makes sense on something that scrolls past it. */
+  .marquee-track {
+    mask-image: none;
+    -webkit-mask-image: none;
   }
   .marquee-row > [data-dup] {
     display: none;

@@ -67,7 +67,7 @@ export default function PortalAuth({ onAuthed }: { onAuthed: () => void }) {
         )}
 
         <button type="submit" disabled={busy}
-          className="mt-5 w-full rounded-full bg-navy px-4 py-3 text-[15px] font-semibold text-white transition hover:bg-navy-2 disabled:opacity-60">
+          className="mt-5 w-full rounded-full bg-accent px-4 py-3 text-[15px] font-semibold text-navy transition hover:bg-accent-2 disabled:opacity-60">
           {busy ? "Please wait…" : mode === "signup" ? "Create account" : "Sign in"}
         </button>
 

@@ -101,7 +101,7 @@ export default function HowItWorksPage() {
                           ? "bg-success/15 text-success"
                           : tone === "accent"
                           ? "bg-accent/20 text-accent-deep"
-                          : "bg-navy/[0.06] text-muted"
+                          : "bg-white/[0.06] text-muted"
                       }`}
                     >
                       {status}

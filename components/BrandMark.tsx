@@ -19,10 +19,10 @@ export default function BrandMark({
       aria-hidden="true"
       className={className}
     >
-      <rect width="40" height="40" rx="11" fill={onDark ? "#1e2f52" : "#0f1f3d"} />
+      <rect width="40" height="40" rx="11" fill={onDark ? "#22345a" : "#1c2b4a"} />
       <path
         d="M13 11v18M27 11v18M13 20h14"
-        stroke="#c9a227"
+        stroke="#e0b544"
         strokeWidth="2.6"
         strokeLinecap="round"
       />

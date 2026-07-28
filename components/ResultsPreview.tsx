@@ -26,7 +26,7 @@ export default function ResultsPreview({
             />
             <div className="mt-8 grid grid-cols-2 gap-4">
               <div className={`rounded-card border p-5 ${card}`}>
-                <div className={`text-3xl font-extrabold ${d ? "text-accent" : "text-navy"}`}>
+                <div className="text-3xl font-extrabold text-accent">
                   <StatCounter value={stats.totalApplications} suffix="+" />
                 </div>
                 <p className={`mt-1 text-xs ${d ? "text-white/60" : "text-muted"}`}>
@@ -34,7 +34,7 @@ export default function ResultsPreview({
                 </p>
               </div>
               <div className={`rounded-card border p-5 ${card}`}>
-                <div className={`text-3xl font-extrabold ${d ? "text-accent" : "text-navy"}`}>
+                <div className="text-3xl font-extrabold text-accent">
                   <StatCounter value={stats.callbacksThisMonth} />
                 </div>
                 <p className={`mt-1 text-xs ${d ? "text-white/60" : "text-muted"}`}>

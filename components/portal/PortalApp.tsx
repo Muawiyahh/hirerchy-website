@@ -98,7 +98,7 @@ export default function PortalApp() {
                 key={t.id}
                 onClick={() => go(t.id)}
                 className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-                  view === t.id ? "bg-navy text-white" : "text-muted hover:bg-surface-2 hover:text-ink"
+                  view === t.id ? "bg-accent text-navy" : "text-muted hover:bg-surface-2 hover:text-ink"
                 }`}
               >
                 {t.label}

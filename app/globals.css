@@ -1,33 +1,35 @@
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Hirerchy design tokens — navy + gold (matches the extension / Chrome Store
-   branding and the admin panel). Light surfaces, navy ink, gold accents.
+   Hirerchy design tokens — DARK navy + gold (matches the extension / Chrome
+   Store branding and the admin panel). Deep navy surfaces, near-white ink,
+   gold accents.
 
    Colour rules:
-     • navy   → primary buttons, dark bands, cards, headings
-     • gold   → fills, borders, large display text, and text ON navy
-     • gold-deep → small gold text/icons on LIGHT backgrounds (contrast-safe)
-   The client portal at /portal uses this same navy + gold palette.
+     • navy   → section bands + cards that sit just above the page background
+     • gold   → primary buttons, fills, borders, display text, icons
+     • gold-deep → small gold text/icons; on DARK this is the LIGHTER gold so it
+       still clears contrast at small sizes
+   The client portal at /portal uses this same dark navy + gold palette.
    ══════════════════════════════════════════════════════════════════════════ */
 @theme {
-  --color-bg:          #edf1f7; /* soft blue-tinted light, so white cards lift off it */
-  --color-surface:     #ffffff;
-  --color-surface-2:   #e3e9f2;
+  --color-bg:          #0b1220; /* deep navy page background */
+  --color-surface:     #131d31; /* cards lift off the background */
+  --color-surface-2:   #1a2540; /* inputs / subtle fills */
 
-  --color-navy:        #0f1f3d;
-  --color-navy-2:      #16213a;
+  --color-navy:        #0f1a2e; /* tonal band sections */
+  --color-navy-2:      #16223a;
 
-  --color-accent:      #c9a227; /* gold — fills, borders, display text, on-navy text */
-  --color-accent-2:    #a8871c; /* deeper gold — hover fills */
-  --color-accent-deep: #8a6a14; /* gold that passes contrast as small text on light */
+  --color-accent:      #e0b544; /* gold — buttons, fills, display text */
+  --color-accent-2:    #c9a227; /* deeper gold — hover fills */
+  --color-accent-deep: #e8c766; /* light gold for small text on dark (contrast-safe) */
 
-  --color-ink:         #16213a;
-  --color-muted:       #697089;
-  --color-border:      #e4e8f0;
+  --color-ink:         #eef2f9;
+  --color-muted:       #97a3bd;
+  --color-border:      #223050;
 
-  --color-success:     #1e7d4f;
-  --color-error:       #c0392b;
+  --color-success:     #22c58b;
+  --color-error:       #f87171;
 
   /* lighter variants for use on the navy bands, where the dark ones vanish */
   --color-success-light: #22c58b;
@@ -57,7 +59,7 @@ body {
   background-color: var(--color-bg);
   background-image: radial-gradient(
     1200px 600px at 50% -10%,
-    #f9fbfd 0%,
+    rgba(224, 181, 68, 0.1) 0%,
     var(--color-bg) 70%
   );
   background-attachment: fixed;
@@ -69,8 +71,8 @@ body {
 }
 
 ::selection {
-  background: rgba(201, 162, 39, 0.3);
-  color: var(--color-navy);
+  background: rgba(224, 181, 68, 0.35);
+  color: #ffffff;
 }
 
 /* thin, on-brand scrollbar */
@@ -79,12 +81,12 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c7cdd9;
+  background: #2c3a5c;
   border-radius: 999px;
   border: 2px solid var(--color-bg);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #aab3c4;
+  background: #3a4a70;
 }
 
 /* ── Scroll-reveal animation (paired with the Reveal component) ───────────── */
@@ -113,14 +115,14 @@ body {
 }
 
 .glow-accent {
-  box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.35),
-    0 18px 50px -14px rgba(15, 31, 61, 0.18);
+  box-shadow: 0 0 0 1px rgba(224, 181, 68, 0.35),
+    0 18px 50px -14px rgba(0, 0, 0, 0.55);
 }
 
-/* faint grid texture behind hero / proof sections (on LIGHT backgrounds) */
+/* faint grid texture behind hero / proof sections */
 .bg-grid {
-  background-image: linear-gradient(rgba(15, 31, 61, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 31, 61, 0.05) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(224, 181, 68, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(224, 181, 68, 0.07) 1px, transparent 1px);
   background-size: 56px 56px;
   -webkit-mask-image: radial-gradient(
     ellipse 70% 60% at 50% 0%,

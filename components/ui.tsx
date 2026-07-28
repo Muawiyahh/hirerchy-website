@@ -113,12 +113,14 @@ export function Button({
     md: "px-5 py-2.5 text-sm",
     lg: "px-7 py-3.5 text-[15px]",
   };
+  // On the dark palette a navy fill would vanish into the page, so the primary
+  // action is the gold fill (navy text) — the same CTA treatment used sitewide.
   const variants = {
     primary:
-      "bg-navy text-white hover:bg-navy-2 shadow-[0_10px_30px_-10px_rgba(15,31,61,0.5)] hover:shadow-[0_14px_36px_-10px_rgba(15,31,61,0.6)] hover:-translate-y-0.5",
-    gold: "bg-accent text-navy hover:bg-accent-2 hover:text-white shadow-[0_10px_30px_-10px_rgba(201,162,39,0.7)] hover:-translate-y-0.5",
-    soft: "bg-accent/15 text-ink ring-1 ring-accent/40 hover:bg-accent/25",
-    ghost: "text-ink ring-1 ring-border hover:ring-navy/40 hover:bg-navy/[0.04]",
+      "bg-accent text-navy hover:bg-accent-2 shadow-[0_10px_30px_-10px_rgba(224,181,68,0.55)] hover:shadow-[0_14px_36px_-10px_rgba(224,181,68,0.65)] hover:-translate-y-0.5",
+    gold: "bg-accent text-navy hover:bg-accent-2 shadow-[0_10px_30px_-10px_rgba(224,181,68,0.55)] hover:-translate-y-0.5",
+    soft: "bg-accent/15 text-accent-deep ring-1 ring-accent/40 hover:bg-accent/25",
+    ghost: "text-ink ring-1 ring-border hover:ring-accent/50 hover:bg-white/[0.06]",
     onDark: "text-white ring-1 ring-white/30 hover:bg-white/10 hover:ring-white/50",
   };
   const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
@@ -180,7 +182,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`rounded-card border border-border bg-surface shadow-[0_1px_3px_rgba(15,31,61,0.04),0_10px_30px_-16px_rgba(15,31,61,0.15)] ${className}`}
+      className={`rounded-card border border-border bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.25),0_16px_40px_-20px_rgba(0,0,0,0.6)] ${className}`}
     >
       {children}
     </div>

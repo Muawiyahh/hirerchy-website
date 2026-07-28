@@ -15,7 +15,7 @@ const labelCls = "mb-1.5 block text-sm font-medium text-ink/90";
 const pill = "inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm transition select-none";
 const cardCls = "rounded-2xl border border-border bg-surface p-6 shadow-sm";
 const addBtn = "rounded-lg border border-dashed border-accent/50 bg-accent/5 px-4 py-2.5 text-sm font-semibold text-accent-deep transition hover:bg-accent/10";
-const primaryBtn = "rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-2";
+const primaryBtn = "rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-navy transition hover:bg-accent-2";
 
 // Fields that MUST be filled before the profile can be completed (flagged
 // `required` in config) — the essentials the extension needs to autofill.
@@ -205,7 +205,7 @@ export default function PortalProfile({
       <div className="mx-auto flex max-w-6xl gap-8 px-5 py-8 sm:px-8">
         {/* sidebar */}
         <nav className="hidden w-52 shrink-0 lg:block">
-          <ul className="sticky top-[124px] space-y-1 rounded-2xl bg-navy p-3 shadow-[0_20px_50px_-24px_rgba(15,31,61,0.65)]">
+          <ul className="sticky top-[124px] space-y-1 rounded-2xl border border-border bg-navy p-3 shadow-[0_20px_50px_-24px_rgba(0,0,0,0.7)]">
             {SECTIONS.map((s, i) => (
               <li key={s.id}>
                 <button onClick={() => setActive(i)}
@@ -294,7 +294,7 @@ export default function PortalProfile({
             {f.options!.map((o) => {
               const on = sel.includes(o);
               return (
-                <label key={o} className={`${pill} ${on ? "border-navy bg-navy text-white" : "border-border bg-surface-2 text-ink/70 hover:border-accent"}`}>
+                <label key={o} className={`${pill} ${on ? "border-accent bg-accent text-navy" : "border-border bg-surface-2 text-ink/70 hover:border-accent"}`}>
                   <input type="checkbox" className="sr-only" checked={on} onChange={() => toggleMulti(f.name, o)} />
                   {o}
                 </label>
@@ -395,7 +395,7 @@ export default function PortalProfile({
           <div className="mb-4 inline-flex rounded-lg border border-border bg-surface-2 p-1">
             {(["upload", "paste"] as const).map((m) => (
               <button key={m} onClick={() => setCoverMode(m)}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${coverMode === m ? "bg-navy text-white" : "text-muted hover:text-ink"}`}>
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${coverMode === m ? "bg-accent text-navy" : "text-muted hover:text-ink"}`}>
                 {m === "upload" ? "Upload document" : "Paste text"}
               </button>
             ))}

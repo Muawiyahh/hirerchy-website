@@ -5,7 +5,7 @@ import { Button } from "./ui";
 /** Full-bleed navy band — keeps the light/navy alternation unbroken. */
 export default function LeadMagnetBand() {
   return (
-    <section className="relative overflow-hidden bg-navy px-5 py-16 sm:px-8">
+    <section className="relative overflow-hidden border-y border-border bg-navy px-5 py-16 sm:px-8">
       <div className="bg-grid-navy pointer-events-none absolute inset-0" />
       <div className="relative mx-auto w-full max-w-6xl">
         <Reveal>

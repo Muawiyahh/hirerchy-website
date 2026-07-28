@@ -100,7 +100,7 @@ export default function Navbar() {
               {!loggedIn && (
                 <a
                   href={site.portalUrl}
-                  className="inline-flex items-center justify-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(15,31,61,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-navy-2"
+                  className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-navy shadow-[0_10px_30px_-10px_rgba(224,181,68,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-2"
                 >
                   Get started
                 </a>
@@ -138,7 +138,7 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-3 text-base font-medium text-ink hover:bg-navy/[0.04]"
+                className="rounded-lg px-3 py-3 text-base font-medium text-ink hover:bg-white/[0.06]"
               >
                 {item.label}
               </Link>
@@ -155,7 +155,7 @@ export default function Navbar() {
                   {!loggedIn && (
                     <a
                       href={site.portalUrl}
-                      className="rounded-full bg-navy px-4 py-3 text-center text-sm font-semibold text-white"
+                      className="rounded-full bg-accent px-4 py-3 text-center text-sm font-semibold text-navy"
                     >
                       Get started
                     </a>

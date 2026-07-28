@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createElement,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { createElement, useEffect, useState, type ReactNode } from "react";
 
 /**
  * Fades + lifts its children into view on scroll. Pure IntersectionObserver +
@@ -24,12 +18,13 @@ export default function Reveal({
   className?: string;
   as?: "div" | "section" | "li" | "span";
 }) {
-  const ref = useRef<HTMLElement | null>(null);
+  // Callback ref (state) rather than a ref object — the element is a dependency
+  // of the observer effect, and reading ref.current during render is disallowed.
+  const [node, setNode] = useState<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    if (!node) return;
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -39,14 +34,14 @@ export default function Reveal({
       },
       { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
-    io.observe(el);
+    io.observe(node);
     return () => io.disconnect();
-  }, []);
+  }, [node]);
 
   return createElement(
     as,
     {
-      ref,
+      ref: setNode,
       className: `reveal ${visible ? "is-visible" : ""} ${className}`,
       style: delay ? { transitionDelay: `${delay}ms` } : undefined,
     },

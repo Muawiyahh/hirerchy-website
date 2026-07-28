@@ -31,7 +31,7 @@ export default function PortalOverview({
   return (
     <div className="mx-auto max-w-5xl px-5 py-8 sm:px-8">
       {/* status banner */}
-      <div className="overflow-hidden rounded-2xl bg-navy p-6 text-white shadow-[0_24px_60px_-28px_rgba(15,31,61,0.6)] sm:p-8">
+      <div className="overflow-hidden rounded-2xl border border-border bg-navy p-6 text-white shadow-[0_24px_60px_-28px_rgba(0,0,0,0.7)] sm:p-8">
         <div className="flex items-center gap-3">
           <BrandMark size={32} onDark />
           <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
@@ -72,7 +72,7 @@ export default function PortalOverview({
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <button
           onClick={onGoTracker}
-          className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-2"
+          className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-navy transition hover:bg-accent-2"
         >
           Go to tracker →
         </button>

@@ -48,8 +48,8 @@ export default function PricingCards({
                 href={site.portalUrl}
                 className={`mt-7 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-all ${
                   plan.featured
-                    ? "bg-navy text-white hover:bg-navy-2"
-                    : "text-ink ring-1 ring-border hover:ring-navy/40 hover:bg-navy/[0.04]"
+                    ? "bg-accent text-navy hover:bg-accent-2 shadow-[0_10px_30px_-10px_rgba(224,181,68,0.55)]"
+                    : "text-ink ring-1 ring-border hover:ring-accent/50 hover:bg-white/[0.06]"
                 }`}
               >
                 {plan.cta}

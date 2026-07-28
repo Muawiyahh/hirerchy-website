@@ -88,9 +88,9 @@ export default function PortalApp() {
   ];
 
   return (
-    <div className="min-h-[calc(100vh-68px)]">
-      {/* sub-bar under the site navbar (68px) */}
-      <header className="sticky top-[68px] z-20 border-b border-border bg-bg/85 backdrop-blur">
+    <div className="min-h-[calc(100vh-65px)]">
+      {/* sub-bar under the site navbar (65px) */}
+      <header className="sticky top-[65px] z-20 border-b border-border bg-bg/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-1 px-5 py-2 sm:px-8">
           {onboarded ? (
             tabs.map((t) => (

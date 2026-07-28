@@ -4,7 +4,7 @@ import type { AppRow } from "@/lib/portal";
 
 // Status → pill colour (navy + gold palette, with success/error accents).
 const STATUS_STYLES: Record<string, string> = {
-  Applied: "bg-white/10 text-ink",
+  Applied: "bg-navy/[0.07] text-ink",
   Screening: "bg-accent/15 text-accent-deep",
   Interview: "bg-success/10 text-success",
   Offer: "bg-success/15 text-success",

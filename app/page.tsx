@@ -1,28 +1,27 @@
-import Hero from "@/components/Hero";
-import ProblemSolution from "@/components/ProblemSolution";
-import Steps from "@/components/Steps";
-import ResultsPreview from "@/components/ResultsPreview";
-import Features from "@/components/Features";
-import LeadMagnetBand from "@/components/LeadMagnetBand";
-import HomePricing from "@/components/HomePricing";
-import Testimonials from "@/components/Testimonials";
-import FAQ from "@/components/FAQ";
-import CTASection from "@/components/CTASection";
+import Hero from "@/components/home/Hero";
+import Trusted from "@/components/home/Trusted";
+import Services from "@/components/home/Services";
+import NumbersBand from "@/components/home/NumbersBand";
+import WhyMatters from "@/components/home/WhyMatters";
+import Promise from "@/components/home/Promise";
+import Process from "@/components/home/Process";
+import Testimonials from "@/components/home/Testimonials";
+import PricingTeaser from "@/components/home/PricingTeaser";
+import IntakeCTA from "@/components/home/IntakeCTA";
 
-/* Sections alternate light → navy → light … all the way down the page. */
 export default function Home() {
   return (
     <>
-      <Hero />               {/* light (navy stat card) */}
-      <ProblemSolution tone="navy" />
-      <Steps />              {/* light */}
-      <ResultsPreview tone="navy" />
-      <Features />           {/* light */}
-      <LeadMagnetBand />     {/* navy */}
-      <HomePricing />        {/* light */}
-      <Testimonials tone="navy" />
-      <FAQ />                {/* light */}
-      <CTASection />         {/* navy */}
+      <Hero />
+      <Trusted />      {/* navy */}
+      <Services />
+      <NumbersBand />  {/* navy */}
+      <WhyMatters />
+      <Promise />
+      <Process />
+      <Testimonials />
+      <PricingTeaser />
+      <IntakeCTA />
     </>
   );
 }

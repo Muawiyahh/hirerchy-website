@@ -1,86 +1,91 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-/* ── Page section wrapper (consistent max-width + vertical rhythm) ─────────── */
-/* `tone="navy"` turns the whole band dark — used to alternate white/navy down
-   the page so the site never reads as a wall of white. */
+/* ── Page section wrapper ─────────────────────────────────────────────────────
+   80px of vertical rhythm and a hairline rule between bands. `tone="navy"`
+   turns the whole band dark (used for the trust wall and the numbers band). */
 export function Section({
   children,
   className = "",
   id,
   tone = "light",
+  divider = true,
 }: {
   children: ReactNode;
   className?: string;
   id?: string;
   tone?: "light" | "navy";
+  divider?: boolean;
 }) {
   const isNavy = tone === "navy";
   return (
     <section
       id={id}
-      className={`relative py-20 sm:py-28 ${isNavy ? "overflow-hidden bg-navy" : ""} ${className}`}
+      className={`py-20 ${isNavy ? "bg-navy" : ""} ${
+        divider ? (isNavy ? "border-b border-accent-2/20" : "border-b border-border") : ""
+      } ${className}`}
     >
-      {isNavy && <div className="bg-grid-navy pointer-events-none absolute inset-0" />}
-      <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">{children}</div>
+      <Wrap>{children}</Wrap>
     </section>
   );
 }
 
-/* ── Small uppercase eyebrow label ────────────────────────────────────────── */
-/* On light we use the deeper gold — bright gold fails contrast at this text
-   size. On navy, bright gold is the right call (~7:1). */
+/** The 1080px content column every section shares. */
+export function Wrap({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <div className={`mx-auto w-full max-w-[1080px] px-6 ${className}`}>{children}</div>;
+}
+
+/* ── Section eyebrow ──────────────────────────────────────────────────────────
+   Not a small kicker — on this site the eyebrow is the largest text in the
+   section, set in gold display caps above a smaller heading. */
 export function Eyebrow({
   children,
   onDark = false,
+  className = "",
 }: {
   children: ReactNode;
   onDark?: boolean;
+  className?: string;
 }) {
   return (
-    <span
-      className={`inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] ${
-        onDark ? "text-accent" : "text-accent-deep"
-      }`}
+    <div
+      className={`font-display text-[26px] font-extrabold uppercase leading-[1.1] wide:text-[36px] ${
+        onDark ? "text-accent-2" : "text-accent"
+      } ${className}`}
     >
-      <span className="h-1 w-1 rounded-full bg-accent" />
       {children}
-    </span>
+    </div>
   );
 }
 
 /* ── Section heading block ────────────────────────────────────────────────── */
-export function Heading({
+export function SectionHead({
   eyebrow,
   title,
   sub,
-  center = false,
   onDark = false,
+  className = "",
 }: {
   eyebrow?: string;
-  title: ReactNode;
+  title?: ReactNode;
   sub?: ReactNode;
-  center?: boolean;
   onDark?: boolean;
+  className?: string;
 }) {
   return (
-    <div className={`max-w-2xl ${center ? "mx-auto text-center" : ""}`}>
+    <div className={`mb-12 max-w-[64ch] ${className}`}>
       {eyebrow && <Eyebrow onDark={onDark}>{eyebrow}</Eyebrow>}
-      <h2
-        className={`mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl ${
-          onDark ? "text-white" : "text-ink"
-        }`}
-      >
-        {title}
-      </h2>
-      {sub && (
-        <p
-          className={`mt-4 text-base leading-relaxed sm:text-lg ${
-            onDark ? "text-white/70" : "text-muted"
+      {title && (
+        <h2
+          className={`mt-[18px] text-[22px] font-semibold leading-[1.2] tracking-[-0.005em] wide:text-[26px] ${
+            onDark ? "text-white" : "text-ink"
           }`}
         >
-          {sub}
-        </p>
+          {title}
+        </h2>
+      )}
+      {sub && (
+        <p className={`mt-4 text-base ${onDark ? "text-[#c7d0e0]" : "text-muted"}`}>{sub}</p>
       )}
     </div>
   );
@@ -90,11 +95,9 @@ export function Heading({
 type ButtonProps = {
   href: string;
   children: ReactNode;
-  /** primary = navy · gold = gold fill · ghost = outlined · onDark = outlined on navy */
-  variant?: "primary" | "gold" | "ghost" | "soft" | "onDark";
-  size?: "md" | "lg";
-  external?: boolean; // render a plain <a> (full navigation) instead of client-side <Link>
-  newTab?: boolean; // open in a new tab (only meaningful with external)
+  /** primary = navy fill · gold = gold fill · ghost = ink outline */
+  variant?: "primary" | "gold" | "ghost";
+  external?: boolean; // render a plain <a> (full navigation) instead of <Link>
   className?: string;
 };
 
@@ -102,36 +105,23 @@ export function Button({
   href,
   children,
   variant = "primary",
-  size = "md",
   external = false,
-  newTab = false,
   className = "",
 }: ButtonProps) {
+  // No border-colour in `base` — it would tie with the variant's and let source
+  // order decide, which is how the ghost outline goes missing.
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
-  const sizes = {
-    md: "px-5 py-2.5 text-sm",
-    lg: "px-7 py-3.5 text-[15px]",
-  };
-  // On the dark palette a navy fill would vanish into the page, so the primary
-  // action is the gold fill (navy text) — the same CTA treatment used sitewide.
+    "font-display inline-block rounded-md border px-6 py-[13px] text-[14.5px] font-semibold transition-all duration-200 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[3px] hover:scale-[1.03] hover:shadow-[0_12px_22px_rgba(11,31,63,0.16)]";
   const variants = {
-    primary:
-      "bg-accent text-navy hover:bg-accent-2 shadow-[0_10px_30px_-10px_rgba(224,181,68,0.55)] hover:shadow-[0_14px_36px_-10px_rgba(224,181,68,0.65)] hover:-translate-y-0.5",
-    gold: "bg-accent text-navy hover:bg-accent-2 shadow-[0_10px_30px_-10px_rgba(224,181,68,0.55)] hover:-translate-y-0.5",
-    soft: "bg-accent/15 text-accent-deep ring-1 ring-accent/40 hover:bg-accent/25",
-    ghost: "text-ink ring-1 ring-border hover:ring-accent/50 hover:bg-white/[0.06]",
-    onDark: "text-white ring-1 ring-white/30 hover:bg-white/10 hover:ring-white/50",
+    primary: "border-navy bg-navy text-bg hover:border-navy-2 hover:bg-navy-2",
+    gold: "border-accent bg-accent text-navy hover:border-accent-2 hover:bg-accent-2",
+    ghost: "border-ink bg-transparent text-ink hover:bg-ink hover:text-bg",
   };
-  const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
+  const cls = `${base} ${variants[variant]} ${className}`;
 
-  if (external) {
+  if (external || href.startsWith("#") || href.startsWith("mailto:")) {
     return (
-      <a
-        href={href}
-        {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        className={cls}
-      >
+      <a href={href} className={cls}>
         {children}
       </a>
     );
@@ -143,7 +133,7 @@ export function Button({
   );
 }
 
-/* ── Inner-page hero header ───────────────────────────────────────────────── */
+/* ── Inner-page hero header (legal pages) ─────────────────────────────────── */
 export function PageHeader({
   eyebrow,
   title,
@@ -154,37 +144,21 @@ export function PageHeader({
   sub?: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-border">
-      <div className="bg-grid pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute left-1/2 top-[-40%] h-[360px] w-[680px] -translate-x-1/2 rounded-full bg-accent/10 blur-[130px]" />
-      <div className="relative mx-auto w-full max-w-6xl px-5 pb-14 pt-16 text-center sm:px-8 sm:pb-16 sm:pt-20">
+    <section className="border-b border-border py-16">
+      <Wrap>
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-        <h1 className="mx-auto mt-4 max-w-3xl text-balance text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">
+        <h1 className="mt-[18px] text-[26px] font-semibold leading-[1.2] tracking-[-0.005em] text-ink wide:text-[32px]">
           {title}
         </h1>
-        {sub && (
-          <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
-            {sub}
-          </p>
-        )}
-      </div>
+        {sub && <p className="mt-4 max-w-[64ch] text-base text-muted">{sub}</p>}
+      </Wrap>
     </section>
   );
 }
 
 /* ── Surface card ─────────────────────────────────────────────────────────── */
-export function Card({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div
-      className={`rounded-card border border-border bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.25),0_16px_40px_-20px_rgba(0,0,0,0.6)] ${className}`}
-    >
-      {children}
-    </div>
+    <div className={`rounded-card border border-border bg-surface ${className}`}>{children}</div>
   );
 }

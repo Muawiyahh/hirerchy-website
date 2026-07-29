@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/free-review",
     "/contact",
     "/privacy",
-    "/terms",
   ];
   const now = new Date();
   return routes.map((path) => ({

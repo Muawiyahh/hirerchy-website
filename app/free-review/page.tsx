@@ -1,74 +1,73 @@
 import type { Metadata } from "next";
-import { PageHeader, Section, Card } from "@/components/ui";
+import { PageHeader, Card } from "@/components/ui";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 import LeadForm from "@/components/LeadForm";
-import { site } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Free resume review",
   description:
-    "Send us your resume and we will tell you exactly what is keeping it out of interviews — free, no strings, within 1 to 2 business days.",
+    "Send us your resume and we'll tell you exactly what's holding you back from interview callbacks — free, no commitment.",
 };
 
-const CHECKS = [
-  "Whether applicant tracking software is filtering you out before a human reads it",
-  "The keywords your target roles expect and your resume is missing",
-  "Where you are listing duties instead of proving impact",
-  "One honest read on whether we can actually help, or whether you are fine on your own",
+const perks = [
+  "A clear read on why you're not getting callbacks",
+  "The 3 biggest fixes to make first",
+  "An honest take on whether Hirerchy can help you",
 ];
 
 export default function FreeReviewPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Free resume review"
-        title="Find out what is holding your resume back."
-        sub="Send it over and a real person will read it. No payment, no commitment — just a straight answer on what is costing you callbacks."
+        eyebrow="No commitment"
+        title="Find out what's holding your resume back"
+        sub="Send it over and our team will review it like a recruiter would — then tell you exactly what to fix. Free, no payment, no pressure."
       />
 
-      <Section divider={false}>
-        <div className="grid gap-10 wide:grid-cols-[1fr_1.05fr] wide:items-start">
+      <section className="px-5 pb-24 sm:px-8">
+        <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[1fr_1.25fr] lg:items-start">
           <Reveal>
-            <h2 className="text-[22px] font-bold text-ink wide:text-[26px]">
-              What we will tell you
-            </h2>
-            <ul className="mt-6 space-y-4">
-              {CHECKS.map((c) => (
-                <li key={c} className="flex gap-3 text-[15px] text-ink">
-                  <span className="mt-0.5 shrink-0 text-accent">
-                    <Icon name="check" size={18} />
-                  </span>
-                  {c}
-                </li>
-              ))}
-            </ul>
+            <div className="lg:sticky lg:top-24">
+              <h2 className="text-xl font-bold text-ink">What you&apos;ll get</h2>
+              <ul className="mt-5 space-y-4">
+                {perks.map((p) => (
+                  <li key={p} className="flex gap-3 text-sm text-ink/90">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent-deep">
+                      <Icon name="check" size={15} />
+                    </span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
 
-            <div className="mt-8 rounded-[10px] border-2 border-accent bg-cream p-6">
-              <span className="font-display mb-3 inline-block rounded bg-accent px-3 py-1.5 text-xs font-bold tracking-[0.06em] text-navy">
-                NO CATCH
-              </span>
-              <p className="mt-2 text-[15px] text-ink">
-                The review is free whether or not you ever become a client. If we do not think
-                we can add anything, we will say so — that is a faster answer than a sales call.
-              </p>
+              <div className="mt-8 rounded-card border border-border bg-surface p-5">
+                <div className="flex items-center gap-2 text-sm font-semibold text-ink">
+                  <Icon name="spark" size={16} className="text-accent-deep" />
+                  Why we do this for free
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  We&apos;d rather show you we know our craft than ask you to take
+                  our word for it. If the review helps and you want us to run your
+                  whole search, great. If not, you&apos;ve still got useful advice.
+                </p>
+              </div>
             </div>
-
-            <p className="mt-6 text-sm text-muted">
-              Would rather just email it?{" "}
-              <a href={`mailto:${site.email}`} className="font-semibold text-accent hover:underline">
-                {site.email}
-              </a>
-            </p>
           </Reveal>
 
           <Reveal delay={100}>
             <Card className="p-6 sm:p-8">
-              <LeadForm />
+              <h2 className="text-lg font-bold text-ink">Request your free review</h2>
+              <p className="mt-1 text-sm text-muted">
+                Takes under a minute. We&apos;ll reply by email within 1–2 business days.
+              </p>
+              <div className="mt-6">
+                <LeadForm />
+              </div>
             </Card>
           </Reveal>
         </div>
-      </Section>
+      </section>
     </>
   );
 }

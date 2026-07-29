@@ -1,33 +1,39 @@
 import type { Metadata } from "next";
-import { PageHeader, Section, SectionHead, Button, Card } from "@/components/ui";
+import { PageHeader, Section, Heading, Card } from "@/components/ui";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
-import Process from "@/components/home/Process";
-import IntakeCTA from "@/components/home/IntakeCTA";
-import { portalSteps, included, site } from "@/lib/content";
+import Steps from "@/components/Steps";
+import CTASection from "@/components/CTASection";
+import { site } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "How it works",
   description:
-    "From intake to interviews — exactly how Hirerchy runs your job search for you, week after week, and what you can see in your portal.",
+    "From signup to interviews — see exactly how Hirerchy runs your job search for you, week after week.",
 };
 
-/* Mirrors the real tracker table in the client portal, so what people see here
-   is what they get after signing up. */
-const PREVIEW_ROWS: [string, string, string, keyof typeof STATUS][] = [
-  ["Ericsson", "Product Designer", "12 Jul", "Interview"],
-  ["JB Hunt", "Operations Analyst", "12 Jul", "Applied"],
-  ["Aon", "Risk Consultant", "11 Jul", "Screening"],
-  ["Sanofi", "Data Analyst", "11 Jul", "Applied"],
-  ["West Monroe", "Associate Consultant", "10 Jul", "Offer"],
+const portalSteps = [
+  {
+    title: "Create your account",
+    body: "Sign in to your private client portal and you're ready to start — no email confirmation hoops.",
+  },
+  {
+    title: "Fill your profile once",
+    body: "A guided form captures your experience, target roles, locations, salary and work authorization. About 15 minutes.",
+  },
+  {
+    title: "Upload your resume",
+    body: "Drop in your current resume (and a cover letter if you have one). Our team takes it from there.",
+  },
+  {
+    title: "We rebuild & start applying",
+    body: "We rewrite your resume to pass the filters and begin hand-applying to matched roles within days.",
+  },
+  {
+    title: "Track everything live",
+    body: "Watch every company, role, date and status update in your dashboard as the callbacks come in.",
+  },
 ];
-
-const STATUS = {
-  Applied: "bg-navy/[0.07] text-ink",
-  Screening: "bg-accent/15 text-accent",
-  Interview: "bg-success/10 text-success",
-  Offer: "bg-success/15 text-success",
-};
 
 export default function HowItWorksPage() {
   return (
@@ -38,116 +44,95 @@ export default function HowItWorksPage() {
         sub="No bots spraying generic applications. A real team doing real, targeted work under your name — and you can see all of it."
       />
 
-      <Process />
+      <Steps withHeading={false} tone="navy" />
 
-      <Section id="portal">
+      <Section className="border-t border-border/60">
         <Reveal>
-          <SectionHead
+          <Heading
             eyebrow="Inside the portal"
-            title="What you actually do (it is not much)"
-            sub="Everything starts in your client portal. Here is the full flow from signup to interviews."
+            title="What you actually do (it's not much)"
+            sub="Everything starts in your client portal. Here's the full flow from signup to interviews."
           />
         </Reveal>
 
-        <div className="grid gap-10 wide:grid-cols-[1.05fr_1fr] wide:items-start">
-          <ol className="relative space-y-7 border-l border-border pl-8">
+        <div className="mt-12 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start">
+          <ol className="relative space-y-8 border-l border-border pl-8">
             {portalSteps.map((s, i) => (
-              <Reveal as="li" key={s.title} delay={(i % 4) * 70} className="relative">
-                <span className="font-display absolute -left-[45px] flex h-[34px] w-[34px] items-center justify-center rounded-full bg-navy text-sm font-bold text-bg">
+              <Reveal as="li" key={i} delay={i * 70} className="relative">
+                <span className="absolute -left-[41px] flex h-7 w-7 items-center justify-center rounded-full border border-accent/60 bg-surface text-xs font-bold text-accent-deep">
                   {i + 1}
                 </span>
                 <h3 className="text-base font-bold text-ink">{s.title}</h3>
-                <p className="mt-1.5 text-sm text-muted">{s.body}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{s.body}</p>
               </Reveal>
             ))}
           </ol>
 
-          {/* live tracker preview */}
           <Reveal delay={120}>
-            <Card className="overflow-hidden">
-              <div className="flex items-center justify-between border-b border-border px-5 py-4">
-                <div className="flex items-center gap-2 text-sm font-bold text-ink">
-                  <span className="text-accent">
-                    <Icon name="chart" size={18} />
-                  </span>
-                  Application tracker
+            <Card className="p-6">
+              {/* lightweight dashboard mock */}
+              <div className="flex items-center justify-between border-b border-border pb-4">
+                <div className="flex items-center gap-2 text-sm font-semibold text-ink">
+                  <Icon name="chart" size={18} className="text-accent-deep" /> Application tracker
                 </div>
-                <span className="rounded-full bg-success/10 px-2.5 py-1 text-[11px] font-semibold text-success">
+                <span className="rounded-full bg-success/15 px-2.5 py-1 text-[11px] font-medium text-success">
                   live
                 </span>
               </div>
-
-              <table className="w-full text-left text-[13px]">
-                <thead className="border-b border-border bg-surface-2 text-[10.5px] uppercase tracking-wide text-muted">
-                  <tr>
-                    <th className="px-4 py-2 font-semibold">Company</th>
-                    <th className="px-4 py-2 font-semibold">Role</th>
-                    <th className="px-4 py-2 font-semibold">Listing</th>
-                    <th className="px-4 py-2 font-semibold">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {PREVIEW_ROWS.map(([co, role, , status]) => (
-                    <tr key={co} className="even:bg-surface-2/50">
-                      <td className="px-4 py-2 font-medium text-ink">{co}</td>
-                      <td className="px-4 py-2 text-ink/80">{role}</td>
-                      <td className="px-4 py-2 font-medium text-accent">View</td>
-                      <td className="px-4 py-2">
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS[status]}`}
-                        >
-                          {status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <p className="border-t border-border px-4 py-3 text-center text-[11px] text-muted">
-                Illustrative preview — your real tracker lives in the portal
+              <div className="mt-4 space-y-2.5">
+                {[
+                  ["Stripe", "Product Designer", "Interview", "ok"],
+                  ["Notion", "Sr. PM", "Applied", "muted"],
+                  ["Airbnb", "UX Researcher", "Screening", "accent"],
+                  ["Linear", "Product Manager", "Applied", "muted"],
+                  ["Figma", "Design Lead", "Interview", "ok"],
+                ].map(([co, role, status, tone], i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between rounded-lg border border-border bg-surface-2/60 px-3.5 py-2.5"
+                  >
+                    <div>
+                      <div className="text-sm font-medium text-ink">{co}</div>
+                      <div className="text-[11px] text-muted">{role}</div>
+                    </div>
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${
+                        tone === "ok"
+                          ? "bg-success/15 text-success"
+                          : tone === "accent"
+                          ? "bg-accent/20 text-accent-deep"
+                          : "bg-navy/[0.06] text-muted"
+                      }`}
+                    >
+                      {status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-center text-[11px] text-muted/70">
+                Illustrative preview of your client dashboard
               </p>
             </Card>
           </Reveal>
         </div>
 
-        <Reveal className="mt-10 flex flex-col items-start gap-4 rounded-[10px] border border-border bg-surface p-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-muted">
-            Your profile lives in the same secure portal our application team works from — so
-            what you enter is exactly what gets used.
-          </p>
-          <Button href={site.portalUrl} external className="shrink-0">
-            Open the portal
-          </Button>
-        </Reveal>
-      </Section>
-
-      <Section id="included">
         <Reveal>
-          <SectionHead
-            eyebrow="What is included"
-            title="Everything that happens once you are on board."
-            sub="Every plan gets the resume rebuild and the tracker from day one. What changes higher up is volume and how much of the strategy is handled for you."
-          />
+          <div className="mt-12 flex flex-col items-center gap-3 rounded-card border border-border bg-surface p-7 text-center sm:flex-row sm:justify-between sm:text-left">
+            <p className="text-sm text-muted">
+              Your profile already lives in the same secure portal our application
+              team works from — so what you enter is exactly what gets used.
+            </p>
+            <a
+              href={site.portalUrl}
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-navy px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-navy-2"
+            >
+              Open the portal
+            </a>
+          </div>
         </Reveal>
-
-        <div className="grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2 wide:grid-cols-3">
-          {included.map((f, i) => (
-            <Reveal key={f.title} delay={(i % 3) * 70} className="bg-surface px-6 py-[30px]">
-              <span className="text-accent">
-                <Icon name={f.icon} size={22} />
-              </span>
-              <h3 className="mt-3.5 text-[17px] font-bold text-ink">{f.title}</h3>
-              <p className="mt-2 text-[14.5px] text-muted">{f.body}</p>
-              <span className="font-display mt-4 inline-block rounded-full bg-navy/[0.06] px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.04em] text-navy">
-                {f.plans}
-              </span>
-            </Reveal>
-          ))}
-        </div>
       </Section>
 
-      <IntakeCTA />
+      <CTASection />
     </>
   );
 }

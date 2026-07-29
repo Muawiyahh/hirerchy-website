@@ -1,77 +1,96 @@
 import type { Metadata } from "next";
-import { PageHeader, Section, SectionHead, Eyebrow, Wrap } from "@/components/ui";
+import { PageHeader, Section, Heading } from "@/components/ui";
 import Reveal from "@/components/Reveal";
+import StatCounter from "@/components/StatCounter";
 import VolumeChart from "@/components/VolumeChart";
-import Testimonials from "@/components/home/Testimonials";
-import Trusted from "@/components/home/Trusted";
-import IntakeCTA from "@/components/home/IntakeCTA";
-import LiveCount from "@/components/LiveCount";
-import { proofStats } from "@/lib/content";
+import BeforeAfter from "@/components/BeforeAfter";
+import Testimonials from "@/components/Testimonials";
+import CTASection from "@/components/CTASection";
+import { stats } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Results",
   description:
-    "The proof behind Hirerchy — application volume, interview callback rate, and where our clients have interviewed.",
+    "The proof behind Hirerchy — application volume, interview callback rate, and real client outcomes. Specific numbers, not hype.",
 };
 
+const bigStats = [
+  { value: stats.totalApplications, suffix: "+", label: stats.totalApplicationsLabel },
+  { value: stats.callbackRate, suffix: "%", label: stats.callbackRateLabel },
+  { value: stats.callbacksThisMonth, suffix: "", label: "interview callbacks this month" },
+  { value: stats.clientsServed, suffix: "+", label: "clients served and counting" },
+];
+
+/* Sections alternate light → navy → light … down the page. */
 export default function ResultsPage() {
   return (
     <>
       <PageHeader
         eyebrow="Proof, not promises"
         title="The numbers behind the callbacks"
-        sub="We track one thing above all: interview callbacks. Here is what that has looked like across our clients."
+        sub="We track one thing above all: interview callbacks. Here's what that's looked like across our clients — specific figures we can stand behind."
       />
 
-      {/* headline stats — navy */}
-      <section className="border-b border-accent-2/20 bg-navy py-20">
-        <Wrap>
-          <Eyebrow onDark>By the numbers</Eyebrow>
-          <div className="mt-8 grid gap-px overflow-hidden rounded-[10px] bg-white/10 sm:grid-cols-2 wide:grid-cols-4">
-            {proofStats.map((s, i) => (
-              <Reveal key={s.label} delay={(i % 4) * 70} className="bg-navy">
-                <div className="h-full px-6 py-9 text-center">
-                  <div className="font-display text-[34px] font-extrabold leading-none text-accent-2">
-                    {s.value}
-                  </div>
-                  <p className="mx-auto mt-3 max-w-[190px] text-sm text-bg/80">{s.label}</p>
+      {/* big stat grid — navy */}
+      <Section tone="navy">
+        <div className="grid gap-px overflow-hidden rounded-card bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+          {bigStats.map((s, i) => (
+            <Reveal as="div" key={i} delay={i * 70} className="bg-navy">
+              <div className="h-full px-6 py-9 text-center">
+                <div className="text-4xl font-extrabold tracking-tight text-accent">
+                  <StatCounter value={s.value} suffix={s.suffix} />
                 </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 rounded-[10px] border border-accent-2/25 bg-white/[0.04] px-6 py-5">
-            <span className="live-dot h-[9px] w-[9px] shrink-0 rounded-full bg-[#3ddc84] shadow-[0_0_8px_rgba(61,220,132,0.9)]" />
-            <span className="font-display text-[13px] font-bold uppercase tracking-[0.1em] text-bg/65">
-              Applications submitted to date
-            </span>
-            <LiveCount />
-          </div>
-
-          <p className="mt-5 text-center text-[11px] text-bg/55">
-            Based on Hirerchy client data. Individual results vary, and none of this is a
-            guaranteed outcome for every case.
-          </p>
-        </Wrap>
-      </section>
-
-      {/* weekly volume */}
-      <Section>
-        <Reveal>
-          <SectionHead
-            eyebrow="Consistency"
-            title="We do not slow down."
-            sub="Volume matters in a job search, but only if it holds up week after week. Here is what a typical run looks like."
-          />
-        </Reveal>
-        <Reveal>
-          <VolumeChart />
-        </Reveal>
+                <p className="mx-auto mt-2 max-w-[180px] text-sm text-white/70">{s.label}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <p className="mt-4 text-center text-[11px] text-white/50">
+          Based on Hirerchy client data. Individual results vary; figures are
+          updated periodically.
+        </p>
       </Section>
 
-      <Trusted />
+      {/* weekly volume chart — light */}
+      <Section>
+        <Reveal>
+          <Heading
+            eyebrow="Consistency"
+            title="We don't slow down"
+            sub="Volume matters in a job search. Here's how many applications we send for a client in a typical week."
+          />
+        </Reveal>
+        <div className="mt-10">
+          <Reveal>
+            <VolumeChart />
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* before / after — navy */}
+      <Section tone="navy">
+        <Reveal>
+          <Heading
+            onDark
+            eyebrow="Show the work"
+            title="Before & after: the resume rewrite"
+            sub="A resume that lists duties gets filtered out. One that proves impact gets read. Here's the kind of transformation we make (anonymized)."
+          />
+        </Reveal>
+        <div className="mt-10">
+          <Reveal>
+            <BeforeAfter tone="navy" />
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* testimonials — light */}
       <Testimonials />
-      <IntakeCTA />
+
+      <CTASection
+        title="Want results like these?"
+        sub="The fastest way to see if we can help is a free resume review — we'll tell you exactly what's holding you back."
+      />
     </>
   );
 }

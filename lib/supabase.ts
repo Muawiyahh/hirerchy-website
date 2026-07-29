@@ -58,17 +58,6 @@ export async function submitLead(
     };
   }
   const { error } = await sb.from("leads").insert({ source: "website", ...lead });
-  if (error) {
-    // Never surface raw Postgres errors on a public form — log the detail for
-    // debugging and give the visitor something actionable instead.
-    console.error("[leads] insert failed:", error.message);
-    const missingTable = error.code === "PGRST205" || error.code === "42P01";
-    return {
-      ok: false,
-      error: missingTable
-        ? `Our form is not connected yet. Please email us at hirerchy@gmail.com and we will pick it up from there.`
-        : "We could not send that just now. Please try again, or email hirerchy@gmail.com.",
-    };
-  }
+  if (error) return { ok: false, error: error.message };
   return { ok: true };
 }

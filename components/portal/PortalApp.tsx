@@ -5,7 +5,7 @@ import {
   getMyProfile, getMyApplications, saveProfile, signOut,
   type ClientProfile, type AppRow,
 } from "@/lib/portal";
-import { completionFromProfile } from "./config";
+
 import PortalProfile from "./PortalProfile";
 import PortalOverview from "./PortalOverview";
 import PortalTracker from "./PortalTracker";
@@ -85,10 +85,10 @@ export default function PortalApp() {
   ];
 
   return (
-    <div className="min-h-[calc(100vh-65px)]">
-      {/* sub-bar under the site navbar (65px) */}
-      <header className="sticky top-[65px] z-20 border-b border-border bg-bg/85 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-[1080px] items-center gap-1 px-6 py-2">
+    <div className="min-h-[calc(100vh-68px)]">
+      {/* sub-bar under the site navbar (68px) */}
+      <header className="sticky top-[68px] z-20 border-b border-border bg-bg/85 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-1 px-5 py-2 sm:px-8">
           {onboarded ? (
             tabs.map((t) => (
               <button

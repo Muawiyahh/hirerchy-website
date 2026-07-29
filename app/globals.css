@@ -1,55 +1,43 @@
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Hirerchy design tokens — light "paper" page, deep navy bands, gold accents.
+   Hirerchy design tokens — navy + gold (matches the extension / Chrome Store
+   branding and the admin panel). Light surfaces, navy ink, gold accents.
 
    Colour rules:
-     • paper (bg)  → the page itself; almost every section sits on it
-     • navy        → full-bleed bands + cards that need to punch (trust, stats,
-                     pillars, intake panel)
-     • gold        → primary gold fills, eyebrows and stat numbers ON LIGHT
-     • accent-2    → the LIGHTER gold: button hovers, and any gold text sitting
-                     ON NAVY, where the deep gold would go muddy
-     • cream       → the two flagship service cards + the selection-promise box
-   The client portal at /portal is built from these same tokens.
+     • navy   → primary buttons, dark bands, cards, headings
+     • gold   → fills, borders, large display text, and text ON navy
+     • gold-deep → small gold text/icons on LIGHT backgrounds (contrast-safe)
+   The client portal at /portal uses this same navy + gold palette.
    ══════════════════════════════════════════════════════════════════════════ */
 @theme {
-  --color-bg:          #f6f7fa; /* paper — page background */
-  --color-surface:     #ffffff; /* cards */
-  --color-surface-2:   #eff2f7; /* inputs / subtle fills */
-  --color-cream:       #fbf6ea; /* flagship cards, promise clause */
+  --color-bg:          #edf1f7; /* soft blue-tinted light, so white cards lift off it */
+  --color-surface:     #ffffff;
+  --color-surface-2:   #e3e9f2;
 
-  --color-navy:        #0b1f3f; /* bands + dark cards */
-  --color-navy-2:      #17325c; /* navy hover */
+  --color-navy:        #0f1f3d;
+  --color-navy-2:      #16213a;
 
-  --color-accent:      #c99a3d; /* gold */
-  --color-accent-2:    #e0b65e; /* light gold — hovers, gold text on navy */
-  --color-accent-deep: #c99a3d; /* contrast-safe gold for small text on light */
+  --color-accent:      #c9a227; /* gold — fills, borders, display text, on-navy text */
+  --color-accent-2:    #a8871c; /* deeper gold — hover fills */
+  --color-accent-deep: #8a6a14; /* gold that passes contrast as small text on light */
 
-  --color-ink:         #10182b;
-  --color-muted:       #5b6472; /* slate */
-  --color-border:      #dde1e8; /* paper line */
+  --color-ink:         #16213a;
+  --color-muted:       #697089;
+  --color-border:      #e4e8f0;
 
-  --color-success:     #1e9e63;
+  --color-success:     #1e7d4f;
   --color-error:       #c0392b;
+
+  /* lighter variants for use on the navy bands, where the dark ones vanish */
+  --color-success-light: #22c58b;
+  --color-error-light:   #f87171;
 
   --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
-  --font-display: var(--font-bricolage), var(--font-inter), system-ui, sans-serif;
 
-  --radius-card: 12px;
+  --radius-card: 16px;
   --radius-pill: 999px;
-
-  /* The reference layout switches from stacked/2-up to its full desktop grids
-     at 861px, which sits between Tailwind's md and lg. `wide:` is that switch.
-     `climb:` is the wider one where the four pricing cards fan out into the
-     staircase — below it they drop to a plain 2-up grid.
-     These MUST be in rem: Tailwind orders breakpoints by value, and a px value
-     mixed in with the rem defaults sorts ahead of all of them, which would let
-     `sm:` win over `wide:` at desktop widths. 53.8125rem = 861px, 67.5625rem =
-     1081px. */
-  --breakpoint-wide: 53.8125rem;
-  --breakpoint-climb: 67.5625rem;
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
@@ -67,30 +55,36 @@ html {
 
 body {
   background-color: var(--color-bg);
+  background-image: radial-gradient(
+    1200px 600px at 50% -10%,
+    #f9fbfd 0%,
+    var(--color-bg) 70%
+  );
+  background-attachment: fixed;
   color: var(--color-ink);
   font-family: var(--font-sans);
-  line-height: 1.6;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* long compound words look better unbroken than hyphenated mid-headline */
-  hyphens: none;
-  -webkit-hyphens: none;
-}
-
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
 }
 
 ::selection {
-  background: rgba(201, 154, 61, 0.28);
-  color: var(--color-ink);
+  background: rgba(201, 162, 39, 0.3);
+  color: var(--color-navy);
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
+/* thin, on-brand scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c7cdd9;
+  border-radius: 999px;
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #aab3c4;
 }
 
 /* ── Scroll-reveal animation (paired with the Reveal component) ───────────── */
@@ -108,160 +102,55 @@ h3 {
   }
 }
 
-/* ── Hero tagline: the four words drop in and bounce ──────────────────────── */
-.tag-word {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(-46px);
-  animation: bounceDrop 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-.tag-word:nth-child(1) { animation-delay: 0.05s; }
-.tag-word:nth-child(2) { animation-delay: 0.22s; }
-.tag-word:nth-child(3) { animation-delay: 0.39s; }
-.tag-word:nth-child(4) { animation-delay: 0.56s; }
+/* ── Reusable brand utilities ─────────────────────────────────────────────── */
 
-@keyframes bounceDrop {
-  0%   { opacity: 0; transform: translateY(-46px); }
-  55%  { opacity: 1; transform: translateY(8px); }
-  75%  { transform: translateY(-4px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* "Succeed." keeps pulsing after it lands */
-.tag-succeed {
-  color: var(--color-accent-2);
-  animation: bounceDrop 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.56s forwards,
-    succeedShine 2.6s ease-in-out 1.5s infinite;
-}
-
-@keyframes succeedShine {
-  0%, 100% { color: var(--color-accent-2); text-shadow: 0 0 0 rgba(224, 182, 94, 0); }
-  50%      { color: #f4c766; text-shadow: 0 0 16px rgba(224, 182, 94, 0.75); }
-}
-
-/* ── Live application count strip ─────────────────────────────────────────── */
-.live-dot {
-  animation: livePulse 1.6s ease-in-out infinite;
-}
-@keyframes livePulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.4; transform: scale(0.8); }
-}
-
-/* ── Trusted-company chips: a slow gold sheen sweeps across each name ─────── */
-.trust-name {
-  background: linear-gradient(
-    100deg,
-    #fff 20%,
-    var(--color-accent-2) 45%,
-    #fff 60%,
-    var(--color-accent-2) 85%
-  );
-  background-size: 250% auto;
+/* Gold display text — only for LARGE headings, never small copy. */
+.text-gradient {
+  background: linear-gradient(120deg, #e3c65c 0%, #c9a227 55%, #a8871c 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: transparent;
-  animation: trustShine 7s linear infinite;
-}
-@keyframes trustShine {
-  0%   { background-position: 0% center; }
-  100% { background-position: -250% center; }
 }
 
-/* ── Testimonial marquee ──────────────────────────────────────────────────── */
-.marquee-track {
-  overflow: hidden;
-  mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black 60px,
-    black calc(100% - 60px),
-    transparent 100%
+.glow-accent {
+  box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.35),
+    0 18px 50px -14px rgba(15, 31, 61, 0.18);
+}
+
+/* faint grid texture behind hero / proof sections (on LIGHT backgrounds) */
+.bg-grid {
+  background-image: linear-gradient(rgba(15, 31, 61, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 31, 61, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #000 0%,
+    transparent 75%
   );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black 60px,
-    black calc(100% - 60px),
-    transparent 100%
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 0%, transparent 75%);
+}
+
+/* same texture, tuned for NAVY bands (gold lines) */
+.bg-grid-navy {
+  background-image: linear-gradient(rgba(201, 162, 39, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 162, 39, 0.1) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 70% at 50% 0%,
+    #000 0%,
+    transparent 78%
   );
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 0%, #000 0%, transparent 78%);
 }
 
-/* The row holds two copies of the cards, so translating by -50% loops seamlessly. */
-.marquee-row {
-  display: flex;
-  flex-wrap: nowrap;
-  width: max-content;
-  gap: 20px;
-  animation: scrollLeft 34s linear infinite;
-}
-.marquee-row.reverse {
-  animation-name: scrollRight;
-  animation-duration: 38s;
-}
-.marquee-track:hover .marquee-row {
-  animation-play-state: paused;
-}
-
-@keyframes scrollLeft {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-@keyframes scrollRight {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
-}
-
-/* ── Long-form prose (privacy / terms) ────────────────────────────────────── */
+/* ── Long-form prose (privacy page) ───────────────────────────────────────── */
 .prose-hirerchy p {
   margin-top: 0.85rem;
   font-size: 15px;
   line-height: 1.75;
-  color: var(--color-muted);
+  color: color-mix(in oklab, var(--color-ink) 85%, transparent);
 }
 .prose-hirerchy strong {
   color: var(--color-ink);
   font-weight: 600;
-}
-
-/* ── Reduced motion: hold everything still ────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .tag-word,
-  .tag-succeed {
-    opacity: 1;
-    transform: none;
-    animation: none;
-    color: var(--color-accent-2);
-  }
-  .trust-name {
-    animation: none;
-    background-position: 0% center;
-  }
-  /* No animation means no loop, so drop the duplicate set and let the
-     originals wrap into a static grid instead of repeating themselves.
-     `.reverse` has to be named explicitly — it out-specifies a bare
-     `.marquee-row` reset and would otherwise keep its translate.
-     The wrapped grid also has to be centred: a scrolling row starts flush left
-     by design, but once it is static that reads as the whole block being
-     shunted to one side. */
-  .marquee-row,
-  .marquee-row.reverse {
-    animation: none;
-    transform: none;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: auto;
-    padding-inline: 24px;
-  }
-  /* The edge fade only makes sense on something that scrolls past it. */
-  .marquee-track {
-    mask-image: none;
-    -webkit-mask-image: none;
-  }
-  .marquee-row > [data-dup] {
-    display: none;
-  }
-  .live-dot { animation: none; }
 }

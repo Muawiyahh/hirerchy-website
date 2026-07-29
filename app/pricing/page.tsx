@@ -1,72 +1,67 @@
 import type { Metadata } from "next";
+import { PageHeader, Section } from "@/components/ui";
 import Reveal from "@/components/Reveal";
-import { Eyebrow, SectionHead, Wrap } from "@/components/ui";
-import PricingPlans from "@/components/pricing/PricingPlans";
-import CompareTable from "@/components/pricing/CompareTable";
-import IntakeCTA from "@/components/home/IntakeCTA";
-import { pricingHero, pricingFootnote } from "@/lib/content";
+import Icon from "@/components/Icon";
+import PricingCards from "@/components/PricingCards";
+import FAQ from "@/components/FAQ";
+import CTASection from "@/components/CTASection";
+import { referral } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Rookie, Pro, Champion and Legend — done-for-you job applications from $27 a week, with every feature compared side by side.",
+    "Straightforward monthly plans for done-for-you job applications — including an interview guarantee on our top tier. Cancel anytime.",
 };
 
 export default function PricingPage() {
   return (
     <>
-      <section className="bg-navy pb-[70px] pt-[90px] text-white">
-        <Wrap>
-          <Eyebrow onDark>Pricing</Eyebrow>
-          <h1 className="font-display mb-[18px] mt-[18px] max-w-[16ch] text-[30px] font-extrabold leading-[1.15] sm:text-[42px]">
-            {pricingHero.title}
-          </h1>
-          <p className="mb-8 max-w-[56ch] text-base text-[#c7d0e0]">{pricingHero.lead}</p>
-          <div className="flex flex-wrap gap-3 sm:gap-4">
-            {pricingHero.stats.map((s) => (
-              <div
-                key={s.label}
-                className="inline-flex items-baseline gap-2.5 rounded-[14px] border border-white/[0.14] bg-white/[0.06] px-5 py-3.5 sm:px-[26px] sm:py-[18px]"
-              >
-                <span className="font-display text-[34px] font-extrabold text-accent-2">
-                  {s.big}
-                </span>
-                <span className="max-w-[22ch] text-[13.5px] text-[#c7d0e0]">{s.label}</span>
+      <PageHeader
+        eyebrow="Pricing"
+        title="One job to do: get you hired"
+        sub="Four plans, priced per week. Pick a 4 or 8 week term — 8 weeks saves 10%. Every plan includes a full ATS resume rebuild and the live tracker."
+      />
+
+      <Section>
+        <PricingCards />
+      </Section>
+
+      {/* referral program — navy */}
+      <Section tone="navy">
+        <Reveal>
+          <div className="grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
+            <div>
+              <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+                <Icon name="users" size={16} /> Referral program
+              </span>
+              <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                {referral.title}
+              </h2>
+              <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/70 sm:text-base">
+                {referral.body}
+              </p>
+            </div>
+            <div className="rounded-card border border-white/10 bg-white/[0.04] p-6 text-center">
+              <div className="text-sm text-white/60">You both get</div>
+              <div className="mt-1 text-3xl font-extrabold text-accent">1 free week</div>
+              <div className="mt-1 text-sm text-white/60">of applications, each</div>
+              <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-dashed border-accent/60 px-4 py-2 font-mono text-sm text-accent">
+                YOURNAME-2026
               </div>
-            ))}
+              <p className="mt-3 text-[11px] text-white/50">
+                Your unique code appears in your dashboard once you join
+              </p>
+            </div>
           </div>
-        </Wrap>
-      </section>
+        </Reveal>
+      </Section>
 
-      <section id="pricing" className="border-b border-border pb-20 pt-16">
-        <Wrap>
-          <Reveal>
-            <SectionHead
-              eyebrow="Pick your position"
-              title="Four plans. Same sharp aim. Different amount of ground covered."
-              sub={
-                <>
-                  Every plan includes a full resume rebuild and ATS optimization from day one,
-                  priced to be one of the most affordable done-for-you job application services
-                  around.{" "}
-                  <strong className="font-bold text-ink">
-                    What changes is volume, and how much of the strategy gets handled for you.
-                  </strong>
-                </>
-              }
-            />
-          </Reveal>
+      <FAQ />
 
-          <PricingPlans />
-          <CompareTable />
-
-          <Reveal className="mt-14 border-l-4 border-accent py-1 pl-[18px] text-base font-semibold text-ink">
-            {pricingFootnote}
-          </Reveal>
-        </Wrap>
-      </section>
-
-      <IntakeCTA showTagline={false} />
+      <CTASection
+        title="Ready when you are"
+        sub="Start today, or grab a free resume review first — whichever feels right."
+      />
     </>
   );
 }

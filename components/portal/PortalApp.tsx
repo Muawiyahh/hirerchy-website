@@ -78,9 +78,6 @@ export default function PortalApp() {
     );
   }
 
-  const name = profile?.first_name || "";
-  const pct = profile ? completionFromProfile(profile) : 0;
-
   const tabs: { id: View; label: string }[] = [
     { id: "overview", label: "Overview" },
     { id: "tracker", label: "Applications" },
@@ -91,7 +88,7 @@ export default function PortalApp() {
     <div className="min-h-[calc(100vh-65px)]">
       {/* sub-bar under the site navbar (65px) */}
       <header className="sticky top-[65px] z-20 border-b border-border bg-bg/85 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-1 px-5 py-2 sm:px-8">
+        <div className="mx-auto flex w-full max-w-[1080px] items-center gap-1 px-6 py-2">
           {onboarded ? (
             tabs.map((t) => (
               <button
@@ -120,8 +117,7 @@ export default function PortalApp() {
       {view === "profile" && <PortalProfile mode="edit" onComplete={handleComplete} />}
       {view === "overview" && profile && (
         <PortalOverview
-          name={name}
-          completionPct={pct}
+          profile={profile}
           apps={apps}
           justSubmitted={justSubmitted}
           onGoTracker={() => go("tracker")}

@@ -202,7 +202,7 @@ export default function PortalProfile({
 
   return (
     <>
-      <div className="mx-auto flex max-w-6xl gap-8 px-5 py-8 sm:px-8">
+      <div className="mx-auto flex w-full max-w-[1080px] gap-8 px-6 py-10">
         {/* sidebar */}
         <nav className="hidden w-52 shrink-0 lg:block">
           <ul className="sticky top-[124px] space-y-1 rounded-2xl border border-border bg-navy p-3 shadow-[0_20px_50px_-24px_rgba(0,0,0,0.7)]">

@@ -14,7 +14,7 @@ const STATUS_STYLES: Record<string, string> = {
 
 export default function PortalTracker({ apps }: { apps: AppRow[] }) {
   return (
-    <div className="mx-auto max-w-5xl px-5 py-6 sm:px-8">
+    <div className="mx-auto w-full max-w-[1080px] px-6 py-10">
       <div className="mb-4 flex items-end justify-between gap-3">
         <div>
           <div className="text-xs font-semibold uppercase tracking-wider text-accent-deep">Tracker</div>

@@ -151,3 +151,29 @@ export function completionFromProfile(p: ClientProfile): number {
   if (p.resume_url) filled++;
   return Math.round((filled / (COMPLETION_KEYS.length + extras)) * 100);
 }
+
+/** Field labels keyed by name, read straight off the form definition so the
+ *  Overview nudge can never drift from what the form actually calls things. */
+const FIELD_LABELS: Record<string, string> = Object.fromEntries(
+  SECTIONS.flatMap((s) => (s.fields || []).map((f) => [f.name, f.label]))
+);
+
+/** Everything still empty, in form order — drives the "finish your profile"
+ *  nudge on the Overview tab. */
+export function missingFromProfile(p: ClientProfile): string[] {
+  const out: string[] = [];
+  for (const k of COMPLETION_KEYS) {
+    const v = p[k];
+    const empty =
+      k === "skills"
+        ? !(Array.isArray(v) && v.length)
+        : v == null || String(v).trim() === "";
+    if (empty) out.push(FIELD_LABELS[k] || k);
+  }
+  if (!(Array.isArray(p.work_experience) && p.work_experience.some((w) => w.title || w.company)))
+    out.push("Work experience");
+  if (!(Array.isArray(p.education) && p.education.some((e) => e.school || e.degree)))
+    out.push("Education");
+  if (!p.resume_url) out.push("Resume");
+  return out;
+}

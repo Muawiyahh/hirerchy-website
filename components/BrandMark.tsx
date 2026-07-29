@@ -1,6 +1,8 @@
-/** Hirerchy "H" brand mark — navy square with a gold lettermark, matching the
- *  Chrome Web Store icon and the admin panel. Pass `onDark` when it sits on a
- *  navy band so the square stays visible. */
+import Image from "next/image";
+
+/** Hirerchy logo tile — the "H" with the briefcase cut into its leg.
+ *  The artwork is a navy tile with a white glyph, which disappears on a navy
+ *  band, so `onDark` swaps in the inverted variant (white tile, navy glyph). */
 export default function BrandMark({
   size = 34,
   className = "",
@@ -11,22 +13,16 @@ export default function BrandMark({
   onDark?: boolean;
 }) {
   return (
-    <svg
+    <Image
+      src={onDark ? "/logo-on-dark.png" : "/logo.png"}
+      alt=""
+      aria-hidden="true"
       width={size}
       height={size}
-      viewBox="0 0 40 40"
-      fill="none"
-      aria-hidden="true"
-      className={className}
-    >
-      <rect width="40" height="40" rx="11" fill={onDark ? "#1e2f52" : "#0f1f3d"} />
-      <path
-        d="M13 11v18M27 11v18M13 20h14"
-        stroke="#c9a227"
-        strokeWidth="2.6"
-        strokeLinecap="round"
-      />
-    </svg>
+      priority
+      className={`block rounded-[22%] ${className}`}
+      style={{ width: size, height: size }}
+    />
   );
 }
 
@@ -41,11 +37,11 @@ export function Wordmark({
 }) {
   return (
     <span className="inline-flex items-center gap-2.5">
-      {withMark && <BrandMark size={size === "lg" ? 34 : 28} onDark={onDark} />}
+      {withMark && <BrandMark size={size === "lg" ? 38 : 30} onDark={onDark} />}
       <span
-        className={`font-extrabold tracking-[-0.02em] ${
+        className={`font-display font-bold tracking-[0.01em] ${
           onDark ? "text-white" : "text-ink"
-        } ${size === "lg" ? "text-xl" : "text-lg"}`}
+        } ${size === "lg" ? "text-[21px]" : "text-lg"}`}
       >
         Hirerchy
       </span>

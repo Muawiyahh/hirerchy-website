@@ -35,6 +35,8 @@
 
   --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
+  /* Logotype only — see the Wordmark component. */
+  --font-display: var(--font-bricolage), var(--font-inter), system-ui, sans-serif;
 
   --radius-card: 16px;
   --radius-pill: 999px;

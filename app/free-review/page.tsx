@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHeader, Card } from "@/components/ui";
+import { PageHeader, Section, Card } from "@/components/ui";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 import LeadForm from "@/components/LeadForm";
@@ -25,8 +25,8 @@ export default function FreeReviewPage() {
         sub="Send it over and our team will review it like a recruiter would — then tell you exactly what to fix. Free, no payment, no pressure."
       />
 
-      <section className="px-5 pb-24 sm:px-8">
-        <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[1fr_1.25fr] lg:items-start">
+      <Section pad="tight">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.25fr] lg:items-start">
           <Reveal>
             <div className="lg:sticky lg:top-24">
               <h2 className="text-xl font-bold text-ink">What you&apos;ll get</h2>
@@ -67,7 +67,7 @@ export default function FreeReviewPage() {
             </Card>
           </Reveal>
         </div>
-      </section>
+      </Section>
     </>
   );
 }

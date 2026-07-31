@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHeader, Card } from "@/components/ui";
+import { PageHeader, Section, Card } from "@/components/ui";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 import ContactForm from "@/components/ContactForm";
@@ -20,8 +20,8 @@ export default function ContactPage() {
         sub="Have a question before you start? Send us a note and a real person will get back to you."
       />
 
-      <section className="px-5 pb-24 sm:px-8">
-        <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[1fr_1.25fr] lg:items-start">
+      <Section pad="tight">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.25fr] lg:items-start">
           <Reveal>
             <div className="space-y-4">
               <ContactItem icon="pen" title="Email us" value={site.email} href={`mailto:${site.email}`} />
@@ -50,7 +50,7 @@ export default function ContactPage() {
             </Card>
           </Reveal>
         </div>
-      </section>
+      </Section>
     </>
   );
 }

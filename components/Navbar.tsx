@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Wordmark } from "./BrandMark";
+import ThemeToggle from "./ThemeToggle";
 import { site } from "@/lib/content";
 import { getSession, portal, portalConfigured } from "@/lib/portal";
 
@@ -53,6 +54,10 @@ export default function Navbar() {
     };
   }, [open]);
 
+  // Signed-in dashboards carry their own header — the marketing bar on top of
+  // it just competes for attention, so it's dropped inside the portal.
+  if (authReady && loggedIn && pathname?.startsWith("/portal")) return null;
+
   return (
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
@@ -86,6 +91,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           {authReady && (
             <>
               <a
@@ -110,6 +116,8 @@ export default function Navbar() {
         </div>
 
         {/* mobile toggle */}
+        <div className="flex items-center gap-1 md:hidden">
+        <ThemeToggle />
         <button
           type="button"
           aria-label="Toggle menu"
@@ -127,6 +135,7 @@ export default function Navbar() {
             </svg>
           )}
         </button>
+        </div>
       </nav>
 
       {/* mobile menu */}

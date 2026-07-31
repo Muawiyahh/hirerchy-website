@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getMessages, sendMessage, type ClientProfile, type MessageRow } from "@/lib/portal";
+import LocalTime from "./LocalTime";
 
 /** What each pipeline status means to the client, in their words. */
 const STATUS_COPY: Record<string, string> = {
@@ -164,7 +165,7 @@ export function ClientMessages({ clientId }: { clientId: string }) {
                   m.sender_role === "client" ? "text-white/50" : "text-muted"
                 }`}
               >
-                {new Date(m.created_at).toLocaleString()}
+                <LocalTime value={m.created_at} />
               </span>
             </div>
           ))}

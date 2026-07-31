@@ -15,7 +15,7 @@ import {
 export type AdminTab = "clients" | "employees" | "operations" | "messages";
 
 const TABS = [
-  { id: "clients" as const, label: "Client queue" },
+  { id: "clients" as const, label: "Client Queue" },
   { id: "employees" as const, label: "Employees" },
   { id: "operations" as const, label: "Operations" },
   { id: "messages" as const, label: "Messages" },
@@ -48,6 +48,8 @@ const errText = (e: unknown) =>
 export default function AdminApp() {
   const [tab, setTab] = useState<AdminTab>("clients");
   const [openClient, setOpenClient] = useState<string | null>(null);
+  // Set when "Message Client" is pressed elsewhere, so Messages opens on them.
+  const [messageClient, setMessageClient] = useState<string | null>(null);
   const [data, setData] = useState<AdminData>(EMPTY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -87,7 +89,7 @@ export default function AdminApp() {
 
   return (
     <StaffShell
-      label="Manager"
+      role="Manager"
       tabs={tabsWithBadge}
       active={tab}
       onSelect={(t) => {
@@ -120,9 +122,26 @@ export default function AdminApp() {
           )}
           {tab === "employees" && <AdminEmployees data={data} onChanged={load} />}
           {tab === "operations" && (
-            <AdminOperations data={data} onOpen={setOpenClient} onChanged={load} />
+            <AdminOperations
+              data={data}
+              onOpen={setOpenClient}
+              onChanged={load}
+              onMessage={(id) => {
+                setMessageClient(id);
+                setTab("messages");
+              }}
+            />
           )}
-          {tab === "messages" && <AdminMessages data={data} onChanged={load} />}
+          {/* keyed on the requested client so opening a thread from Operations
+              remounts with it selected — no state sync in an effect */}
+          {tab === "messages" && (
+            <AdminMessages
+              key={messageClient ?? "all"}
+              data={data}
+              onChanged={load}
+              initialClientId={messageClient}
+            />
+          )}
         </>
       )}
     </StaffShell>

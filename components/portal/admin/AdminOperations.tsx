@@ -1,27 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { WeekBar, clientName } from "../StaffShell";
+import { WeekBar, clientName, initials } from "../StaffShell";
 import { acknowledgeUpdate } from "@/lib/portal";
+import LocalTime from "../LocalTime";
 import type { AdminData } from "./AdminApp";
 
 const KIND_STYLE: Record<string, string> = {
-  Completed: "bg-success/10 text-success border-success/30",
-  "Facing an Issue": "bg-error/10 text-error border-error/30",
-  Pending: "bg-accent/15 text-accent-deep border-accent/40",
-  Other: "bg-surface-2 text-muted border-border",
+  Completed: "border-l-success bg-success/[0.07] text-success",
+  "Facing an Issue": "border-l-error bg-error/[0.07] text-error",
+  Pending: "border-l-accent bg-accent/[0.08] text-accent-deep",
+  Other: "border-l-border bg-surface-2 text-muted",
 };
 
-/** Tab 3 — employees, the clients under each of them, week progress, and any
- *  status pings they've sent up. */
+/** Tab 3 — employees, the clients under each, week progress and status pings. */
 export default function AdminOperations({
   data,
   onOpen,
   onChanged,
+  onMessage,
 }: {
   data: AdminData;
   onOpen: (id: string) => void;
   onChanged: () => void;
+  onMessage: (id: string) => void;
 }) {
   const [busy, setBusy] = useState("");
   const employees = data.staff.filter((s) => s.role === "employee");
@@ -42,12 +44,12 @@ export default function AdminOperations({
 
   return (
     <>
-      <h1 className="text-2xl font-extrabold tracking-tight text-ink">Operations</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight text-ink">Operations</h1>
       <p className="mt-1 text-sm text-muted">
         Track employee progress and stay in the loop with clients.
       </p>
 
-      <div className="mt-8 space-y-5">
+      <div className="mt-7 space-y-5">
         {employees.map((emp) => {
           const mine = data.assignments
             .filter((a) => a.employee_id === emp.id)
@@ -57,22 +59,22 @@ export default function AdminOperations({
           return (
             <section
               key={emp.id}
-              className="overflow-hidden rounded-card border border-border bg-surface shadow-sm"
+              className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm"
             >
-              <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-2/60 px-6 py-4">
+              <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-2/70 px-6 py-4">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-xs font-bold text-white">
-                    {emp.email.slice(0, 2).toUpperCase()}
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-navy text-xs font-bold text-white">
+                    {initials(emp.email)}
                   </span>
-                  <span className="text-sm font-bold text-ink">{emp.email}</span>
+                  <span className="font-bold text-ink">{emp.email}</span>
                 </div>
-                <span className="rounded-full bg-surface px-3 py-1 text-xs font-semibold text-muted">
+                <span className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-semibold text-muted">
                   {mine.length} client{mine.length === 1 ? "" : "s"}
                 </span>
               </div>
 
               {mine.length === 0 ? (
-                <p className="px-6 py-6 text-sm text-muted">No clients assigned yet.</p>
+                <p className="px-6 py-7 text-sm text-muted">No clients assigned yet.</p>
               ) : (
                 <ul className="divide-y divide-border">
                   {mine.map((c) => {
@@ -80,34 +82,44 @@ export default function AdminOperations({
                     return (
                       <li key={c.id} className="px-6 py-4">
                         <div className="flex flex-wrap items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <button
+                              onClick={() => onOpen(c.id)}
+                              className="font-bold text-ink hover:text-accent-deep"
+                            >
+                              {clientName(c)}
+                            </button>
+                            <div className="mt-1.5">
+                              <WeekBar done={c.weeks_completed} total={c.weeks_total} />
+                            </div>
+                          </div>
                           <button
-                            onClick={() => onOpen(c.id)}
-                            className="text-sm font-semibold text-ink hover:text-accent-deep"
+                            onClick={() => onMessage(c.id)}
+                            className="shrink-0 rounded-lg border border-border bg-surface px-4 py-2 text-xs font-bold text-ink transition hover:border-accent/60 hover:bg-accent hover:text-navy"
                           >
-                            {clientName(c)}
+                            Message Client
                           </button>
-                          <WeekBar done={c.weeks_completed} total={c.weeks_total} />
                         </div>
 
                         {updates.slice(0, 3).map((u) => (
                           <div
                             key={u.id}
-                            className={`mt-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border px-4 py-2.5 ${
+                            className={`mt-3 flex flex-wrap items-center justify-between gap-3 rounded-r-lg border-l-4 px-4 py-2.5 ${
                               KIND_STYLE[u.kind] || KIND_STYLE.Other
-                            } ${u.acknowledged_at ? "opacity-60" : ""}`}
+                            } ${u.acknowledged_at ? "opacity-55" : ""}`}
                           >
-                            <span className="text-xs font-semibold">
+                            <span className="text-xs font-bold">
                               {u.kind}
-                              {u.note ? ` — ${u.note}` : ""}
-                              <span className="ml-2 font-normal opacity-70">
-                                {new Date(u.created_at).toLocaleString()}
+                              {u.note ? <span className="font-medium"> — {u.note}</span> : null}
+                              <span className="ml-2 font-medium opacity-70">
+                                <LocalTime value={u.created_at} />
                               </span>
                             </span>
                             {!u.acknowledged_at && (
                               <button
                                 disabled={busy === u.id}
                                 onClick={() => ack(u.id)}
-                                className="shrink-0 rounded-full bg-navy px-3 py-1 text-[11px] font-semibold text-white transition hover:bg-navy-2 disabled:opacity-50"
+                                className="shrink-0 rounded-lg bg-navy px-3 py-1.5 text-[11px] font-bold text-white transition hover:bg-navy-2 disabled:opacity-50"
                               >
                                 Acknowledge
                               </button>
@@ -124,22 +136,22 @@ export default function AdminOperations({
         })}
 
         {employees.length === 0 && (
-          <p className="rounded-card border border-border bg-surface p-8 text-center text-sm text-muted">
+          <p className="rounded-lg border border-dashed border-border bg-surface p-12 text-center text-sm text-muted">
             No employees yet. Create one on the Employees tab, then assign clients to them.
           </p>
         )}
 
         {unassigned.length > 0 && (
-          <section className="rounded-card border border-accent/40 bg-accent/[0.06] p-6">
+          <section className="rounded-lg border border-accent/40 bg-accent/[0.06] p-6">
             <h2 className="text-sm font-bold text-ink">
-              Unassigned ({unassigned.length})
+              Waiting to be assigned ({unassigned.length})
             </h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {unassigned.map((c) => (
                 <button
                   key={c.id}
                   onClick={() => onOpen(c.id)}
-                  className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-ink transition hover:border-accent"
+                  className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-bold text-ink transition hover:border-accent"
                 >
                   {clientName(c)}
                 </button>

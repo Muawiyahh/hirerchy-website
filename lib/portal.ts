@@ -180,6 +180,23 @@ export async function getClientById(id: string): Promise<ClientRow> {
   return data as ClientRow;
 }
 
+/** Every column — the admin detail view shows the whole intake, not just the
+ *  pipeline fields the queue needs. */
+export async function getFullClient(id: string): Promise<ClientProfile> {
+  const { data, error } = await portal().from("clients").select("*").eq("id", id).single();
+  if (error) throw error;
+  return data as ClientProfile;
+}
+
+/** Emails the client a reset link. We never set a password on their behalf —
+ *  that would need the service-role key, which must not reach the browser. */
+export async function sendPasswordReset(email: string) {
+  const { error } = await portal().auth.resetPasswordForEmail(email, {
+    redirectTo: typeof window !== "undefined" ? `${window.location.origin}/portal` : undefined,
+  });
+  if (error) throw error;
+}
+
 export async function updateClientPipeline(
   id: string,
   patch: Partial<Pick<ClientRow, "status" | "plan" | "weeks_total" | "weeks_completed">>

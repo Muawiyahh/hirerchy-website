@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import SiteFooter from "@/components/SiteFooter";
+import { THEME_BOOT } from "@/components/ThemeToggle";
 import { site } from "@/lib/content";
 
 const inter = Inter({
@@ -58,10 +59,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${bricolage.variable} h-full`}>
+      <head>
+        {/* Applies the saved theme before first paint — without this the page
+            renders light for a frame and then snaps to dark. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+      </head>
       <body className="min-h-full flex flex-col antialiased">
         <Navbar />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteFooter />
       </body>
     </html>
   );

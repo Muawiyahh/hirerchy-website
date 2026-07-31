@@ -42,6 +42,44 @@
   --radius-pill: 999px;
 }
 
+/* ── Dark mode ─────────────────────────────────────────────────────────────
+   Same trick the intake screen uses: every utility resolves to var(--color-*),
+   so redefining the tokens on <html class="dark"> re-skins the whole site.
+   `accent` brightens and `accent-deep` flips to the LIGHT gold, because the
+   light-mode values are tuned for small gold text on a white page. */
+.dark {
+  --color-bg: #0b1220;
+  --color-surface: #131d31;
+  --color-surface-2: #1a2540;
+
+  --color-navy: #0f1a2e;
+  --color-navy-2: #16223a;
+
+  --color-accent: #e0b544;
+  --color-accent-2: #c9a227;
+  --color-accent-deep: #e8c766;
+
+  --color-ink: #eef2f9;
+  --color-muted: #97a3bd;
+  --color-border: #223050;
+
+  --color-success: #22c58b;
+  --color-error: #f87171;
+
+  /* the body's top glow is a light-page effect; on dark it becomes a lift */
+  --page-glow: #16223a;
+  color-scheme: dark;
+}
+
+/* The marketing page's light-only flourishes have to soften on dark. */
+.dark .bg-grid {
+  background-image: linear-gradient(rgba(224, 181, 68, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(224, 181, 68, 0.06) 1px, transparent 1px);
+}
+.dark .glow-accent {
+  box-shadow: 0 0 0 1px rgba(224, 181, 68, 0.35), 0 18px 50px -14px rgba(0, 0, 0, 0.6);
+}
+
 /* ── Base ─────────────────────────────────────────────────────────────────── */
 *,
 *::before,
@@ -59,7 +97,7 @@ body {
   background-color: var(--color-bg);
   background-image: radial-gradient(
     1200px 600px at 50% -10%,
-    #f9fbfd 0%,
+    var(--page-glow, #f9fbfd) 0%,
     var(--color-bg) 70%
   );
   background-attachment: fixed;

@@ -28,6 +28,17 @@ export default function PortalApp() {
   // Sticky for the session once the client has finished onboarding — drives tab
   // visibility so navigating away from Overview never strands them without tabs.
   const [onboarded, setOnboarded] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function leave() {
+    setSigningOut(true);
+    try {
+      await signOut();
+      // The portal page listens for SIGNED_OUT and swaps to the auth view.
+    } catch {
+      setSigningOut(false);
+    }
+  }
 
   async function load() {
     const p = await getMyProfile();
@@ -92,7 +103,7 @@ export default function PortalApp() {
           bar is the top of the page — pinning it any lower leaves a dead band
           above it that the page then scrolls through. */}
       <header className="sticky top-0 z-30 bg-navy">
-        <div className="flex w-full items-center gap-x-6 px-5 py-3 sm:px-7">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-x-6 px-5 py-3 sm:px-8">
           <DashboardBrand role="Client" />
           <nav className="flex items-center gap-1.5">
           {onboarded ? (
@@ -116,10 +127,11 @@ export default function PortalApp() {
           <div className="ml-auto flex items-center gap-2">
           <ThemeToggle className="text-white/60 hover:bg-white/10 hover:text-white" />
           <button
-            onClick={() => signOut().then(() => location.reload())}
-            className="rounded-lg border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+            onClick={leave}
+            disabled={signingOut}
+            className="rounded-lg border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10 disabled:opacity-60"
           >
-            Sign out
+            {signingOut ? "Signing out…" : "Sign out"}
           </button>
           </div>
         </div>

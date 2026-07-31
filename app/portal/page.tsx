@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { getSession, getMyRole, portalConfigured, type Role } from "@/lib/portal";
+import { getSession, getMyRole, portal, portalConfigured, type Role } from "@/lib/portal";
 import PortalAuth from "@/components/portal/PortalAuth";
 import PortalApp from "@/components/portal/PortalApp";
 import AdminApp from "@/components/portal/admin/AdminApp";
@@ -24,6 +24,7 @@ export default function PortalPage() {
     portalConfigured ? "loading" : "auth"
   );
   const [role, setRole] = useState<Role>("client");
+  const [signedOut, setSignedOut] = useState(false);
 
   // Resolved outside the component so the mount effect never sets state
   // synchronously — it only settles in a promise callback.
@@ -41,6 +42,22 @@ export default function PortalPage() {
         .catch(() => setState("auth")),
     []
   );
+
+  // Signing out used to call location.reload(), which tore the whole app down
+  // and rebuilt it — that full round trip is the flash. Supabase fires
+  // SIGNED_OUT locally the moment the session is cleared, so swapping straight
+  // to the auth view is instant and nothing remounts that doesn't have to.
+  useEffect(() => {
+    if (!portalConfigured) return;
+    const { data } = portal().auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") {
+        setRole("client");
+        setSignedOut(true);
+        setState("auth");
+      }
+    });
+    return () => data.subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (!portalConfigured) return;
@@ -75,5 +92,14 @@ export default function PortalPage() {
     return <PortalApp />;
   }
 
-  return <PortalAuth onAuthed={() => { setState("loading"); resolve(); }} />;
+  return (
+    <PortalAuth
+      defaultMode={signedOut ? "signin" : undefined}
+      onAuthed={() => {
+        setSignedOut(false);
+        setState("loading");
+        resolve();
+      }}
+    />
+  );
 }

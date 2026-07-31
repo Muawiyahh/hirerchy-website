@@ -7,15 +7,24 @@ import { signIn, signUp } from "@/lib/portal";
 const input =
   "w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25";
 
-export default function PortalAuth({ onAuthed }: { onAuthed: () => void }) {
+export default function PortalAuth({
+  onAuthed,
+  defaultMode,
+}: {
+  onAuthed: () => void;
+  /** Forced starting view. Set to "signin" straight after a sign-out, where
+   *  landing on a sign-UP form would be wrong. */
+  defaultMode?: "signup" | "signin";
+}) {
   // "Client login" links arrive with ?view=signin so returning clients land on
   // the sign-in view; "Get started" (no param) defaults to sign-up.
-  const [mode, setMode] = useState<"signup" | "signin">(() =>
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("view") === "signin"
+  const [mode, setMode] = useState<"signup" | "signin">(() => {
+    if (defaultMode) return defaultMode;
+    return typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("view") === "signin"
       ? "signin"
-      : "signup"
-  );
+      : "signup";
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -41,7 +50,7 @@ export default function PortalAuth({ onAuthed }: { onAuthed: () => void }) {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-68px)] flex-col items-center justify-center px-4 py-16">
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 py-20">
       <div className="flex flex-col items-center">
         <BrandMark size={52} />
         <h1 className="font-display mt-4 text-3xl font-bold tracking-[0.01em] text-ink">Hirerchy</h1>

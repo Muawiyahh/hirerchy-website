@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Image from "next/image";
 import ThemeToggle from "@/components/ThemeToggle";
 import { signOut } from "@/lib/portal";
@@ -45,11 +45,24 @@ export default function StaffShell<T extends string>({
   onSelect: (id: T) => void;
   children: ReactNode;
 }) {
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function leave() {
+    setSigningOut(true);
+    try {
+      await signOut();
+      // The portal page listens for SIGNED_OUT and swaps to the auth view.
+    } catch {
+      setSigningOut(false);
+    }
+  }
+
   return (
     <div className="staff-canvas min-h-screen bg-bg">
       <header className="sticky top-0 z-40 bg-navy">
-        {/* full-bleed: brand hard left, sign out hard right */}
-        <div className="flex w-full flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 sm:px-7">
+        {/* Same column as the content below, so the brand and Sign Out line up
+            with the page rather than floating out at the viewport edges. */}
+        <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 sm:px-8">
           <DashboardBrand role={role} />
 
           <nav className="flex flex-wrap items-center gap-1.5">
@@ -80,13 +93,14 @@ export default function StaffShell<T extends string>({
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle className="text-white/60 hover:bg-white/10 hover:text-white" />
             <button
-              onClick={() => signOut().then(() => location.reload())}
-              className="flex items-center gap-2 rounded-lg border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+              onClick={leave}
+              disabled={signingOut}
+              className="flex items-center gap-2 rounded-lg border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10 disabled:opacity-60"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
               </svg>
-              Sign Out
+              {signingOut ? "Signing out…" : "Sign Out"}
             </button>
           </div>
         </div>

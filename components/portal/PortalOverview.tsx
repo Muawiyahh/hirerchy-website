@@ -6,6 +6,7 @@ import BrandMark from "@/components/BrandMark";
 import { steps, site } from "@/lib/content";
 import type { AppRow, ClientProfile } from "@/lib/portal";
 import { completionFromProfile, missingFromProfile } from "./config";
+import { ClientStatusPanel, ClientMessages } from "./ClientStatusPanel";
 
 /* Same column the site navbar uses, so the portal lines up with the rest of
    the site instead of sitting on its own grid. */
@@ -80,8 +81,25 @@ export default function PortalOverview({
         </div>
       </section>
 
-      {/* ── 2. light: what happens next ──────────────────────────────────── */}
+      {/* ── 2. light: where your plan stands + your manager ──────────────── */}
       <section className="py-14">
+        <Shell>
+          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent-deep">
+            <span className="h-1 w-1 rounded-full bg-accent" />
+            Your plan
+          </span>
+          <h2 className="mb-8 mt-4 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+            Where things stand today.
+          </h2>
+          <ClientStatusPanel profile={profile} />
+          <div className="mt-4">
+            <ClientMessages clientId={profile.id} />
+          </div>
+        </Shell>
+      </section>
+
+      {/* ── 3. light: what happens next ──────────────────────────────────── */}
+      <section className="border-t border-border py-14">
         <Shell>
           <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent-deep">
             <span className="h-1 w-1 rounded-full bg-accent" />

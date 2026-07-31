@@ -20,7 +20,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   // Gate the auth buttons until we know the session, so a signed-in client never
-  // flashes the logged-out "Client login / Get started" buttons on load. If the
+  // flashes the logged-out "Login / Sign up" buttons on load. If the
   // portal isn't configured there's no session to resolve, so reveal immediately.
   const [authReady, setAuthReady] = useState(!portalConfigured);
 
@@ -31,8 +31,8 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Track the client-portal session so we can hide "Get started" and swap
-  // "Client login" → "My profile" while a client is signed in.
+  // Track the client-portal session so we can hide "Sign up" and swap
+  // "Login" → "My profile" while a client is signed in.
   useEffect(() => {
     if (!portalConfigured) return;
     let mounted = true;
@@ -95,14 +95,14 @@ export default function Navbar() {
                   pathname?.startsWith("/portal") ? "text-ink" : "text-muted hover:text-ink"
                 }`}
               >
-                {loggedIn ? "My profile" : "Client login"}
+                {loggedIn ? "My profile" : "Login"}
               </a>
               {!loggedIn && (
                 <a
                   href={site.portalUrl}
                   className="inline-flex items-center justify-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(15,31,61,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-navy-2"
                 >
-                  Get started
+                  Sign up
                 </a>
               )}
             </>
@@ -150,14 +150,14 @@ export default function Navbar() {
                     href={loggedIn ? site.portalUrl : `${site.portalUrl}?view=signin`}
                     className="rounded-full px-4 py-3 text-center text-sm font-semibold text-ink ring-1 ring-border"
                   >
-                    {loggedIn ? "My profile" : "Client login"}
+                    {loggedIn ? "My profile" : "Login"}
                   </a>
                   {!loggedIn && (
                     <a
                       href={site.portalUrl}
                       className="rounded-full bg-navy px-4 py-3 text-center text-sm font-semibold text-white"
                     >
-                      Get started
+                      Sign up
                     </a>
                   )}
                 </>

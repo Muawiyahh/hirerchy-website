@@ -52,7 +52,7 @@ export default function PortalOverview({
   return (
     <div>
       {/* ── 1. navy: welcome + the three numbers ─────────────────────────── */}
-      <section className="relative overflow-hidden bg-navy py-14">
+      <section className="relative overflow-hidden bg-navy py-10">
         <div className="bg-grid-navy pointer-events-none absolute inset-0" />
         <div className="relative">
           <Shell>
@@ -63,16 +63,16 @@ export default function PortalOverview({
               </span>
             </div>
 
-            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
               {justSubmitted ? `You're live, ${first}! 🎉` : `Welcome back, ${first}`}
             </h1>
-            <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/70">
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/70">
               {justSubmitted
                 ? "Your profile is in. Our team will start applying to matched roles under your name — every application lands in your tracker so you always know what's happening."
                 : "Here's where your job search stands. We keep applying on your behalf; you keep an eye on the callbacks."}
             </p>
 
-            <div className="mt-9 grid gap-4 sm:grid-cols-3">
+            <div className="mt-7 grid gap-4 sm:grid-cols-3">
               <Tile label="Applications sent" value={applied} />
               <Tile label="Interviews & offers" value={interviews} />
               <Tile label="Profile completeness" value={`${pct}%`} meter={pct} />
@@ -82,7 +82,7 @@ export default function PortalOverview({
       </section>
 
       {/* ── 2. light: where your plan stands + your manager ──────────────── */}
-      <section className="py-14">
+      <section className="py-10">
         <Shell>
           <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent-deep">
             <span className="h-1 w-1 rounded-full bg-accent" />
@@ -99,7 +99,7 @@ export default function PortalOverview({
       </section>
 
       {/* ── 3. light: what happens next ──────────────────────────────────── */}
-      <section className="border-t border-border py-14">
+      <section className="border-t border-border py-10">
         <Shell>
           <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent-deep">
             <span className="h-1 w-1 rounded-full bg-accent" />
@@ -109,11 +109,11 @@ export default function PortalOverview({
             How your search runs from here.
           </h2>
 
-          <ol className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {steps.map((s) => (
               <li
                 key={s.n}
-                className="rounded-card border border-border bg-surface p-6 shadow-sm"
+                className="rounded-lg border border-border bg-surface p-5 shadow-sm"
               >
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-sm font-bold text-white">
                   {s.n}
@@ -127,7 +127,7 @@ export default function PortalOverview({
       </section>
 
       {/* ── 3. navy: latest applications ─────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-navy py-14">
+      <section className="relative overflow-hidden bg-navy py-10">
         <div className="bg-grid-navy pointer-events-none absolute inset-0" />
         <div className="relative">
           <Shell>
@@ -148,7 +148,7 @@ export default function PortalOverview({
             </div>
 
             {recent.length ? (
-              <div className="mt-7 overflow-hidden rounded-card border border-white/12">
+              <div className="mt-7 overflow-hidden rounded-lg border border-white/12">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-[13px]">
                     <thead className="border-b border-white/12 bg-white/[0.06] text-[10.5px] uppercase tracking-wide text-white/60">
@@ -223,10 +223,10 @@ export default function PortalOverview({
       </section>
 
       {/* ── 4. light: profile completeness + help ────────────────────────── */}
-      <section className="py-14">
+      <section className="py-10">
         <Shell>
           <div className="grid gap-5 lg:grid-cols-[1.15fr_1fr] lg:items-start">
-            <div className="rounded-card border border-border bg-surface p-6 shadow-sm sm:p-8">
+            <div className="rounded-lg border border-border bg-surface p-6 shadow-sm sm:p-8">
               <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent-deep">
                 <span className="h-1 w-1 rounded-full bg-accent" />
                 Your profile
@@ -277,7 +277,7 @@ export default function PortalOverview({
               )}
             </div>
 
-            <div className="rounded-card border border-accent/40 bg-accent/[0.08] p-6 shadow-sm sm:p-8">
+            <div className="rounded-lg border border-accent/40 bg-accent/[0.08] p-6 shadow-sm sm:p-8">
               <span className="inline-block rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-navy">
                 Need a hand?
               </span>
@@ -326,7 +326,7 @@ function Tile({
   meter?: number;
 }) {
   return (
-    <div className="rounded-card border border-white/12 bg-white/[0.06] p-5">
+    <div className="rounded-lg border border-white/12 bg-white/[0.06] p-5">
       <div className="text-3xl font-extrabold tracking-tight text-accent">{value}</div>
       <div className="mt-1.5 text-xs font-medium text-white/70">{label}</div>
       {meter != null && (

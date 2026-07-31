@@ -131,7 +131,7 @@ export default function EmployeeApp() {
           </div>
 
           <div className="mt-8 overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
-            <div className="hidden grid-cols-[1.4fr_1fr_1.6fr] gap-4 border-b border-border bg-surface-2/70 px-6 py-3 text-[11px] font-bold uppercase tracking-wider text-muted lg:grid">
+            <div className="hidden grid-cols-[1.4fr_1fr_1.6fr] gap-4 border-b border-border bg-surface-2 px-6 py-3 text-[11px] font-bold uppercase tracking-wider text-muted lg:grid">
               <span>Client</span>
               <span>Progress</span>
               <span>Send update to manager</span>

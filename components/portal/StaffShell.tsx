@@ -24,9 +24,10 @@ export default function StaffShell<T extends string>({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="staff-canvas min-h-screen bg-bg">
       <header className="sticky top-0 z-40 bg-navy">
-        <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 sm:px-8">
+        {/* full-bleed: brand hard left, sign out hard right */}
+        <div className="flex w-full flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 sm:px-7">
           <span className="flex shrink-0 items-baseline gap-1.5">
             <Image src="/logo-on-dark.png" alt="" width={22} height={22} className="translate-y-1 rounded-[22%]" aria-hidden="true" />
             <span className="font-display text-lg font-bold tracking-[0.01em] text-white">

@@ -61,7 +61,7 @@ export default function AdminOperations({
               key={emp.id}
               className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm"
             >
-              <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-2/70 px-6 py-4">
+              <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-2 px-6 py-4">
                 <div className="flex items-center gap-3">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-navy text-xs font-bold text-white">
                     {initials(emp.email)}

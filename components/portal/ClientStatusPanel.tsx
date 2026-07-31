@@ -39,7 +39,7 @@ export function ClientStatusPanel({ profile }: { profile: ClientProfile }) {
   return (
     <>
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-card border border-border bg-surface p-5 shadow-sm">
+        <div className="rounded-lg border border-border bg-surface p-5 shadow-sm">
           <div className="text-xs font-medium text-muted">Status</div>
           <span
             className={`mt-2 inline-block rounded-full px-3 py-1 text-sm font-semibold ${
@@ -50,14 +50,14 @@ export function ClientStatusPanel({ profile }: { profile: ClientProfile }) {
           </span>
         </div>
 
-        <div className="rounded-card border border-border bg-surface p-5 shadow-sm">
+        <div className="rounded-lg border border-border bg-surface p-5 shadow-sm">
           <div className="text-xs font-medium text-muted">Your plan</div>
           <div className="mt-1.5 text-2xl font-extrabold tracking-tight text-ink">
             {plan || "—"}
           </div>
         </div>
 
-        <div className="rounded-card border border-border bg-surface p-5 shadow-sm">
+        <div className="rounded-lg border border-border bg-surface p-5 shadow-sm">
           <div className="text-xs font-medium text-muted">Progress</div>
           <div className="mt-1.5 text-2xl font-extrabold tabular-nums tracking-tight text-ink">
             {done} / {total || "—"} <span className="text-base text-muted">weeks</span>
@@ -71,7 +71,7 @@ export function ClientStatusPanel({ profile }: { profile: ClientProfile }) {
         </div>
       </div>
 
-      <div className="mt-4 rounded-card border border-border bg-surface p-6 shadow-sm">
+      <div className="mt-4 rounded-lg border border-border bg-surface p-6 shadow-sm">
         <div className="flex items-center gap-2.5">
           <span
             className={`h-2.5 w-2.5 shrink-0 rounded-full ${
@@ -136,7 +136,7 @@ export function ClientMessages({ clientId }: { clientId: string }) {
   }
 
   return (
-    <div className="rounded-card border border-border bg-surface p-6 shadow-sm">
+    <div className="rounded-lg border border-border bg-surface p-6 shadow-sm">
       <h2 className="text-lg font-bold text-ink">Message your manager</h2>
 
       {msgs.length === 0 ? (
@@ -148,7 +148,7 @@ export function ClientMessages({ clientId }: { clientId: string }) {
           {msgs.map((m) => (
             <div
               key={m.id}
-              className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
+              className={`max-w-[85%] rounded-lg px-4 py-2.5 text-sm ${
                 m.sender_role === "client"
                   ? "ml-auto bg-navy text-white"
                   : "bg-surface-2 text-ink"

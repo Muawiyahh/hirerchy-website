@@ -6,6 +6,7 @@ import {
   type ClientProfile, type AppRow,
 } from "@/lib/portal";
 
+import ThemeToggle from "@/components/ThemeToggle";
 import PortalProfile from "./PortalProfile";
 import PortalOverview from "./PortalOverview";
 import PortalTracker from "./PortalTracker";
@@ -85,31 +86,38 @@ export default function PortalApp() {
   ];
 
   return (
-    <div className="min-h-[calc(100vh-68px)]">
-      {/* sub-bar under the site navbar (68px) */}
-      <header className="sticky top-[68px] z-20 border-b border-border bg-bg/85 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-1 px-5 py-2 sm:px-8">
+    <div className="min-h-screen">
+      {/* The site navbar hides itself inside the portal once signed in, so this
+          bar is the top of the page — pinning it any lower leaves a dead band
+          above it that the page then scrolls through. */}
+      <header className="sticky top-0 z-30 bg-navy">
+        <div className="flex w-full items-center gap-1.5 px-5 py-3 sm:px-7">
           {onboarded ? (
             tabs.map((t) => (
               <button
                 key={t.id}
                 onClick={() => go(t.id)}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-                  view === t.id ? "bg-accent text-navy" : "text-muted hover:bg-surface-2 hover:text-ink"
+                className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
+                  view === t.id
+                    ? "bg-accent text-navy"
+                    : "text-white/65 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 {t.label}
               </button>
             ))
           ) : (
-            <span className="px-1 text-sm font-semibold text-ink">Set up your profile</span>
+            <span className="px-1 text-sm font-semibold text-white">Set up your profile</span>
           )}
+          <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle className="text-white/60 hover:bg-white/10 hover:text-white" />
           <button
             onClick={() => signOut().then(() => location.reload())}
-            className="ml-auto rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-ink"
+            className="rounded-lg border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
           >
             Sign out
           </button>
+          </div>
         </div>
       </header>
 

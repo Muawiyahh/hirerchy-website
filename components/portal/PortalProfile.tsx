@@ -224,7 +224,7 @@ export default function PortalProfile({
     <div
       className={
         onboarding
-          ? "intake-dark min-h-[calc(100vh-68px)] bg-[radial-gradient(1100px_600px_at_50%_-10%,#132a4f_0%,#0a1628_60%)]"
+          ? "intake-dark min-h-screen bg-[radial-gradient(1100px_600px_at_50%_-10%,#132a4f_0%,#0a1628_60%)]"
           : ""
       }
     >

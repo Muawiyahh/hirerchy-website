@@ -183,6 +183,27 @@ body {
   mask-image: radial-gradient(ellipse 70% 70% at 50% 0%, #000 0%, transparent 78%);
 }
 
+/* ── Staff dashboards: their own canvas ────────────────────────────────────
+   A dashboard is mostly cards, and cards need to sit ON something. With the
+   marketing tokens the page and the cards were nearly the same value, so the
+   whole screen read as one flat slab. These override the page and surface
+   tones for the dashboards only, leaving the marketing site untouched:
+   light mode gets a warm off-white page under white cards, dark mode drops
+   the page and lifts the cards so the edges actually show. */
+.staff-canvas {
+  --color-bg: #f5f3ec;
+  --color-surface: #ffffff;
+  --color-surface-2: #ecebe3;
+  --color-border: #ddd9cc;
+}
+
+.dark .staff-canvas {
+  --color-bg: #080d18;
+  --color-surface: #151f36;
+  --color-surface-2: #1d2a45;
+  --color-border: #2a3a5b;
+}
+
 /* ── Candidate intake: dark surface ────────────────────────────────────────
    The intake form is the one dark screen on the site. Rather than rewriting
    every class in the form, we redefine the colour tokens for this subtree —

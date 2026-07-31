@@ -140,9 +140,13 @@ export function ClientMessages({ clientId }: { clientId: string }) {
 
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
-      <h2 className="border-b border-border px-4 py-2.5 text-[13px] font-bold text-ink">
-        Message your manager
-      </h2>
+      <div className="border-b border-border px-4 py-3">
+        <h3 className="text-sm font-bold text-ink">Message your manager</h3>
+        <p className="mt-0.5 text-xs text-muted">
+          Questions about your search, your plan, or this week&apos;s roles — your manager
+          replies within one business day.
+        </p>
+      </div>
 
       {msgs.length === 0 ? (
         <p className="px-4 py-5 text-[13px] text-muted">

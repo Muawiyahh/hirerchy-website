@@ -7,6 +7,7 @@ import {
 } from "@/lib/portal";
 
 import ThemeToggle from "@/components/ThemeToggle";
+import { DashboardBrand } from "./StaffShell";
 import PortalProfile from "./PortalProfile";
 import PortalOverview from "./PortalOverview";
 import PortalTracker from "./PortalTracker";
@@ -91,7 +92,9 @@ export default function PortalApp() {
           bar is the top of the page — pinning it any lower leaves a dead band
           above it that the page then scrolls through. */}
       <header className="sticky top-0 z-30 bg-navy">
-        <div className="flex w-full items-center gap-1.5 px-5 py-3 sm:px-7">
+        <div className="flex w-full items-center gap-x-6 px-5 py-3 sm:px-7">
+          <DashboardBrand role="Client" />
+          <nav className="flex items-center gap-1.5">
           {onboarded ? (
             tabs.map((t) => (
               <button
@@ -109,6 +112,7 @@ export default function PortalApp() {
           ) : (
             <span className="px-1 text-sm font-semibold text-white">Set up your profile</span>
           )}
+          </nav>
           <div className="ml-auto flex items-center gap-2">
           <ThemeToggle className="text-white/60 hover:bg-white/10 hover:text-white" />
           <button

@@ -92,9 +92,15 @@ export default function PortalOverview({
             Where things stand today.
           </h2>
           <ClientStatusPanel profile={profile} />
-          <div className="mt-3">
-            <ClientMessages clientId={profile.id} />
-          </div>
+
+          <span className="mt-8 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent-deep">
+            <span className="h-1 w-1 rounded-full bg-accent" />
+            Messages
+          </span>
+          <h2 className="mb-3 mt-2.5 text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
+            Talk to your manager.
+          </h2>
+          <ClientMessages clientId={profile.id} />
         </Shell>
       </section>
 

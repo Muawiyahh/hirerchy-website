@@ -5,6 +5,28 @@ import Image from "next/image";
 import ThemeToggle from "@/components/ThemeToggle";
 import { signOut } from "@/lib/portal";
 
+/** The brand lockup every dashboard bar shares — "Hirerchy .Manager",
+ *  ".Employee", ".Client". Kept in one place so the three can't drift. */
+export function DashboardBrand({ role }: { role: string }) {
+  return (
+    <span className="flex shrink-0 items-baseline gap-1.5">
+      <Image
+        src="/logo-on-dark.png"
+        alt=""
+        width={24}
+        height={24}
+        className="translate-y-1 rounded-[22%]"
+        aria-hidden="true"
+      />
+      <span className="font-display text-lg font-bold tracking-[0.01em] text-white">
+        Hirerchy
+      </span>
+      <span className="text-accent">.</span>
+      <span className="text-sm font-medium text-white/55">{role}</span>
+    </span>
+  );
+}
+
 /**
  * Dashboard chrome for staff. The site navbar hides itself inside the portal,
  * so this navy bar is the only header — brand on the left, tabs beside it,
@@ -28,14 +50,7 @@ export default function StaffShell<T extends string>({
       <header className="sticky top-0 z-40 bg-navy">
         {/* full-bleed: brand hard left, sign out hard right */}
         <div className="flex w-full flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3 sm:px-7">
-          <span className="flex shrink-0 items-baseline gap-1.5">
-            <Image src="/logo-on-dark.png" alt="" width={22} height={22} className="translate-y-1 rounded-[22%]" aria-hidden="true" />
-            <span className="font-display text-lg font-bold tracking-[0.01em] text-white">
-              Hirerchy
-            </span>
-            <span className="text-accent">.</span>
-            <span className="text-sm font-medium text-white/55">{role}</span>
-          </span>
+          <DashboardBrand role={role} />
 
           <nav className="flex flex-wrap items-center gap-1.5">
             {tabs.map((t) => (

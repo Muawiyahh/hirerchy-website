@@ -9,17 +9,21 @@ export function Section({
   className = "",
   id,
   tone = "light",
+  pad = "normal",
 }: {
   children: ReactNode;
   className?: string;
   id?: string;
   tone?: "light" | "navy";
+  /** "tight" halves the vertical rhythm — used where a page header already
+   *  supplies the breathing room above. */
+  pad?: "normal" | "tight";
 }) {
   const isNavy = tone === "navy";
   return (
     <section
       id={id}
-      className={`relative py-20 sm:py-28 ${isNavy ? "overflow-hidden bg-navy" : ""} ${className}`}
+      className={`relative ${pad === "tight" ? "py-10 sm:py-12" : "py-20 sm:py-28"} ${isNavy ? "overflow-hidden bg-navy" : ""} ${className}`}
     >
       {isNavy && <div className="bg-grid-navy pointer-events-none absolute inset-0" />}
       <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">{children}</div>
@@ -155,7 +159,7 @@ export function PageHeader({
     <section className="relative overflow-hidden border-b border-border">
       <div className="bg-grid pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute left-1/2 top-[-40%] h-[360px] w-[680px] -translate-x-1/2 rounded-full bg-accent/10 blur-[130px]" />
-      <div className="relative mx-auto w-full max-w-6xl px-5 pb-14 pt-16 text-center sm:px-8 sm:pb-16 sm:pt-20">
+      <div className="relative mx-auto w-full max-w-6xl px-5 pb-10 pt-12 text-center sm:px-8 sm:pb-12 sm:pt-14">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
         <h1 className="mx-auto mt-4 max-w-3xl text-balance text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">
           {title}

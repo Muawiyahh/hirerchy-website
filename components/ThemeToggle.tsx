@@ -6,7 +6,7 @@ export const THEME_KEY = "hirerchy-theme";
 
 /** Runs before paint (see layout.tsx) so the page never flashes the wrong
  *  theme. Kept here so the script and the toggle can't drift apart. */
-export const THEME_BOOT = `(function(){try{var t=localStorage.getItem('${THEME_KEY}');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`;
+export const THEME_BOOT = `(function(){try{var t=localStorage.getItem('${THEME_KEY}');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`;
 
 /** Reads what the boot script already decided rather than deciding again.
  *  `null` until mounted, so the icon can't render for the wrong theme. */

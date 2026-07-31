@@ -49,7 +49,7 @@ export default function AdminOperations({
         Track employee progress and stay in the loop with clients.
       </p>
 
-      <div className="mt-7 space-y-5">
+      <div className="mt-8 space-y-6">
         {employees.map((emp) => {
           const mine = data.assignments
             .filter((a) => a.employee_id === emp.id)
@@ -61,7 +61,7 @@ export default function AdminOperations({
               key={emp.id}
               className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm"
             >
-              <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-2 px-6 py-4">
+              <div className="flex items-center justify-between gap-3 border-b border-border bg-panel px-6 py-4">
                 <div className="flex items-center gap-3">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-navy text-xs font-bold text-white">
                     {initials(emp.email)}
@@ -74,13 +74,13 @@ export default function AdminOperations({
               </div>
 
               {mine.length === 0 ? (
-                <p className="px-6 py-7 text-sm text-muted">No clients assigned yet.</p>
+                <p className="px-6 py-8 text-sm text-muted">No clients assigned yet.</p>
               ) : (
                 <ul className="divide-y divide-border">
                   {mine.map((c) => {
                     const updates = data.updates.filter((u) => u.client_id === c.id);
                     return (
-                      <li key={c.id} className="px-6 py-4">
+                      <li key={c.id} className="px-6 py-5">
                         <div className="flex flex-wrap items-center justify-between gap-3">
                           <div className="min-w-0">
                             <button
@@ -89,7 +89,7 @@ export default function AdminOperations({
                             >
                               {clientName(c)}
                             </button>
-                            <div className="mt-1.5">
+                            <div className="mt-2">
                               <WeekBar done={c.weeks_completed} total={c.weeks_total} />
                             </div>
                           </div>

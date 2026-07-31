@@ -86,7 +86,7 @@ export default function PortalApp() {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="staff-canvas min-h-screen bg-bg">
       {/* The site navbar hides itself inside the portal once signed in, so this
           bar is the top of the page — pinning it any lower leaves a dead band
           above it that the page then scrolls through. */}

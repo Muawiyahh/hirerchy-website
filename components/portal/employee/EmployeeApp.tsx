@@ -131,7 +131,7 @@ export default function EmployeeApp() {
           </div>
 
           <div className="mt-8 overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
-            <div className="hidden grid-cols-[1.4fr_1fr_1.6fr] gap-4 border-b border-border bg-surface-2 px-6 py-3 text-[11px] font-bold uppercase tracking-wider text-muted lg:grid">
+            <div className="hidden grid-cols-[1.4fr_1fr_1.6fr] gap-4 border-b border-border bg-panel px-6 py-3 text-[11px] font-bold uppercase tracking-wider text-muted lg:grid">
               <span>Client</span>
               <span>Progress</span>
               <span>Send update to manager</span>
@@ -143,7 +143,7 @@ export default function EmployeeApp() {
                 const done = c.weeks_total > 0 && c.weeks_completed >= c.weeks_total;
                 const name = clientName(c);
                 return (
-                  <li key={c.id} className="px-6 py-5">
+                  <li key={c.id} className="px-6 py-6">
                     <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1.6fr] lg:items-center">
                       <div className="flex items-center gap-3">
                         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy text-xs font-bold text-white">

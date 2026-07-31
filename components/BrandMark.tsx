@@ -37,11 +37,11 @@ export function Wordmark({
 }) {
   return (
     <span className="inline-flex items-center gap-2.5">
-      {withMark && <BrandMark size={size === "lg" ? 38 : 30} onDark={onDark} />}
+      {withMark && <BrandMark size={size === "lg" ? 42 : 32} onDark={onDark} />}
       <span
         className={`font-display font-bold tracking-[0.01em] ${
           onDark ? "text-white" : "text-ink"
-        } ${size === "lg" ? "text-[21px]" : "text-lg"}`}
+        } ${size === "lg" ? "text-[23px]" : "text-lg"}`}
       >
         Hirerchy
       </span>

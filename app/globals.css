@@ -25,6 +25,7 @@
   --color-ink:         #16213a;
   --color-muted:       #697089;
   --color-border:      #e4e8f0;
+  --color-panel:       #eef1f8; /* blue-tinted band behind section headers */
 
   --color-success:     #1e7d4f;
   --color-error:       #c0392b;
@@ -62,6 +63,7 @@
   --color-ink: #eef2f9;
   --color-muted: #97a3bd;
   --color-border: #223050;
+  --color-panel: #1a2540;
 
   --color-success: #22c58b;
   --color-error: #f87171;
@@ -191,10 +193,11 @@ body {
    light mode gets a warm off-white page under white cards, dark mode drops
    the page and lifts the cards so the edges actually show. */
 .staff-canvas {
-  --color-bg: #f5f3ec;
+  --color-bg: #f7f4ec;
   --color-surface: #ffffff;
-  --color-surface-2: #ecebe3;
-  --color-border: #ddd9cc;
+  --color-surface-2: #f0eee6;
+  --color-border: #e3ded1;
+  --color-panel: #eef1f8;
 }
 
 .dark .staff-canvas {
@@ -202,6 +205,7 @@ body {
   --color-surface: #151f36;
   --color-surface-2: #1d2a45;
   --color-border: #2a3a5b;
+  --color-panel: #1c2a49;
 }
 
 /* ── Candidate intake: dark surface ────────────────────────────────────────

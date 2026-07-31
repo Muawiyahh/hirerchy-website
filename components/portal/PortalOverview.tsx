@@ -82,17 +82,17 @@ export default function PortalOverview({
       </section>
 
       {/* ── 2. light: where your plan stands + your manager ──────────────── */}
-      <section className="py-10">
+      <section className="py-8">
         <Shell>
-          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-accent-deep">
+          <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent-deep">
             <span className="h-1 w-1 rounded-full bg-accent" />
             Your plan
           </span>
-          <h2 className="mb-8 mt-4 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+          <h2 className="mb-5 mt-2.5 text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
             Where things stand today.
           </h2>
           <ClientStatusPanel profile={profile} />
-          <div className="mt-4">
+          <div className="mt-3">
             <ClientMessages clientId={profile.id} />
           </div>
         </Shell>
@@ -326,11 +326,11 @@ function Tile({
   meter?: number;
 }) {
   return (
-    <div className="rounded-lg border border-white/12 bg-white/[0.06] p-5">
-      <div className="text-3xl font-extrabold tracking-tight text-accent">{value}</div>
-      <div className="mt-1.5 text-xs font-medium text-white/70">{label}</div>
+    <div className="rounded-lg border border-white/12 bg-white/[0.06] px-4 py-3.5">
+      <div className="text-2xl font-extrabold leading-none tracking-tight text-accent">{value}</div>
+      <div className="mt-1 text-[11px] font-medium text-white/70">{label}</div>
       {meter != null && (
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/12">
+        <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/12">
           <div
             className="h-full rounded-full bg-accent transition-all"
             style={{ width: `${meter}%` }}

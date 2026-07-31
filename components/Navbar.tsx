@@ -66,7 +66,8 @@ export default function Navbar() {
           : "border-b border-transparent"
       }`}
     >
-      <nav className="mx-auto flex h-[68px] w-full max-w-6xl items-center justify-between px-5 sm:px-8">
+      {/* full-bleed: brand hard left, auth hard right */}
+      <nav className="flex h-[72px] w-full items-center justify-between px-5 sm:px-7">
         <Link href="/" aria-label="Hirerchy home" onClick={() => setOpen(false)}>
           <Wordmark size="lg" />
         </Link>
@@ -141,7 +142,7 @@ export default function Navbar() {
       {/* mobile menu */}
       {open && (
         <div className="border-t border-border bg-bg/95 backdrop-blur-xl md:hidden">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-5 py-4">
+          <div className="flex w-full flex-col gap-1 px-5 py-4 sm:px-7">
             {NAV.map((item) => (
               <Link
                 key={item.href}

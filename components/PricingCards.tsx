@@ -17,7 +17,7 @@ export default function PricingCards({
   return (
     <div>
       {/* 4 vs 8 week term switch */}
-      <div className="mb-10 flex justify-center">
+      <div className="mb-6 flex justify-center">
         <div className="inline-flex gap-1 rounded-full border border-border bg-surface p-1">
           {(["4", "8"] as Term[]).map((t) => {
             const active = term === t;

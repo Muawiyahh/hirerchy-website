@@ -22,7 +22,7 @@ export default function PricingPage() {
         sub="Four plans, priced per week. Pick a 4 or 8 week term — 8 weeks saves 10%. Every plan includes a full ATS resume rebuild and the live tracker."
       />
 
-      <Section>
+      <Section pad="tight">
         <PricingCards />
       </Section>
 

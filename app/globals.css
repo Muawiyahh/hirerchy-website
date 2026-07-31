@@ -145,6 +145,32 @@ body {
   mask-image: radial-gradient(ellipse 70% 70% at 50% 0%, #000 0%, transparent 78%);
 }
 
+/* ── Candidate intake: dark surface ────────────────────────────────────────
+   The intake form is the one dark screen on the site. Rather than rewriting
+   every class in the form, we redefine the colour tokens for this subtree —
+   Tailwind's utilities all resolve to var(--color-*), so bg-surface, text-ink,
+   border-border and friends re-skin themselves. `accent-deep` has to flip to
+   the LIGHT gold here: the default is tuned for small text on a light page and
+   goes muddy on navy. */
+.intake-dark {
+  --color-bg: #0a1628;
+  --color-surface: #12203a;
+  --color-surface-2: #17273f;
+  --color-ink: #ffffff;
+  --color-muted: #94a6c4;
+  --color-border: #253d63;
+  --color-accent-deep: #e0b65e;
+}
+
+.intake-dark ::placeholder {
+  color: rgba(148, 166, 196, 0.6);
+}
+
+/* Native pickers (date, select arrows) render light-on-light otherwise. */
+.intake-dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.6);
+}
+
 /* ── Long-form prose (privacy page) ───────────────────────────────────────── */
 .prose-hirerchy p {
   margin-top: 0.85rem;

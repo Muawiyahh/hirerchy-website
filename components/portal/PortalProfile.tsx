@@ -19,6 +19,22 @@ const primaryBtn = "rounded-full bg-accent px-5 py-2.5 text-sm font-semibold tex
 
 // Fields that MUST be filled before the profile can be completed (flagged
 // `required` in config) — the essentials the extension needs to autofill.
+/* The intake rail groups the form's sections into four stages, so onboarding
+   reads as a short journey. `from` is the first section index of each stage;
+   the last one runs to the end of SECTIONS. */
+const STAGES: { label: string; from: number }[] = [
+  { label: "Candidate", from: 0 },
+  { label: "Preferences", from: 3 },
+  { label: "Academic", from: 6 },
+  { label: "Activate", from: 9 },
+];
+
+const stageOf = (section: number) => {
+  let idx = 0;
+  for (let i = 0; i < STAGES.length; i++) if (section >= STAGES[i].from) idx = i;
+  return idx;
+};
+
 const REQUIRED = SECTIONS.flatMap((s) => s.fields ?? []).filter((f) => f.required).map((f) => f.name);
 const FIELD_LABEL: Record<string, string> = Object.fromEntries(
   SECTIONS.flatMap((s) => s.fields ?? []).map((f) => [f.name, f.label])
@@ -86,6 +102,8 @@ export default function PortalProfile({
     for (const [k, v] of Object.entries(f)) {
       if (k === "id" || k === "profile_id" || k === "created_at") continue;
       if (k === "skills") patch[k] = v.split(",").map((s) => s.trim()).filter(Boolean);
+      // security_ack is a boolean column — the form stores everything as text.
+      else if (k === "security_ack") patch[k] = v === "true";
       else patch[k] = v;
     }
     patch.work_experience = workRef.current;
@@ -199,12 +217,86 @@ export default function PortalProfile({
 
   const section = SECTIONS[active];
   const isLast = active === SECTIONS.length - 1;
+  const onboarding = mode === "onboarding";
+  const stageIndex = stageOf(active);
 
   return (
-    <>
-      <div className="mx-auto flex w-full max-w-6xl gap-8 px-5 py-8 sm:px-8">
-        {/* sidebar */}
-        <nav className="hidden w-52 shrink-0 lg:block">
+    <div
+      className={
+        onboarding
+          ? "intake-dark min-h-[calc(100vh-68px)] bg-[radial-gradient(1100px_600px_at_50%_-10%,#132a4f_0%,#0a1628_60%)]"
+          : ""
+      }
+    >
+      {onboarding && (
+        <header className="px-5 pt-14 text-center sm:px-8">
+          <h1 className="text-2xl font-extrabold uppercase tracking-[0.06em] text-white sm:text-4xl">
+            Hirerchy Candidate Intake
+          </h1>
+          <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-accent">
+            Intake protocol
+          </p>
+          <p className="mt-2 text-sm text-[#94a6c4]">
+            {STAGES.length} stages. Once complete, we start applying on your behalf.
+          </p>
+
+          {/* stage rail — the eleven form sections grouped into four stages, so
+              the client sees a short journey rather than a long one. */}
+          <ol className="mx-auto mt-9 flex w-full max-w-3xl items-start justify-between gap-1">
+            {STAGES.map((st, i) => {
+              const now = i === stageIndex;
+              const done = i < stageIndex;
+              return (
+                <li key={st.label} className="relative flex flex-1 flex-col items-center">
+                  {i > 0 && (
+                    <span
+                      aria-hidden="true"
+                      className={`absolute right-1/2 top-5 h-px w-full ${
+                        done || now ? "bg-accent/50" : "bg-white/12"
+                      }`}
+                    />
+                  )}
+                  <button
+                    onClick={() => setActive(st.from)}
+                    aria-current={now ? "step" : undefined}
+                    className={`relative flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold transition ${
+                      now
+                        ? "bg-accent text-navy"
+                        : done
+                          ? "bg-accent/25 text-accent"
+                          : "bg-white/[0.08] text-white/40 hover:text-white/70"
+                    }`}
+                  >
+                    {done ? "✓" : String(i + 1).padStart(2, "0")}
+                  </button>
+                  <span
+                    className={`mt-2.5 text-[10px] font-bold uppercase tracking-[0.14em] ${
+                      now ? "text-accent" : "text-white/35"
+                    }`}
+                  >
+                    Stage {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className={`text-xs ${now ? "text-white" : "text-white/45"}`}>
+                    {st.label}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+
+          <p className="mt-6 text-xs text-white/45">
+            Step {active + 1} of {SECTIONS.length} — {section.nav}
+          </p>
+        </header>
+      )}
+
+      <div
+        className={`mx-auto flex w-full gap-8 px-5 sm:px-8 ${
+          onboarding ? "max-w-4xl py-10" : "max-w-6xl py-8"
+        }`}
+      >
+        {/* sidebar — edit mode only; onboarding uses the stage rail above */}
+        <nav className={`w-52 shrink-0 ${onboarding ? "hidden" : "hidden lg:block"}`}>
           <ul className="sticky top-[124px] space-y-1 rounded-2xl border border-border bg-navy p-3 shadow-[0_20px_50px_-24px_rgba(0,0,0,0.7)]">
             {SECTIONS.map((s, i) => (
               <li key={s.id}>
@@ -256,6 +348,70 @@ export default function PortalProfile({
             )}
           </div>
 
+          {/* Account security policy — first stage of the intake only. The
+              client confirms the application email is separate from their
+              personal account before they can go on. */}
+          {onboarding && active === 0 && (
+            <div className="mt-5 rounded-2xl border border-accent/40 bg-accent/[0.06] p-6">
+              <div className="flex items-center gap-2 text-sm font-bold text-white">
+                <span className="text-accent">🛡</span> Account Security Policy
+                <span className="text-error">*</span>
+              </div>
+
+              <label className={`${labelCls} mt-5`}>
+                Job application email <span className="text-error">*</span>
+              </label>
+              <input
+                className={input}
+                type="email"
+                value={form.job_email ?? ""}
+                onChange={(e) => setField("job_email", e.target.value)}
+                placeholder="eg: michael.career@gmail.com"
+              />
+              <p className="mt-2 text-xs text-muted">
+                An existing email you already use for job applications works fine — or create a
+                new one. Just keep it separate from your personal account.
+              </p>
+
+              <dl className="mt-5 space-y-4 text-sm">
+                <div>
+                  <dt className="font-bold text-accent">Why a separate account</dt>
+                  <dd className="mt-1 text-muted">
+                    We never request access to your personal Google account. A dedicated,
+                    job-only email keeps your personal mail, contacts and files completely
+                    walled off from anything done on your behalf.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-bold text-accent">What you do now</dt>
+                  <dd className="mt-1 text-muted">
+                    If you already use a separate email for job applications, enter it above. If
+                    not, create a new one for this purpose only.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-bold text-accent">What happens next</dt>
+                  <dd className="mt-1 text-muted">
+                    Once your profile is reviewed and approved, a member of our team will contact
+                    you to set up official Gmail delegation — Google&apos;s own access-sharing
+                    feature — to this account only. You can revoke that access at any time.
+                  </dd>
+                </div>
+              </dl>
+
+              <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-surface-2 p-4 text-sm text-ink">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-[#c9a227]"
+                  checked={form.security_ack === "true"}
+                  onChange={(e) => setField("security_ack", e.target.checked ? "true" : "false")}
+                />
+                I confirm the email above is used only for job applications, separate from my
+                personal account.
+              </label>
+            </div>
+          )}
+
           {/* tab nav */}
           <div className="mt-6 flex items-center justify-between">
             <button disabled={active === 0} onClick={() => setActive((a) => a - 1)}
@@ -267,7 +423,16 @@ export default function PortalProfile({
                 {mode === "edit" ? "Save & return" : "Complete profile"}
               </button>
             ) : (
-              <button onClick={() => setActive((a) => a + 1)} className={primaryBtn}>
+              <button
+                onClick={() => setActive((a) => a + 1)}
+                disabled={onboarding && active === 0 && form.security_ack !== "true"}
+                className={`${primaryBtn} disabled:cursor-not-allowed disabled:opacity-40`}
+                title={
+                  onboarding && active === 0 && form.security_ack !== "true"
+                    ? "Confirm the account security policy to continue"
+                    : undefined
+                }
+              >
                 Next: {SECTIONS[active + 1].nav} →
               </button>
             )}
@@ -279,7 +444,7 @@ export default function PortalProfile({
       <div className={`fixed bottom-5 left-1/2 z-30 -translate-x-1/2 rounded-full border border-border bg-surface px-4 py-2 text-sm text-ink shadow-lg transition ${saved ? "opacity-100" : "pointer-events-none opacity-0"}`}>
         ✓ All changes saved
       </div>
-    </>
+    </div>
   );
 
   // ── field renderers ─────────────────────────────────────────────────────────────

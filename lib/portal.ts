@@ -197,6 +197,14 @@ export async function sendPasswordReset(email: string) {
   if (error) throw error;
 }
 
+/** Removes the client row and, if they had one, their login. Applications,
+ *  messages, updates and the assignment cascade off the client row. Owner-only,
+ *  enforced inside the RPC — see supabase/delete_client.sql. */
+export async function deleteClient(id: string) {
+  const { error } = await portal().rpc("admin_delete_client", { target: id });
+  if (error) throw error;
+}
+
 export async function updateClientPipeline(
   id: string,
   patch: Partial<Pick<ClientRow, "status" | "plan" | "weeks_total" | "weeks_completed">>

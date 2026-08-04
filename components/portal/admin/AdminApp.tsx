@@ -4,12 +4,14 @@ import { useCallback, useEffect, useState } from "react";
 import StaffShell from "../StaffShell";
 import AdminClients from "./AdminClients";
 import AdminClientDetail from "./AdminClientDetail";
+import AdminNewClient from "./AdminNewClient";
 import AdminEmployees from "./AdminEmployees";
 import AdminOperations from "./AdminOperations";
 import AdminMessages from "./AdminMessages";
 import {
   getStaffClients, listStaff, getAssignments, getAllMessages, getEmployeeUpdates,
   type ClientRow, type StaffRow, type AssignmentRow, type MessageRow, type EmployeeUpdateRow,
+  errorText,
 } from "@/lib/portal";
 
 export type AdminTab = "clients" | "employees" | "operations" | "messages";
@@ -41,13 +43,14 @@ async function fetchAll(): Promise<AdminData> {
 }
 
 const errText = (e: unknown) =>
-  e instanceof Error ? e.message : "Could not load the dashboard.";
+  errorText(e, "Could not load the dashboard.");
 
 /** Owner dashboard. Everything the extension's admin panel did, plus the
  *  pipeline, week counters and the client message thread. */
 export default function AdminApp() {
   const [tab, setTab] = useState<AdminTab>("clients");
   const [openClient, setOpenClient] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
   // Set when "Message Client" is pressed elsewhere, so Messages opens on them.
   const [messageClient, setMessageClient] = useState<string | null>(null);
   const [data, setData] = useState<AdminData>(EMPTY);
@@ -95,6 +98,7 @@ export default function AdminApp() {
       onSelect={(t) => {
         setTab(t);
         setOpenClient(null);
+        setCreating(false);
       }}
     >
       {error && (
@@ -107,6 +111,16 @@ export default function AdminApp() {
         <div className="flex min-h-[40vh] items-center justify-center">
           <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-border border-t-navy" />
         </div>
+      ) : creating ? (
+        <AdminNewClient
+          staff={data.staff}
+          onBack={() => setCreating(false)}
+          onOpen={(id) => {
+            setCreating(false);
+            setOpenClient(id);
+          }}
+          onChanged={load}
+        />
       ) : detail ? (
         <AdminClientDetail
           client={detail}
@@ -118,7 +132,12 @@ export default function AdminApp() {
       ) : (
         <>
           {tab === "clients" && (
-            <AdminClients data={data} onOpen={setOpenClient} onChanged={load} />
+            <AdminClients
+              data={data}
+              onOpen={setOpenClient}
+              onChanged={load}
+              onNew={() => setCreating(true)}
+            />
           )}
           {tab === "employees" && <AdminEmployees data={data} onChanged={load} />}
           {tab === "operations" && (

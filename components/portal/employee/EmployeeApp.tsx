@@ -6,6 +6,7 @@ import LocalTime from "../LocalTime";
 import {
   getStaffClients, getEmployeeUpdates, sendEmployeeUpdate, bumpClientWeek,
   UPDATE_KINDS, type ClientRow, type EmployeeUpdateRow, type UpdateKind,
+  errorText,
 } from "@/lib/portal";
 
 const KIND_BTN: Record<string, string> = {
@@ -19,7 +20,7 @@ const TABS = [{ id: "clients" as const, label: "My Clients" }];
 
 const fetchMine = () => Promise.all([getStaffClients(), getEmployeeUpdates()]);
 const errText = (e: unknown) =>
-  e instanceof Error ? e.message : "Could not load your clients.";
+  errorText(e, "Could not load your clients.");
 
 const I = {
   users: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></svg>,
@@ -77,7 +78,7 @@ export default function EmployeeApp() {
       setNote("");
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not send that update.");
+      setError(errorText(e, "Could not send that update."));
     } finally {
       setBusy("");
     }
@@ -90,7 +91,7 @@ export default function EmployeeApp() {
       await bumpClientWeek(clientId, 1);
       await load();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not mark that week.");
+      setError(errorText(e, "Could not mark that week."));
     } finally {
       setBusy("");
     }

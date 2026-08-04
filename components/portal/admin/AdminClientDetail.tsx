@@ -6,18 +6,13 @@ import {
   CLIENT_STATUSES, updateClientPipeline, bumpClientWeek, assignClient,
   getFullClient, sendPasswordReset, saveProfile, deleteClient,
   type ClientRow, type StaffRow, type AssignmentRow, type ClientStatus, type ClientProfile,
+  errorText,
 } from "@/lib/portal";
-import { SECTIONS, type Field } from "../config";
-import { COUNTRIES, statesFor } from "@/lib/portalData";
+import {
+  ClientFieldSections, buildPatch, draftFrom, setDraftField, toggleDraftOption,
+  card, cardLabel, editLabel, select,
+} from "./ClientFields";
 import { plans } from "@/lib/content";
-
-const select =
-  "w-full rounded-lg border border-border bg-surface-2 px-3.5 py-2.5 text-sm font-medium text-ink outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25";
-const card = "rounded-lg border border-border bg-surface p-5 shadow-sm";
-const cardLabel = "text-xs font-semibold uppercase tracking-[0.1em] text-muted";
-const editLabel = "mb-1.5 block text-xs font-semibold text-muted";
-const pill =
-  "cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition";
 
 /** Detail groups shown under the control row. Keys map to `clients` columns. */
 const GROUPS: { title: string; fields: [string, string][] }[] = [
@@ -50,41 +45,6 @@ const GROUPS: { title: string; fields: [string, string][] }[] = [
     ],
   },
 ];
-
-/** The edit form is driven by the client's own intake config, so an admin edit
- *  writes exactly the values the extension autofills from — no second list of
- *  fields to drift. The repeater sections (experience, education) and the file
- *  uploads have no `fields`, so they fall out here; those stay with the client. */
-const EDIT_SECTIONS = SECTIONS.filter((s) => s.fields?.length).map((s) =>
-  s.id === "personal"
-    ? {
-        ...s,
-        fields: [
-          ...s.fields!,
-          {
-            name: "job_email",
-            label: "Job application email",
-            type: "email" as const,
-            hint: "the inbox used when applying",
-          },
-        ],
-      }
-    : s
-);
-
-const EDIT_FIELDS: Field[] = EDIT_SECTIONS.flatMap((s) => s.fields!);
-
-/** NOT NULL columns — blanking these has to write "" rather than null. */
-const NEVER_NULL = new Set(["first_name", "last_name"]);
-
-/** How a column's stored value looks in the form, so "changed?" compares like
- *  with like. skills is a jsonb array everywhere else; the form edits it as a
- *  comma-separated string. */
-function asText(profile: ClientProfile | null, key: string): string {
-  const v = profile?.[key];
-  if (v == null) return "";
-  return Array.isArray(v) ? v.join(", ") : String(v);
-}
 
 export default function AdminClientDetail({
   client,
@@ -133,7 +93,7 @@ export default function AdminClientDetail({
       if (ok) setNote(ok);
       onChanged();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "That didn't save.");
+      setError(errorText(e, "That didn't save."));
     } finally {
       setBusy("");
     }
@@ -150,40 +110,14 @@ export default function AdminClientDetail({
   // ── editing ───────────────────────────────────────────────────────────────
 
   function startEdit() {
-    const d: Record<string, string> = {};
-    for (const f of EDIT_FIELDS) d[f.name] = asText(full, f.name);
-    setDraft(d);
+    setDraft(draftFrom(full));
     setError("");
     setNote("");
     setEditing(true);
   }
 
-  const setField = (key: string, value: string) =>
-    setDraft((p) =>
-      // States are per-country, so the old one can't survive a country change.
-      key === "country" ? { ...p, country: value, state: "" } : { ...p, [key]: value }
-    );
-
-  const toggleMulti = (key: string, option: string) =>
-    setDraft((p) => {
-      const on = (p[key] || "").split(",").map((s) => s.trim()).filter(Boolean);
-      const next = on.includes(option) ? on.filter((o) => o !== option) : [...on, option];
-      return { ...p, [key]: next.join(", ") };
-    });
-
   async function saveEdits() {
-    const patch: Record<string, unknown> = {};
-    for (const f of EDIT_FIELDS) {
-      const next = (draft[f.name] ?? "").trim();
-      if (next === asText(full, f.name).trim()) continue;
-      if (f.name === "skills") {
-        patch.skills = next.split(",").map((s) => s.trim()).filter(Boolean);
-      } else if (NEVER_NULL.has(f.name)) {
-        patch[f.name] = next;
-      } else {
-        patch[f.name] = next === "" ? null : next;
-      }
-    }
+    const patch = buildPatch(draft, full);
 
     if (Object.keys(patch).length === 0) {
       setEditing(false);
@@ -201,7 +135,7 @@ export default function AdminClientDetail({
       setNote("Details saved.");
       onChanged();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Those details didn't save.");
+      setError(errorText(e, "Those details didn't save."));
     } finally {
       setBusy("");
     }
@@ -215,7 +149,7 @@ export default function AdminClientDetail({
       onBack();
       onChanged();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not delete that client.");
+      setError(errorText(e, "Could not delete that client."));
       setBusy("");
     }
   }
@@ -400,30 +334,11 @@ export default function AdminClientDetail({
 
       {editing ? (
         <>
-          {EDIT_SECTIONS.map((s) => (
-            <section key={s.id} className={`${card} mt-4`}>
-              <h2 className="text-lg font-bold text-ink">{s.title}</h2>
-              {s.hint && <p className="mt-1 text-xs text-muted">{s.hint}</p>}
-              <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {s.fields!.map((f) => (
-                  <div
-                    key={f.name}
-                    className={
-                      f.type === "multiselect" || f.full ? "sm:col-span-2 xl:col-span-3" : ""
-                    }
-                  >
-                    <EditField
-                      field={f}
-                      value={draft[f.name] ?? ""}
-                      country={draft.country || "United States"}
-                      onChange={(v) => setField(f.name, v)}
-                      onToggle={(o) => toggleMulti(f.name, o)}
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          ))}
+          <ClientFieldSections
+            draft={draft}
+            onChange={(k, v) => setDraft((p) => setDraftField(p, k, v))}
+            onToggle={(k, o) => setDraft((p) => toggleDraftOption(p, k, o))}
+          />
 
           <p className="mt-4 text-xs text-muted">
             Work experience, education, the resume and the cover letter are edited by the client
@@ -528,123 +443,6 @@ export default function AdminClientDetail({
           </section>
         </>
       )}
-    </>
-  );
-}
-
-/** One editable field, rendered the way the client's own form renders it —
- *  same control, same options, so the stored value matches either way. */
-function EditField({
-  field: f,
-  value,
-  country,
-  onChange,
-  onToggle,
-}: {
-  field: Field;
-  value: string;
-  country: string;
-  onChange: (v: string) => void;
-  onToggle: (option: string) => void;
-}) {
-  const text = (
-    <>
-      {f.label}
-      {f.hint && <span className="ml-1 font-normal normal-case text-muted/80">({f.hint})</span>}
-    </>
-  );
-  const label = (
-    <label className={editLabel} htmlFor={`edit-${f.name}`}>
-      {text}
-    </label>
-  );
-
-  if (f.type === "multiselect") {
-    const on = value.split(",").map((s) => s.trim()).filter(Boolean);
-    // A group of checkboxes has no single control to label, so this is a
-    // caption on the group rather than a <label for>.
-    return (
-      <fieldset>
-        <legend className={editLabel}>{text}</legend>
-        <div className="flex flex-wrap gap-2">
-          {f.options!.map((o) => {
-            const active = on.includes(o);
-            return (
-              <label
-                key={o}
-                className={`${pill} ${
-                  active
-                    ? "border-accent bg-accent text-navy"
-                    : "border-border bg-surface-2 text-ink/70 hover:border-accent"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  className="sr-only"
-                  checked={active}
-                  onChange={() => onToggle(o)}
-                />
-                {o}
-              </label>
-            );
-          })}
-        </div>
-      </fieldset>
-    );
-  }
-
-  // Country and state options are runtime — the state list depends on the
-  // country picked above it, and is empty for countries we don't have one for.
-  const options =
-    f.name === "country" ? COUNTRIES : f.name === "state" ? statesFor(country) : f.options;
-
-  if (f.type === "select" && options?.length) {
-    return (
-      <>
-        {label}
-        <select
-          id={`edit-${f.name}`}
-          className={select}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        >
-          <option value="">— not set —</option>
-          {options.map((o) => (
-            <option key={o} value={o}>{o}</option>
-          ))}
-        </select>
-      </>
-    );
-  }
-
-  if (f.type === "textarea") {
-    return (
-      <>
-        {label}
-        <textarea
-          id={`edit-${f.name}`}
-          rows={4}
-          className={select}
-          value={value}
-          placeholder={f.placeholder}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      </>
-    );
-  }
-
-  return (
-    <>
-      {label}
-      <input
-        id={`edit-${f.name}`}
-        // a state with no option list still needs typing into
-        type={f.type === "select" ? "text" : f.type}
-        className={select}
-        value={value}
-        placeholder={f.placeholder}
-        onChange={(e) => onChange(e.target.value)}
-      />
     </>
   );
 }

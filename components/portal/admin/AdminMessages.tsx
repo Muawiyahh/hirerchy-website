@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { clientName, initials } from "../StaffShell";
-import { sendMessage, portal } from "@/lib/portal";
+import { sendMessage, portal, errorText } from "@/lib/portal";
 import LocalTime from "../LocalTime";
 import type { AdminData } from "./AdminApp";
 
@@ -71,7 +71,7 @@ export default function AdminMessages({
       setReply("");
       onChanged();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not send that.");
+      setError(errorText(err, "Could not send that."));
     } finally {
       setBusy(false);
     }

@@ -30,10 +30,12 @@ const I = {
 export default function AdminClients({
   data,
   onOpen,
+  onNew,
 }: {
   data: AdminData;
   onOpen: (id: string) => void;
   onChanged: () => void;
+  onNew: () => void;
 }) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
   const [q, setQ] = useState("");
@@ -69,12 +71,20 @@ export default function AdminClients({
             Every client, where they are in the pipeline, and who&apos;s running them.
           </p>
         </div>
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Search clients…"
-          className="w-full max-w-xs rounded-lg border border-border bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25"
-        />
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search clients…"
+            className="w-full max-w-xs rounded-lg border border-border bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25"
+          />
+          <button
+            onClick={onNew}
+            className="shrink-0 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-navy transition hover:bg-accent-2"
+          >
+            + New Client
+          </button>
+        </div>
       </div>
 
       <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">

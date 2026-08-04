@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getMessages, sendMessage, type ClientProfile, type MessageRow } from "@/lib/portal";
+import { getMessages, sendMessage, errorText, type ClientProfile, type MessageRow } from "@/lib/portal";
 import LocalTime from "./LocalTime";
 
 /** What each pipeline status means to the client, in their words. */
@@ -132,7 +132,7 @@ export function ClientMessages({ clientId }: { clientId: string }) {
       setBody("");
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not send that.");
+      setError(errorText(err, "Could not send that."));
     } finally {
       setBusy(false);
     }

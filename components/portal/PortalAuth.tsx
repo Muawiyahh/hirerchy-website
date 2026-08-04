@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import BrandMark from "@/components/BrandMark";
-import { signIn, signUp } from "@/lib/portal";
+import { signIn, signUp, errorText } from "@/lib/portal";
 
 const input =
   "w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25";
@@ -44,7 +44,7 @@ export default function PortalAuth({
       }
       onAuthed();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(errorText(err, "Something went wrong."));
       setBusy(false);
     }
   }

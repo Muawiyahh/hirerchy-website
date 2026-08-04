@@ -29,6 +29,28 @@ export function portal(): SupabaseClient {
 
 export const portalConfigured = Boolean(url && anonKey);
 
+/**
+ * Readable text for anything thrown here.
+ *
+ * Supabase rejections are plain objects ({ message, details, hint, code }), not
+ * Error instances — so `e instanceof Error` misses them and swallows the real
+ * cause. That turned a missing-migration error into a blank "could not do that",
+ * which is exactly when the message matters most.
+ */
+export function errorText(e: unknown, fallback: string): string {
+  if (e instanceof Error && e.message) return e.message;
+  if (e && typeof e === "object") {
+    const o = e as Record<string, unknown>;
+    const parts = [o.message, o.details, o.hint].filter(
+      (p): p is string => typeof p === "string" && p.trim() !== ""
+    );
+    if (parts.length) {
+      return typeof o.code === "string" ? `${parts.join(" — ")} (${o.code})` : parts.join(" — ");
+    }
+  }
+  return fallback;
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface WorkEntry {
@@ -195,6 +217,62 @@ export async function sendPasswordReset(email: string) {
     redirectTo: typeof window !== "undefined" ? `${window.location.origin}/portal` : undefined,
   });
   if (error) throw error;
+}
+
+/**
+ * Creates a client from the admin panel.
+ *
+ * The record goes in first and the login second, deliberately. If the sign-up
+ * fails we're left with a client row and no login — a state the system already
+ * handles, because get_or_create_my_client_profile links a row by matching
+ * email the first time that person signs up themselves. The other order would
+ * leave an orphaned auth user instead.
+ *
+ * Signing up swaps the current session, so the caller's is restored from the
+ * token pair captured first — same dance as createEmployee.
+ */
+export async function createClientRecord(
+  values: Record<string, unknown>,
+  login?: { email: string; password: string }
+): Promise<{ id: string; loginError?: string }> {
+  const sb = portal();
+
+  const { data, error } = await sb.from("clients").insert(values).select("id").single();
+  if (error) throw error;
+  const id = (data as { id: string }).id;
+
+  if (!login) return { id };
+
+  const { data: current } = await sb.auth.getSession();
+  const keep = current.session;
+  try {
+    const { data: signed, error: signErr } = await sb.auth.signUp({
+      email: login.email,
+      password: login.password,
+    });
+    if (signErr) throw signErr;
+    if (keep) {
+      await sb.auth.setSession({
+        access_token: keep.access_token,
+        refresh_token: keep.refresh_token,
+      });
+    }
+    const uid = signed.user?.id;
+    if (!uid) throw new Error("Account created but no user id came back.");
+
+    const { error: linkErr } = await sb.from("clients").update({ profile_id: uid }).eq("id", id);
+    if (linkErr) throw linkErr;
+  } catch (e) {
+    if (keep) {
+      await sb.auth.setSession({
+        access_token: keep.access_token,
+        refresh_token: keep.refresh_token,
+      });
+    }
+    return { id, loginError: errorText(e, "Could not create their login.") };
+  }
+
+  return { id };
 }
 
 /** Removes the client row and, if they had one, their login. Applications,

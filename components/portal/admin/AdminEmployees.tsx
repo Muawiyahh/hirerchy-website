@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { initials } from "../StaffShell";
-import { createEmployee, deleteStaff } from "@/lib/portal";
+import { createEmployee, deleteStaff, errorText } from "@/lib/portal";
 import type { AdminData } from "./AdminApp";
 
 const field =
@@ -46,7 +46,7 @@ export default function AdminEmployees({
       setShowForm(false);
       onChanged();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not create that account.");
+      setError(errorText(err, "Could not create that account."));
     } finally {
       setBusy(false);
     }
@@ -58,7 +58,7 @@ export default function AdminEmployees({
       await deleteStaff(id);
       onChanged();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not delete that account.");
+      setError(errorText(err, "Could not delete that account."));
     }
   }
 

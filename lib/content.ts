@@ -17,7 +17,7 @@ export const site = {
   tagline: "We get you interviews",
   description:
     "Hirerchy is a done-for-you job-application agency. We rebuild your resume, write tailored cover letters, and apply to up to 120 roles a week on your behalf — so you spend your time in interviews, not in application forms.",
-  url: "https://hirerchy.com", // TODO: set your real domain
+  url: "https://hirerchy.up.railway.app", // swap for the custom domain when DNS moves
   email: "hirerchy@gmail.com", // contact email
   portalUrl: "/portal", // client portal — now bundled into this site at /portal
   privacyUrl: "/privacy",
